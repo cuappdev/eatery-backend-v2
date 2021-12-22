@@ -9,6 +9,7 @@ from src.dfg.DictResponseWrapper import DictResponseWrapper
 from src.dfg.EateryGroupByType import EateryGroupByType
 from src.dfg.EateryToJson import EateryToJson
 from src.dfg.ExternalEateries import ExternalEateries
+from src.dfg.GoogleSheetsEateries import GoogleSheetsEateries
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
@@ -31,3 +32,22 @@ def index(request):
         end=date.today() + timedelta(days=7)
     )
     return JsonResponse(result)
+
+
+def google_sheets_eateries(request):
+    dfg = DictResponseWrapper(
+        EateryToJson(
+            GoogleSheetsEateries(
+                spreadsheet_id="1ImfeTUA6I1Ub-aavgIW53Pf7EVB694f1294NPSCRd5c"
+            )
+        )
+    )
+
+    result = dfg(
+        tzinfo=pytz.timezone("US/Eastern"),
+        start=date.today(),
+        end=date.today() + timedelta(days=7)
+    )
+
+    return JsonResponse(result)
+
