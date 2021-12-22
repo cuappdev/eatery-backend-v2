@@ -28,7 +28,11 @@ class EateryToJson(DfgNode):
             }
 
         else:
-            return obj.to_json(start=kwargs.get("start"), end=kwargs.get("end"))
+            return obj.to_json(
+                tzinfo=kwargs.get("tzinfo"),
+                start=kwargs.get("start"),
+                end=kwargs.get("end")
+            )
 
     def children(self):
         return [self.child]
