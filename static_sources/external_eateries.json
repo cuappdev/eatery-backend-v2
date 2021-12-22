@@ -1,0 +1,542 @@
+{
+    "eateries": [
+        {
+            "slug": "Terrace",
+            "external": true,
+            "name": "Terrace Restaurant",
+            "nameshort": "Terrace",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "1-800-541-2501",
+            "coordinates": {
+                "latitude": 42.446267,
+                "longitude": -76.482314
+            },
+            "location": "Statler",
+            "campusArea": {
+                "descr": "Central Campus",
+                "descrshort": "Central"
+            },
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "monday-friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "10:00am",
+                            "end": "3:00pm",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "datesClosed": [
+                "9/6/21",
+                "11/25/21",
+                "11/26/21",
+                "11/27/21",
+                "11/28/21",
+                "12/20/21-1/20/22"
+            ],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                },
+                {
+                    "descr": "Meal Plan - Debit Plans (Big Red Bucks, Meal Choice, etc)",
+                    "descrshort": "Meal Plan - Debit"
+                }
+            ],
+            "diningItems": [
+                {
+                    "item": "Salads",
+                    "healthy": true
+                },
+                {
+                    "item": "Burrito Bowl",
+                    "healthy": false
+                },
+                {
+                    "item": "Burrito",
+                    "healthy": true
+                },
+                {
+                    "item": "Chicken Tenders",
+                    "healthy": false
+                },
+                {
+                    "item": "Fries",
+                    "healthy": false
+                },
+                {
+                    "item": "Pho",
+                    "healthy": false
+                }
+            ]
+        },
+        {
+            "slug": "Macs",
+            "external": true,
+            "name": "Mac’s Café ",
+            "nameshort": "Mac's",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "1-800-541-2501",
+            "coordinates": {
+                "latitude": 42.445921,
+                "longitude": -76.481984
+            },
+            "campusArea": {
+                "descr": "Central Campus",
+                "descrshort": "Central"
+            },
+            "location": "Statler Hotel",
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "monday-friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "9:30am",
+                            "end": "5:30pm",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                },
+                {
+                    "descr": "Meal Plan - Debit Plans (Big Red Bucks, Meal Choice, etc)",
+                    "descrshort": "Meal Plan - Debit"
+                }
+            ],
+            "datesClosed": [
+                "8/18/21",
+                "8/19/21",
+                "8/20/21",
+                "8/21/21",
+                "8/22/21",
+                "8/23/21",
+                "9/6/21",
+                "10/9/21",
+                "10/10/21",
+                "10/11/21",
+                "10/12/21",
+                "11/24/21",
+                "11/25/21",
+                "11/26/21",
+                "11/27/21",
+                "11/28/21",
+                "12/16/21",
+                "12/17/21",
+                "12/20/21-1/20/22"
+            ],
+            "diningItems": [
+                {
+                    "item": "Pizza",
+                    "healthy": false
+                },
+                {
+                    "item": "Pasta",
+                    "healthy": false
+                },
+                {
+                    "item": "Sandwiches",
+                    "healthy": false
+                },
+                {
+                    "item": "Sushi to Go",
+                    "healthy": false
+                },
+                {
+                    "item": "Soft Drinks",
+                    "healthy": false
+                }
+            ]
+        },
+        {
+            "slug": "Zeus",
+            "external": true,
+            "name": "Temple of Zeus",
+            "nameshort": "Temple of Zeus",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "",
+            "coordinates": {
+                "latitude": 42.449091,
+                "longitude": -76.483414
+            },
+            "campusArea": {
+                "descr": "Central Campus",
+                "descrshort": "Central"
+            },
+            "location": "Goldwin Smith Hall",
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "monday-friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "8:00am",
+                            "end": "5:00pm",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "datesClosed": [
+                "09/06/21"
+            ],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                }
+            ],
+            "diningItems": [
+                {
+                    "item": "Sandwiches",
+                    "healthy": true
+                },
+                {
+                    "item": "Soups",
+                    "healthy": true
+                },
+                {
+                    "item": "Baked Goods",
+                    "healthy": true
+                },
+                {
+                    "item": "Candy",
+                    "healthy": false
+                },
+                {
+                    "item": "Soft Drinks",
+                    "healthy": true
+                }
+            ]
+        },
+        {
+            "slug": "Gimme-Coffee",
+            "external": true,
+            "name": "Gimme Coffee",
+            "nameshort": "Gimme Coffee",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "1-607-227-5391",
+            "coordinates": {
+                "latitude": 42.444958,
+                "longitude": -76.481169
+            },
+            "campusArea": {
+                "descr": "Central Campus",
+                "descrshort": "Central"
+            },
+            "location": "Gates Hall",
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "monday-friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "8:00am",
+                            "end": "3:00pm",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "datesClosed": [],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                }
+            ],
+            "diningItems": [
+                {
+                    "item": "Coffee",
+                    "healthy": true
+                },
+                {
+                    "item": "Baked Goods",
+                    "healthy": true
+                }
+            ]
+        },
+        {
+            "slug": "Louies-Lunch",
+            "external": true,
+            "name": "Louie's Lunch",
+            "nameshort": "Louie's",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "1-607-257-4649",
+            "coordinates": {
+                "latitude": 42.45336,
+                "longitude": -76.481225
+            },
+            "campusArea": {
+                "descr": "North Campus",
+                "descrshort": "North"
+            },
+            "location": "Across from Risley",
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "monday-friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "11:00am",
+                            "end": "3:00am",
+                            "menu": []
+                        }
+                    ]
+                },
+                {
+                    "weekday": "saturday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "12:00pm",
+                            "end": "3:00am",
+                            "menu": []
+                        }
+                    ]
+                },
+                {
+                    "weekday": "sunday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "6:00pm",
+                            "end": "12:00am",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "datesClosed": [],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                }
+            ],
+            "diningItems": [
+                {
+                    "item": "French Fries",
+                    "healthy": false
+                },
+                {
+                    "item": "Garlic Bread",
+                    "healthy": false
+                },
+                {
+                    "item": "Cold Sandwiches",
+                    "healthy": false
+                },
+                {
+                    "item": "Hot Sandwiches",
+                    "healthy": false
+                },
+                {
+                    "item": "Hot Subs",
+                    "healthy": false
+                },
+                {
+                    "item": "Pizza Subs",
+                    "healthy": false
+                },
+                {
+                    "item": "Burgers",
+                    "healthy": false
+                },
+                {
+                    "item": "Egg Sandwiches",
+                    "healthy": false
+                },
+                {
+                    "item": "Hot Dogs",
+                    "healthy": false
+                },
+                {
+                    "item": "Wraps",
+                    "healthy": false
+                },
+                {
+                    "item": "Salads",
+                    "healthy": false
+                }
+            ]
+        },
+        {
+            "slug": "Anabels-Grocery",
+            "external": true,
+            "name": "Anabel's Grocery",
+            "nameshort": "Anabel's",
+            "about": "",
+            "cornellDining": false,
+            "contactPhone": "",
+            "coordinates": {
+                "latitude": 42.445061,
+                "longitude": -76.485826
+            },
+            "campusArea": {
+                "descr": "South Campus",
+                "descrshort": "South"
+            },
+            "location": "Anabel Taylor Hall",
+            "eateryTypes": [
+                {
+                    "descr": "Cafe",
+                    "descrshort": "cafe"
+                }
+            ],
+            "operatingHours": [
+                {
+                    "weekday": "wednesday-thursday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "3:00pm",
+                            "end": "7:00pm",
+                            "menu": []
+                        }
+                    ]
+                }, 
+                {
+                    "weekday": "friday",
+                    "events": [
+                        {
+                            "descr": "General",
+                            "start": "12:00pm",
+                            "end": "3:00pm",
+                            "menu": []
+                        }
+                    ]
+                }
+            ],
+            "datesClosed": [],
+            "payMethods": [
+                {
+                    "descr": "Cash",
+                    "descrshort": "Cash"
+                },
+                {
+                    "descr": "Cornell Card",
+                    "descrshort": "Cornell Card"
+                },
+                {
+                    "descr": "Major Credit Cards (VISA, MasterCard, AMEX)",
+                    "descrshort": "Major Credit Cards"
+                }
+            ],
+            "diningItems": [
+                {
+                    "item": "Whole Grains",
+                    "healthy": true
+                },
+                {
+                    "item": "Spices",
+                    "healthy": false
+                },
+                {
+                    "item": "Legumes",
+                    "healthy": true
+                },
+                {
+                    "item": "Fresh and Frozen Produce",
+                    "healthy": true
+                },
+                {
+                    "item": "Nuts",
+                    "healthy": true
+                },
+                {
+                    "item": "Dried Fruits",
+                    "healthy": true
+                },
+                {
+                    "item": "Tofu",
+                    "healthy": true
+                },
+                {
+                    "item": "Eggs",
+                    "healthy": false
+                },
+                {
+                    "item": "Milks",
+                    "healthy": true
+                },
+                {
+                    "item": "Kombucha on Tap",
+                    "healthy": true
+                },
+                {
+                    "item": "Bottled Drinks",
+                    "healthy": false
+                },
+                {
+                    "item": "Bulk Items",
+                    "healthy": false
+                }
+            ]
+        }
+    ]
+}

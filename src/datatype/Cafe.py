@@ -1,0 +1,43 @@
+from datetime import date
+from typing import Optional
+
+from src.datatype.Eatery import Eatery
+from src.datatype.Event import filter_range
+from src.datatype.CafeEvent import CafeEvent
+from src.datatype.CafeMenu import CafeMenu
+
+
+class Cafe(Eatery):
+
+    def __init__(
+            self,
+            name: str,
+            campus_area: str,
+            events: list[CafeEvent],
+            latitude: float,
+            longitude: float,
+            menu: CafeMenu
+    ):
+        super().__init__(name=name)
+        self.campus_area = campus_area
+        self.latitude = latitude
+        self.longitude = longitude
+        self.known_events = events
+        self.menu = menu
+
+    def events(
+            self,
+            start: Optional[date] = None,
+            end: Optional[date] = None
+    ):
+        return filter_range(self.known_events, start, end)
+
+    def to_json(self, start: Optional[date] = None, end: Optional[date] = None):
+        return {
+            "campus_area": self.campus_area,
+            "events": [event.to_json() for event in self.events(start, end)],
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "name": self.name,
+            "menu": self.menu.to_json()
+        }
