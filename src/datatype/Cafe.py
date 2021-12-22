@@ -1,6 +1,8 @@
 from datetime import date
 from typing import Optional
 
+import pytz
+
 from src.datatype.Eatery import Eatery
 from src.datatype.Event import filter_range
 from src.datatype.CafeEvent import CafeEvent
@@ -27,15 +29,21 @@ class Cafe(Eatery):
 
     def events(
             self,
+            tzinfo: Optional[pytz.timezone] = None,
             start: Optional[date] = None,
             end: Optional[date] = None
     ):
-        return filter_range(self.known_events, start, end)
+        return filter_range(self.known_events, tzinfo, start, end)
 
-    def to_json(self, start: Optional[date] = None, end: Optional[date] = None):
+    def to_json(
+            self,
+            tzinfo: Optional[pytz.timezone] = None,
+            start: Optional[date] = None,
+            end: Optional[date] = None
+    ):
         return {
             "campus_area": self.campus_area,
-            "events": [event.to_json() for event in self.events(start, end)],
+            "events": [event.to_json() for event in self.events(tzinfo, start, end)],
             "latitude": self.latitude,
             "longitude": self.longitude,
             "name": self.name,

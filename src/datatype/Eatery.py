@@ -1,6 +1,8 @@
 from datetime import date
 from typing import Optional
 
+import pytz
+
 
 class Eatery:
 
@@ -10,5 +12,10 @@ class Eatery:
     ):
         self.name = name
 
-    def to_json(self, start: Optional[date] = None, end: Optional[date] = None):
+    def to_json(
+            self,
+            tzinfo: pytz.timezone,
+            start: Optional[date] = None,
+            end: Optional[date] = None
+    ):
         raise Exception()
