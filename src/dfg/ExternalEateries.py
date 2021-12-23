@@ -15,6 +15,7 @@ import json
 
 
 class ExternalEateries(DfgNode):
+
     EXTERNAL_EATERIES_PATH = "static_sources/external_eateries.json"
 
     # based on date.weekday()
