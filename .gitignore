@@ -1,0 +1,8 @@
+env/
+.env
+
+
+eatery_blue_backend/__pycache__
+
+
+db.sqlite3
