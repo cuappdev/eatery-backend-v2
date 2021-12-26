@@ -9,6 +9,7 @@ from transactions.models import TransactionHistory
 class UpdateTransactionsController:
 
     # Converts the Vendor's name for the eatery into the name stored in our backend
+    @staticmethod
     def eatery_name(vendor_eatery_name):
         vendor_eatery_name = ''.join(c.lower() for c in vendor_eatery_name if c.isalpha())
         if vendor_eatery_name == "bearnecessities":
@@ -55,7 +56,7 @@ class UpdateTransactionsController:
             return "Rose House Dining Room"
         elif vendor_eatery_name == "risley":
             return "Risley Dining Room"
-        elif vendor_eatery_name == "Franny's FT":
+        elif vendor_eatery_name == "frannysft":
             return "Franny's"
         elif vendor_eatery_name == "mccormicks":
             return "McCormick's at Moakley House"
@@ -83,14 +84,39 @@ class UpdateTransactionsController:
         self._data = data
 
     def process(self):
+        if "error" in self._data:
+            return JsonResponse({
+                "success": False,
+                "result": None,
+                "error": self._data["error"]
+            })
+        if self._data["TIMESTAMP"] == "Invalid date":
+            return JsonResponse({
+                "success": False,
+                "result": None,
+                "error": "Invalid date"
+            })
         recent_datetime = datetime.strptime(self._data["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
         recent_date = recent_datetime.date()
         recent_time = recent_datetime.time()
+        num_inserted = 0
+        ignored_names = set()
         for place in self._data["UNITS"]:
-            name = self.eatery_name[place["UNIT_NAME"]]
-            TransactionHistory.objects.create(name = name, canonical_date = recent_date, timestamp=recent_time, transaction_count=place["CROWD_COUNT"])
-            # insert a billion records into the database for each one of these
+            name = UpdateTransactionsController.eatery_name(place["UNIT_NAME"])
+            if len(name) == 0:
+                ignored_names.add(place["UNIT_NAME"])
+            else:
+                num_inserted += 1
+                try:
+                    TransactionHistory.objects.create(name = name, canonical_date = recent_date, timestamp=recent_time, transaction_count=place["CROWD_COUNT"])
+                except:
+                    num_inserted -= 1
         return JsonResponse({
-            "hello": "hih"
+            "success": True,
+            "result": {
+                "num_inserted": num_inserted,
+                "ignored_names": list(ignored_names)
+            },
+            "error": None
         })
         
