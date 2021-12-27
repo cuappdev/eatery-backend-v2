@@ -6,8 +6,7 @@ from django.db import models
 class TransactionHistory(models.Model):
     class Meta:
         unique_together = ('name', 'timestamp', 'canonical_date')
-        # idea is when fetching wait time for [name] in between [timestamp - 5, timestamp], we can look at the last 2 weeks of data for that [name, timestamp] pair
-        indexes = [models.Index(fields = ['name', 'timestamp', 'canonical_date'])]  
+        indexes = [models.Index(fields = ['canonical_date'])]  
     name = models.CharField(max_length=100)
     canonical_date = models.DateField()
     timestamp = models.TimeField()
