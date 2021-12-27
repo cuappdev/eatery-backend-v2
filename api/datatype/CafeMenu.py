@@ -1,4 +1,4 @@
-from src.datatype.MenuItem import MenuItem
+from api.datatype.MenuItem import MenuItem
 
 
 class CafeMenu:

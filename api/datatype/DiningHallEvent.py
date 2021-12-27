@@ -1,7 +1,7 @@
 from typing import Optional
 
-from src.datatype.Event import Event
-from src.datatype.DiningHallMenu import DiningHallMenu
+from api.datatype.Event import Event
+from api.datatype.DiningHallMenu import DiningHallMenu
 from datetime import date
 
 

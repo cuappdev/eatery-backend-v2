@@ -3,35 +3,32 @@ from typing import Optional
 
 import pytz
 
-from src.datatype.Eatery import Eatery
-from src.datatype.Event import filter_range
-from src.datatype.CafeEvent import CafeEvent
-from src.datatype.CafeMenu import CafeMenu
+from api.datatype.Eatery import Eatery
+from api.datatype.DiningHallEvent import DiningHallEvent
+from api.datatype.Event import filter_range
 
 
-class Cafe(Eatery):
+class DiningHall(Eatery):
 
     def __init__(
             self,
             name: str,
             campus_area: str,
-            events: list[CafeEvent],
+            events: list[DiningHallEvent],
             latitude: float,
             longitude: float,
-            menu: CafeMenu
     ):
         super().__init__(name=name)
         self.campus_area = campus_area
         self.latitude = latitude
         self.longitude = longitude
         self.known_events = events
-        self.menu = menu
 
     def events(
             self,
             tzinfo: Optional[pytz.timezone] = None,
             start: Optional[date] = None,
-            end: Optional[date] = None
+            end: Optional[date] = None,
     ):
         return filter_range(self.known_events, tzinfo, start, end)
 
@@ -47,5 +44,4 @@ class Cafe(Eatery):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "name": self.name,
-            "menu": self.menu.to_json()
         }

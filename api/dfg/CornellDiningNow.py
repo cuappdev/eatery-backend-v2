@@ -1,15 +1,15 @@
 from typing import Union
 
-from src.dfg.DfgNode import DfgNode
+from api.dfg.DfgNode import DfgNode
 import requests
-from src.datatype.DiningHall import DiningHall
-from src.datatype.Cafe import Cafe
-from src.datatype.CafeMenu import CafeMenu
-from src.datatype.CafeEvent import CafeEvent
-from src.datatype.MenuItem import MenuItem
-from src.datatype.DiningHallEvent import DiningHallEvent
-from src.datatype.DiningHallMenuCategory import DiningHallMenuCategory
-from src.datatype.DiningHallMenu import DiningHallMenu
+from api.datatype.DiningHall import DiningHall
+from api.datatype.Cafe import Cafe
+from api.datatype.CafeMenu import CafeMenu
+from api.datatype.CafeEvent import CafeEvent
+from api.datatype.MenuItem import MenuItem
+from api.datatype.DiningHallEvent import DiningHallEvent
+from api.datatype.DiningHallMenuCategory import DiningHallMenuCategory
+from api.datatype.DiningHallMenu import DiningHallMenu
 from datetime import date
 
 

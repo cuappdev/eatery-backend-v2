@@ -1,4 +1,4 @@
-from src.datatype.DiningHallMenuCategory import DiningHallMenuCategory
+from api.datatype.DiningHallMenuCategory import DiningHallMenuCategory
 
 
 class DiningHallMenu:
