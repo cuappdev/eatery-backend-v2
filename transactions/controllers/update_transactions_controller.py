@@ -1,8 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from random import randrange
 
 from transactions.models import TransactionHistory
@@ -85,20 +84,22 @@ class UpdateTransactionsController:
 
     def process(self):
         if "error" in self._data:
-            return JsonResponse({
+            return {
                 "success": False,
                 "result": None,
                 "error": self._data["error"]
-            })
+            }
         if self._data["TIMESTAMP"] == "Invalid date":
-            return JsonResponse({
+            return {
                 "success": False,
                 "result": None,
                 "error": "Invalid date"
-            })
+            }
         recent_datetime = datetime.strptime(self._data["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
-        recent_date = recent_datetime.date()
-        recent_time = recent_datetime.time()
+        canonical_date = recent_datetime.date()
+        if recent_datetime.hour < 4:
+            # between 12am and 4am associate this with the previous day
+            canonical_date = canonical_date - timedelta(days=1)
         num_inserted = 0
         ignored_names = set()
         for place in self._data["UNITS"]:
@@ -108,15 +109,15 @@ class UpdateTransactionsController:
             else:
                 num_inserted += 1
                 try:
-                    TransactionHistory.objects.create(name = name, canonical_date = recent_date, timestamp=recent_time, transaction_count=place["CROWD_COUNT"])
+                    TransactionHistory.objects.create(name = name, canonical_date = canonical_date, timestamp=recent_datetime, transaction_count=place["CROWD_COUNT"])
                 except:
                     num_inserted -= 1
-        return JsonResponse({
+        return {
             "success": True,
             "result": {
                 "num_inserted": num_inserted,
                 "ignored_names": list(ignored_names)
             },
             "error": None
-        })
+        }
         

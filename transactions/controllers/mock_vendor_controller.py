@@ -21,8 +21,8 @@ class MockVendorController:
                     "CROWD_COUNT": crowd_count
                 })
 
-        return JsonResponse({
+        return {
             "TIMESTAMP": recent_timestamp.strftime('%Y-%m-%d %I:%M:%S %p'),
             "LOOK_BACK_MINUTES": 5,
             "UNITS": units
-        })
+        }

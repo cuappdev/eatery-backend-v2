@@ -2,6 +2,7 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
+from api.dfg.CalculateWaitTimes import CalculateWaitTimes
 
 from api.dfg.Concat import Concat
 from api.dfg.CornellDiningNow import CornellDiningNow
@@ -14,10 +15,12 @@ from api.dfg.GoogleSheetsEateries import GoogleSheetsEateries
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
         EateryGroupByType(
-            Concat([
-                CornellDiningNow(),
-                ExternalEateries()
-            ])
+            CalculateWaitTimes(
+                Concat([
+                    CornellDiningNow(),
+                    ExternalEateries()
+                ])
+            )
         )
     ),
     re_raise_exceptions=True
