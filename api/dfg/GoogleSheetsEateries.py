@@ -6,11 +6,11 @@ from typing import Optional
 
 import pytz
 
-from src.datatype.Cafe import Cafe
-from src.datatype.CafeEvent import CafeEvent
-from src.datatype.CafeMenu import CafeMenu
-from src.datatype.MenuItem import MenuItem
-from src.dfg.DfgNode import DfgNode
+from api.datatype.Cafe import Cafe
+from api.datatype.CafeEvent import CafeEvent
+from api.datatype.CafeMenu import CafeMenu
+from api.datatype.MenuItem import MenuItem
+from api.dfg.DfgNode import DfgNode
 
 import os.path
 
@@ -168,7 +168,7 @@ class GoogleSheetsEateries(DfgNode):
 
 
 if __name__ == "__main__":
-    from src.dfg.EateryToJson import EateryToJson
+    from api.dfg.EateryToJson import EateryToJson
 
     dfg = EateryToJson(GoogleSheetsEateries(
         spreadsheet_id="1ImfeTUA6I1Ub-aavgIW53Pf7EVB694f1294NPSCRd5c",

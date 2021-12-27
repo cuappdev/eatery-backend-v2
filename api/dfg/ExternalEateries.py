@@ -4,12 +4,12 @@ from typing import Union
 
 import pytz
 
-from src.dfg.DfgNode import DfgNode
-from src.datatype.Cafe import Cafe
-from src.datatype.DiningHall import DiningHall
-from src.datatype.CafeMenu import CafeMenu
-from src.datatype.CafeEvent import CafeEvent
-from src.datatype.MenuItem import MenuItem
+from api.dfg.DfgNode import DfgNode
+from api.datatype.Cafe import Cafe
+from api.datatype.DiningHall import DiningHall
+from api.datatype.CafeMenu import CafeMenu
+from api.datatype.CafeEvent import CafeEvent
+from api.datatype.MenuItem import MenuItem
 
 import json
 
@@ -82,11 +82,11 @@ class ExternalEateries(DfgNode):
                 start_weekday, end_weekday = weekdays.split("-")
                 weekdays = range(
                     ExternalEateries.WEEKDAYS.index(start_weekday),
-                    ExternalEateries.WEEKDAYS.index(end_weekday)
+                    ExternalEateries.WEEKDAYS.index(end_weekday) + 1
                 )
 
             else:
-                weekdays = [weekdays]
+                weekdays = [ExternalEateries.WEEKDAYS.index(weekdays)]
 
             for weekday in weekdays:
                 for event_template in event_templates:
@@ -94,7 +94,6 @@ class ExternalEateries(DfgNode):
                         weekday_to_event_templates[weekday] = []
 
                     weekday_to_event_templates[weekday].append(event_template)
-
         resolved_events: list[CafeEvent] = []
         current = start_date
         while current <= end_date:
@@ -125,7 +124,7 @@ class ExternalEateries(DfgNode):
         if not match:
             return datetime.time()
 
-        hours = int(match.group(1))
+        hours = int(match.group(1))%12
         minutes = int(match.group(2))
         is_pm = match.group(3) == "pm"
         return datetime.time(
@@ -160,7 +159,7 @@ class ExternalEateries(DfgNode):
 
 
 if __name__ == "__main__":
-    from src.dfg.EateryToJson import EateryToJson
+    from api.dfg.EateryToJson import EateryToJson
     import json
 
     dfg = EateryToJson(ExternalEateries())

@@ -2,22 +2,25 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
+from api.dfg.CalculateWaitTimes import CalculateWaitTimes
 
-from src.dfg.Concat import Concat
-from src.dfg.CornellDiningNow import CornellDiningNow
-from src.dfg.DictResponseWrapper import DictResponseWrapper
-from src.dfg.EateryGroupByType import EateryGroupByType
-from src.dfg.EateryToJson import EateryToJson
-from src.dfg.ExternalEateries import ExternalEateries
-from src.dfg.GoogleSheetsEateries import GoogleSheetsEateries
+from api.dfg.Concat import Concat
+from api.dfg.CornellDiningNow import CornellDiningNow
+from api.dfg.DictResponseWrapper import DictResponseWrapper
+from api.dfg.EateryGroupByType import EateryGroupByType
+from api.dfg.EateryToJson import EateryToJson
+from api.dfg.ExternalEateries import ExternalEateries
+from api.dfg.GoogleSheetsEateries import GoogleSheetsEateries
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
         EateryGroupByType(
-            Concat([
-                CornellDiningNow(),
-                ExternalEateries()
-            ])
+            CalculateWaitTimes(
+                Concat([
+                    CornellDiningNow(),
+                    ExternalEateries()
+                ])
+            )
         )
     ),
     re_raise_exceptions=True
@@ -32,7 +35,6 @@ def index(request):
         end=date.today() + timedelta(days=7)
     )
     return JsonResponse(result)
-
 
 def google_sheets_eateries(request):
     dfg = DictResponseWrapper(
@@ -50,4 +52,3 @@ def google_sheets_eateries(request):
     )
 
     return JsonResponse(result)
-

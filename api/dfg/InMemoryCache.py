@@ -1,6 +1,6 @@
 import time
 
-from src.dfg.DfgNode import DfgNode
+from api.dfg.DfgNode import DfgNode
 
 
 class InMemoryCache(DfgNode):

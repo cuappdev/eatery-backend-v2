@@ -1,6 +1,6 @@
-from src.datatype.Cafe import Cafe
-from src.datatype.DiningHall import DiningHall
-from src.dfg.DfgNode import DfgNode
+from api.datatype.Cafe import Cafe
+from api.datatype.DiningHall import DiningHall
+from api.dfg.DfgNode import DfgNode
 
 
 class EateryGroupByType(DfgNode):
