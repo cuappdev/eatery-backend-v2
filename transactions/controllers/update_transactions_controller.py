@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.db.models import Q
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, tzinfo
 from random import randrange
+import pytz
 
 from transactions.models import TransactionHistory
 class UpdateTransactionsController:
@@ -95,8 +96,10 @@ class UpdateTransactionsController:
                 "result": None,
                 "error": "Invalid date"
             }
-        recent_datetime = datetime.strptime(self._data["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
+        tz = pytz.timezone('America/New_York')
+        recent_datetime = tz.localize(datetime.strptime(self._data["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p'))
         canonical_date = recent_datetime.date()
+        block_end_time = recent_datetime.time()
         if recent_datetime.hour < 4:
             # between 12am and 4am associate this with the previous day
             canonical_date = canonical_date - timedelta(days=1)
@@ -109,7 +112,7 @@ class UpdateTransactionsController:
             else:
                 num_inserted += 1
                 try:
-                    TransactionHistory.objects.create(name = name, canonical_date = canonical_date, timestamp=recent_datetime, transaction_count=place["CROWD_COUNT"])
+                    TransactionHistory.objects.create(name = name, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
                 except:
                     num_inserted -= 1
         return {
