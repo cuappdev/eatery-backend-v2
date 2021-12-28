@@ -61,27 +61,33 @@
             "diningItems": [
                 {
                     "item": "Salads",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Burrito Bowl",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Burrito",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Chicken Tenders",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Fries",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Pho",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 }
             ]
         },
@@ -159,23 +165,28 @@
             "diningItems": [
                 {
                     "item": "Pizza",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Pasta",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Sandwiches",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Sushi to Go",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Soft Drinks",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 }
             ]
         },
@@ -231,23 +242,28 @@
             "diningItems": [
                 {
                     "item": "Sandwiches",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Soups",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Baked Goods",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Candy",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Soft Drinks",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 }
             ]
         },
@@ -301,11 +317,13 @@
             "diningItems": [
                 {
                     "item": "Coffee",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Baked Goods",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 }
             ]
         },
@@ -381,47 +399,58 @@
             "diningItems": [
                 {
                     "item": "French Fries",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Garlic Bread",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Cold Sandwiches",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Hot Sandwiches",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Hot Subs",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Pizza Subs",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Burgers",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Egg Sandwiches",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Hot Dogs",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Wraps",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Salads",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 }
             ]
         },
@@ -490,51 +519,63 @@
             "diningItems": [
                 {
                     "item": "Whole Grains",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Spices",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Legumes",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Fresh and Frozen Produce",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Nuts",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Dried Fruits",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Tofu",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Eggs",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Milks",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Kombucha on Tap",
-                    "healthy": true
+                    "healthy": true,
+                    "category": "General"
                 },
                 {
                     "item": "Bottled Drinks",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 },
                 {
                     "item": "Bulk Items",
-                    "healthy": false
+                    "healthy": false,
+                    "category": "General"
                 }
             ]
         }
