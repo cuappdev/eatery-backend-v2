@@ -7,20 +7,17 @@ from api.dfg.CalculateWaitTimes import CalculateWaitTimes
 from api.dfg.Concat import Concat
 from api.dfg.CornellDiningNow import CornellDiningNow
 from api.dfg.DictResponseWrapper import DictResponseWrapper
-from api.dfg.EateryGroupByType import EateryGroupByType
 from api.dfg.EateryToJson import EateryToJson
 from api.dfg.ExternalEateries import ExternalEateries
 from api.dfg.GoogleSheetsEateries import GoogleSheetsEateries
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
-        EateryGroupByType(
-            CalculateWaitTimes(
-                Concat([
-                    CornellDiningNow(),
-                    ExternalEateries()
-                ])
-            )
+        CalculateWaitTimes(
+            Concat([
+                CornellDiningNow(),
+                ExternalEateries()
+            ])
         )
     ),
     re_raise_exceptions=True

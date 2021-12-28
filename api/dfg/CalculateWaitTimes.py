@@ -1,5 +1,3 @@
-from api.datatype.Cafe import Cafe
-from api.datatype.DiningHall import DiningHall
 from api.dfg.DfgNode import DfgNode
 from transactions.models import TransactionHistory
 from transactions.serializers import TransactionHistorySerializer
