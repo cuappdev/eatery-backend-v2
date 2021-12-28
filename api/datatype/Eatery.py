@@ -1,5 +1,6 @@
 from datetime import date
-from typing import Optional
+from typing import Mapping, Optional
+from .WaitTime import WaitTime
 
 import pytz
 
@@ -13,7 +14,7 @@ class Eatery:
             campus_area: str,
             events: list[Event],
             latitude: float,
-            longitude: float,
+            longitude: float
     ):
         self.name = name
         self.campus_area = campus_area
