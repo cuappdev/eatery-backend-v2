@@ -19,7 +19,7 @@ def ingest(request):
                 timestamp = time.strptime(data['TIMESTAMP'], '%Y-%m-%d %I:%M:%S %p')
                 if counter % 100 == 1:
                     print(timestamp)
-                if timestamp.tm_year == 2021:
+                if timestamp.tm_year == 2021 and timestamp.tm_mon > 7:
                     counter += 1
                     res = UpdateTransactionsController(data).process()
                     if res["success"]:
