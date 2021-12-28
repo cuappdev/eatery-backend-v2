@@ -2,6 +2,8 @@ from typing import Optional
 
 from datetime import date, datetime, time
 
+from api.datatype.Menu import Menu
+
 import pytz
 
 
@@ -9,16 +11,26 @@ class Event:
 
     def __init__(
             self,
+            description: str,
             canonical_date: date,
             start_timestamp: int,
             end_timestamp: int,
+            menu: Menu
     ):
+        self.description = description
         self.canonical_date = canonical_date
         self.start_timestamp = start_timestamp
         self.end_timestamp = end_timestamp
+        self.menu = menu
 
     def to_json(self):
-        raise Exception()
+        return {
+            "description": self.description,
+            "canonical_date": str(self.canonical_date),
+            "start_timestamp": self.start_timestamp,
+            "end_timestamp": self.end_timestamp,
+            "menu": self.menu.to_json()
+        }
 
     def __contains__(self, item: int):
         return self.start_timestamp <= item <= self.end_timestamp

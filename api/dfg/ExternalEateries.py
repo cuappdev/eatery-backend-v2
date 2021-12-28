@@ -5,10 +5,10 @@ from typing import Union
 import pytz
 
 from api.dfg.DfgNode import DfgNode
-from api.datatype.Cafe import Cafe
-from api.datatype.DiningHall import DiningHall
-from api.datatype.CafeMenu import CafeMenu
-from api.datatype.CafeEvent import CafeEvent
+from api.datatype.Eatery import Eatery
+from api.datatype.Event import Event
+from api.datatype.Menu import Menu
+from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
 
 import json
@@ -29,7 +29,7 @@ class ExternalEateries(DfgNode):
         'sunday'
     ]
 
-    def __call__(self, *args, **kwargs) -> list[Union[Cafe, DiningHall]]:
+    def __call__(self, *args, **kwargs) -> list[Eatery]:
         eateries = []
 
         with open(ExternalEateries.EXTERNAL_EATERIES_PATH) as f:
@@ -39,7 +39,7 @@ class ExternalEateries(DfgNode):
             end = kwargs.get("end", start + datetime.timedelta(days=7))
 
             for json_eatery in json_eateries:
-                eateries.append(ExternalEateries.cafe_from_json(
+                eateries.append(ExternalEateries.eatery_from_json(
                     json_eatery,
                     start=start,
                     end=end
@@ -48,30 +48,29 @@ class ExternalEateries(DfgNode):
         return eateries
 
     @staticmethod
-    def cafe_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> Cafe:
-        return Cafe(
+    def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> Eatery:
+        return Eatery(
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
-            events=ExternalEateries.cafe_events_from_json(
+            events=ExternalEateries.eatery_events_from_json(
                 json_operating_hours=json_eatery["operatingHours"],
                 json_dates_closed=json_eatery["datesClosed"],
+                json_dining_items = json_eatery["diningItems"],
                 start_date=start,
-                end_date=end
+                end_date=end,
             ),
             latitude=json_eatery["coordinates"]["latitude"],
-            longitude=json_eatery["coordinates"]["longitude"],
-            menu=ExternalEateries.cafe_menu_from_json(
-                json_eatery["diningItems"]
-            )
+            longitude=json_eatery["coordinates"]["longitude"]
         )
 
     @staticmethod
-    def cafe_events_from_json(
+    def eatery_events_from_json(
             json_operating_hours: list,
             json_dates_closed: list,
+            json_dining_items: list,
             start_date: datetime.date,
             end_date: datetime.date
-    ) -> list[CafeEvent]:
+    ) -> list[Event]:
         weekday_to_event_templates: dict[int: list[dict]] = {}
 
         for json_weekday_event_templates in json_operating_hours:
@@ -94,13 +93,15 @@ class ExternalEateries(DfgNode):
                         weekday_to_event_templates[weekday] = []
 
                     weekday_to_event_templates[weekday].append(event_template)
-        resolved_events: list[CafeEvent] = []
+        resolved_events: list[Event] = []
         current = start_date
         while current <= end_date:
             if current.weekday() in weekday_to_event_templates:
                 for event_template in weekday_to_event_templates[current.weekday()]:
-                    event = CafeEvent(
+                    event = Event(
+                        description=event_template["descr"],
                         canonical_date=current,
+                        menu=ExternalEateries.eatery_menu_from_json(json_dining_items),
                         start_timestamp=ExternalEateries.timestamp_combined(
                             current,
                             ExternalEateries.time_since_midnight(event_template["start"])
@@ -133,16 +134,16 @@ class ExternalEateries(DfgNode):
         )
 
     @staticmethod
-    def cafe_menu_from_json(json_dining_items: list) -> CafeMenu:
-        items = []
-
-        for json_dining_item in json_dining_items:
-            items.append(MenuItem(
-                healthy=json_dining_item["healthy"],
-                name=json_dining_item["item"]
-            ))
-
-        return CafeMenu(items=items)
+    def eatery_menu_from_json(json_dining_items: list) -> Menu:
+        category_map = {}
+        for item in json_dining_items:
+            if item['category'] not in category_map:
+                category_map[item['category']] = []
+            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name = item['item']))
+        categories = []
+        for category_name in category_map:
+            categories.append(MenuCategory(category_name, category_map[category_name]))
+        return Menu(categories=categories)
 
     @staticmethod
     def timestamp_combined(date: datetime.date, time: datetime.time):

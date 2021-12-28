@@ -6,9 +6,10 @@ from typing import Optional
 
 import pytz
 
-from api.datatype.Cafe import Cafe
-from api.datatype.CafeEvent import CafeEvent
-from api.datatype.CafeMenu import CafeMenu
+from api.datatype.Eatery import Eatery
+from api.datatype.Event import Event
+from api.datatype.Menu import Menu
+from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
 from api.dfg.DfgNode import DfgNode
 
@@ -42,28 +43,27 @@ class GoogleSheetsEateries(DfgNode):
             json_eateries = json.load(f)["eateries"]
 
             for json_eatery in json_eateries:
-                eateries.append(self.cafe_from_json(json_eatery))
+                eateries.append(self.eatery_from_json(json_eatery))
 
         return eateries
 
-    def cafe_from_json(self, json_eatery: dict) -> Cafe:
-        return Cafe(
+    def eatery_from_json(self, json_eatery: dict) -> Eatery:
+        return Eatery(
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
-            events=self.cafe_events_from_google_sheets(
+            events=self.events_from_google_sheets(
                 table_name=json_eatery["name"],
+                dining_items=json_eatery["dining_items"]
             ),
             latitude=json_eatery["coordinates"]["latitude"],
             longitude=json_eatery["coordinates"]["longitude"],
-            menu=GoogleSheetsEateries.cafe_menu_from_json(
-                json_eatery["diningItems"]
-            )
         )
 
-    def cafe_events_from_google_sheets(
+    def events_from_google_sheets(
             self,
             table_name: str,
-    ) -> list[CafeEvent]:
+            dining_items: list
+    ) -> list[Event]:
         scopes = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
         creds = None
         if os.path.exists(self.token_cache_path):
@@ -94,13 +94,13 @@ class GoogleSheetsEateries(DfgNode):
 
         events = []
         for row in values:
-            event = self.parse_row(row)
+            event = self.parse_row(row, dining_items)
             if event is not None:
                 events.append(event)
 
         return events
 
-    def parse_row(self, row: list[str]) -> Optional[CafeEvent]:
+    def parse_row(self, row: list[str], dining_items: list) -> Optional[Event]:
         if len(row) != 3:
             return None
 
@@ -116,10 +116,11 @@ class GoogleSheetsEateries(DfgNode):
         if start_time is None or end_time is None:
             return None
 
-        return CafeEvent(
+        return Event(
             canonical_date=date,
             start_timestamp=GoogleSheetsEateries.timestamp_combined(date, start_time),
-            end_timestamp=GoogleSheetsEateries.timestamp_combined(date, end_time)
+            end_timestamp=GoogleSheetsEateries.timestamp_combined(date, end_time),
+            menu=GoogleSheetsEateries.eatery_menu_from_json(dining_items)
         )
 
     def parse_time(self, time_str: str) -> Optional[datetime.time]:
@@ -142,16 +143,16 @@ class GoogleSheetsEateries(DfgNode):
             return None
 
     @staticmethod
-    def cafe_menu_from_json(json_dining_items: list) -> CafeMenu:
-        items = []
-
-        for json_dining_item in json_dining_items:
-            items.append(MenuItem(
-                healthy=json_dining_item["healthy"],
-                name=json_dining_item["item"]
-            ))
-
-        return CafeMenu(items=items)
+    def eatery_menu_from_json(json_dining_items: list) -> Menu:
+        category_map = {}
+        for item in json_dining_items:
+            if item['category'] not in category_map:
+                category_map[item['category']] = []
+            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name = item['item']))
+        categories = []
+        for category_name in category_map:
+            categories.append(MenuCategory(category_name, category_map[category_name]))
+        return Menu(categories=categories)
 
     @staticmethod
     def timestamp_combined(date: datetime.date, time: datetime.time):
