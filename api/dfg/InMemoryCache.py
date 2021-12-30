@@ -69,8 +69,6 @@ class InMemoryCache(DfgNode):
     def to_json(self, *args, **kwargs):
         for snapshot in self.snapshots:
             if snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
-                print(f"{self}: Returning from cache")
                 return snapshot.to_json()
-
         return EateryToJson.to_json(self.child(*args, **kwargs), *args, **kwargs)
 
