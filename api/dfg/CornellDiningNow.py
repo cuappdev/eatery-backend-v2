@@ -48,7 +48,6 @@ class CornellDiningNow(DfgNode):
                 json_dining_items = json_eatery["diningItems"],
                 is_cafe = is_cafe
             ),
-
         )
 
     @staticmethod

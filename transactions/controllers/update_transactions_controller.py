@@ -75,7 +75,7 @@ class UpdateTransactionsController:
         elif vendor_eatery_name == "manncafe":
             return "Mann Café"
         elif vendor_eatery_name == "statlermacs":
-            return "Mac's Café" # NOTE: Mac's apostrophe character is different from normal. Using normal apostrophe here
+            return "Mac's Café"
         else:
             # TODO: Add a slack notif / flag that a wait time location was not recognized
             return ""
