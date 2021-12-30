@@ -10,14 +10,17 @@ from api.dfg.DictResponseWrapper import DictResponseWrapper
 from api.dfg.EateryToJson import EateryToJson
 from api.dfg.ExternalEateries import ExternalEateries
 from api.dfg.GoogleSheetsEateries import GoogleSheetsEateries
+from api.dfg.InMemoryCache import InMemoryCache
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
-        CalculateWaitTimes(
-            Concat([
-                CornellDiningNow(),
-                ExternalEateries()
-            ])
+        InMemoryCache(
+            CalculateWaitTimes(
+                Concat([
+                    CornellDiningNow(),
+                    ExternalEateries()
+                ])
+            )
         )
     ),
     re_raise_exceptions=True
