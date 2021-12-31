@@ -49,6 +49,7 @@ class CornellDiningNow(DfgNode):
                 is_cafe = is_cafe
             ),
             payment_methods=CornellDiningNow.generate_payment_methods(json_eatery["payMethods"]),
+            location=None,
             online_order_url=json_eatery["onlineOrderUrl"] if json_eatery["onlineOrdering"] else None
         )
 
