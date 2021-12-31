@@ -15,7 +15,7 @@ import json
 
 
 class ExternalEateries(DfgNode):
-
+    # TODO: Make parsing of ExternalEateries the same as parsing of normal eateries, except from file, and then read external data on top of this
     EXTERNAL_EATERIES_PATH = "static_sources/external_eateries.json"
 
     # based on date.weekday()
@@ -60,8 +60,26 @@ class ExternalEateries(DfgNode):
                 end_date=end,
             ),
             latitude=json_eatery["coordinates"]["latitude"],
-            longitude=json_eatery["coordinates"]["longitude"]
+            longitude=json_eatery["coordinates"]["longitude"],
+            payment_methods=ExternalEateries.generate_payment_methods(json_eatery["payMethods"]),
+            online_order_url=json_eatery["onlineOrderUrl"] if json_eatery["onlineOrdering"] else None
         )
+
+
+    @staticmethod
+    def generate_payment_methods(json_paymethods: list):
+        payment_methods = []
+        takes_cash = True
+        takes_brbs = any([method["descrshort"] == "Meal Plan - Debit" for method in json_paymethods])
+        takes_swipes = any([method["descrshort"] == "Meal Plan - Swipe" for method in json_paymethods])
+        if takes_cash:
+            payment_methods.append("cash")
+        if takes_brbs:
+            payment_methods.append("brbs")
+        if takes_swipes:
+            payment_methods.append("swipes")
+        return payment_methods
+    
 
     @staticmethod
     def eatery_events_from_json(

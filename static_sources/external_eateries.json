@@ -6,7 +6,6 @@
             "name": "Terrace Restaurant",
             "nameshort": "Terrace",
             "about": "",
-            "cornellDining": false,
             "contactPhone": "1-800-541-2501",
             "coordinates": {
                 "latitude": 42.446267,
@@ -23,6 +22,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "monday-friday",
@@ -114,6 +115,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "monday-friday",
@@ -213,6 +216,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "monday-friday",
@@ -290,6 +295,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "monday-friday",
@@ -350,6 +357,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "monday-friday",
@@ -477,6 +486,8 @@
                     "descrshort": "cafe"
                 }
             ],
+            "onlineOrdering": false,
+            "onlineOrderUrl": null,
             "operatingHours": [
                 {
                     "weekday": "wednesday-thursday",
