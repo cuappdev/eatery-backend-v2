@@ -27,7 +27,7 @@ class DataSnapshot():
 
 class InMemoryCache(DfgNode):
 
-    def __init__(self, child, expiration: float = 60, max_size: int = 5):
+    def __init__(self, child, expiration: float = 3600, max_size: int = 5):
         self.child = child
         self.expiration = expiration
         self.max_size = max_size
