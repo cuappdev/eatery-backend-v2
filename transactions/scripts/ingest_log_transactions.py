@@ -1,13 +1,16 @@
 # Transaction Histories used to be stored in a giant log file. Ingest that log file into the db
 
-import requests
 import json
 import time
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from django.views.decorators.csrf import csrf_exempt
 
 from transactions.controllers.update_transactions_controller import UpdateTransactionsController
 from ..models import TransactionHistory
 
+@api_view(['POST'])
+@csrf_exempt
 def ingest(request):
     num_deleted = TransactionHistory.objects.all().delete()[0]
     counter = 0
