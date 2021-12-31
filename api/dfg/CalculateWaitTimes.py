@@ -43,32 +43,32 @@ class CalculateWaitTimes(DfgNode):
 
         return eatery_results
 
-    # Expected amount of time (in minutes) for the length of the line to decrease by 1 person
+    # Expected amount of time (in seconds) for the length of the line to decrease by 1 person
     # Returns [lower, expected, upper]
     @staticmethod
     def LINE_DECREASE_BY_ONE_TIME(eatery_name: str) -> float:
         # TODO: Move these hardcoded names into a string file
         if eatery_name == "Mac's Café": 
-            return [0.4, 0.45, 0.5]
+            return [24, 27, 30]
         elif eatery_name == "Mattin's Café":
-            return [0.15, 0.25, 0.35]
+            return [9, 15, 21]
         elif eatery_name == "Terrace Restaurant":
-            return [0.25, 0.45, 0.6]
+            return [15, 27, 36]
         else:
-            return [0.3, 0.35, 0.4]
+            return [18, 21, 24]
     
-    # Expected amount of time (in minutes) for a person to get food, assuming an empty eatery, not including the amount of time to check out
+    # Expected amount of time (in seconds) for a person to get food, assuming an empty eatery, not including the amount of time to check out
     # Returns [lower, expected, upper]
     @staticmethod
     def BASE_TIME_TO_GET_FOOD(eatery_name: str) -> float:
         if eatery_name == "Mac's Café":
-            return [4, 5, 6]
+            return [240, 300, 360]
         elif eatery_name == "Mattin's Café":
-            return [2.5, 3.5, 4.5]
+            return [150, 210, 270]
         elif eatery_name == "Terrace Restaurant":
-            return [3, 5, 7]
+            return [180, 300, 420]
         else:
-            return [3, 4, 5]
+            return [180, 240, 300]
 
     @staticmethod
     def generate_eatery_wait_times_by_day(
@@ -83,27 +83,25 @@ class CalculateWaitTimes(DfgNode):
             line_decrease_times = CalculateWaitTimes.LINE_DECREASE_BY_ONE_TIME(eatery.name)
             # we assume all the guests in this transaction bucket showed up [how_long_ago_guest_arrival] minutes ago
             how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index].data["transaction_avg"]
-            prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // 5)
+            prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
                 print("Fatal Wait Times Error - prev_bucket_guest_arrival far too large.")
             else:
                 customers_waiting_in_line[prev_bucket_guest_arrival] += transactions[index].data["transaction_avg"]
                 num_customers = customers_waiting_in_line.pop(0)
-                wait_time_low = base_times[0] + line_decrease_times[0] * num_customers
-                wait_time_expected = base_times[1] + line_decrease_times[1] * num_customers
-                wait_time_high = base_times[2] + line_decrease_times[2] * num_customers
-                relative_density = num_customers
+                wait_time_low = int(base_times[0] + line_decrease_times[0] * num_customers)
+                wait_time_expected = int(base_times[1] + line_decrease_times[1] * num_customers)
+                wait_time_high = int(base_times[2] + line_decrease_times[2] * num_customers)
 
                 customers_waiting_in_line.append(0.0)
                 block_end_time = datetime.strptime(transactions[index].data['block_end_time'], '%H:%M:%S').time()
-                block_end_timestamp = CalculateWaitTimes.timestamp_combined(date, block_end_time)
-                if any([block_end_timestamp in event for event in eatery.events()]):
+                timestamp = int(CalculateWaitTimes.timestamp_combined(date, block_end_time) - 5 * 60 / 2)
+                if any([timestamp in event for event in eatery.events()]):
                     wait_times.insert(0, WaitTime(
-                            end_timestamp=block_end_timestamp, 
+                            timestamp=timestamp, 
                             wait_time_low = wait_time_low,
                             wait_time_expected= wait_time_expected,
-                            wait_time_high = wait_time_high,
-                            relative_density= relative_density))
+                            wait_time_high = wait_time_high))
                 
         return WaitTimesByDay(date, wait_times)
 
