@@ -62,6 +62,7 @@ class ExternalEateries(DfgNode):
             latitude=json_eatery["coordinates"]["latitude"],
             longitude=json_eatery["coordinates"]["longitude"],
             payment_methods=ExternalEateries.generate_payment_methods(json_eatery["payMethods"]),
+            location=None,
             online_order_url=json_eatery["onlineOrderUrl"] if json_eatery["onlineOrdering"] else None
         )
 

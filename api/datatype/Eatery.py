@@ -16,7 +16,7 @@ class Eatery:
             latitude: float,
             longitude: float,
             payment_methods: list[str],
-            location: str,
+            location: Optional[str],
             online_order_url: Optional[str] = None
     ):
         self.name = name
