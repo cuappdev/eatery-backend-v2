@@ -25,8 +25,5 @@ class DictResponseWrapper(DfgNode):
                 "error": str(e)
             }
 
-    def children(self):
-        return [self.child]
-
     def description(self):
         return "DictResponseWrapper"

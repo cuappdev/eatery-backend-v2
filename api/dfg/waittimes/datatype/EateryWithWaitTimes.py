@@ -2,12 +2,12 @@
 
 from datetime import date
 from typing import Mapping, Optional
-from .Eatery import Eatery
+from ...assembly.datatype.Eatery import Eatery
 from .WaitTimesByDay import WaitTimesByDay
 
 import pytz
 
-class EateryResult:
+class EateryWithWaitTimes:
 
     def __init__(
             self,
