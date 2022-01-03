@@ -21,7 +21,7 @@ class Event:
         self.canonical_date = canonical_date
         self.start_timestamp = start_timestamp
         self.end_timestamp = end_timestamp
-        self.menu = menu,
+        self.menu = menu
         self.exists = exists
 
     def to_json(self):
@@ -42,6 +42,9 @@ def _combined_timestamp(date: date, time: time, tzinfo: pytz.timezone) -> int:
 
 
 def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Optional[date], end: Optional[date]):
+    if events is None:
+        return []
+
     if start is None and end is None:
         return events
 

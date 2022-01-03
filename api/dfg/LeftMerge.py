@@ -2,7 +2,7 @@ from typing import TypeVar, Optional
 
 from api.datatype.Eatery import Eatery
 from api.datatype.Event import Event
-from api.datatype.WaitTimesByDay import WaitTimesByDay
+from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.DfgNode import DfgNode
 from api.dfg.EateryToJson import EateryToJson
 
@@ -14,6 +14,9 @@ class LeftMerge(DfgNode):
         self.left = left
         self.right = right
 
+    def children(self):
+        return [self.left, self.right]
+
     def __call__(self, *args, **kwargs):
         merged_eateries = []
         right_eateries = self.right(*args, **kwargs)
@@ -23,13 +26,13 @@ class LeftMerge(DfgNode):
                 merged_eateries.append(left_eatery)
             else:
                 right_eateries = [right_eatery for right_eatery in right_eateries if right_eatery.id != left_eatery.id]
+                merged_eateries.append(LeftMerge.merge_eateries(left_eatery, updated_eatery))
 
-        merged_eateries.add(right_eateries)
         return merged_eateries
 
     @staticmethod 
     def merge_eateries(left: Eatery, right: Eatery):
-        merged_events = LeftMerge.merge_events(left.events, right.events)
+        merged_events = LeftMerge.merge_events(left.events(), right.events())
         return Eatery(
             id=left.id,
             name=LeftMerge.merge_fields(left.name, right.name),
@@ -56,23 +59,23 @@ class LeftMerge(DfgNode):
                 right_event.canonical_date != left_event.canonical_date or 
                 right_event.description != left_event.description
             ]
-            merged_events.add(left_event)
-        merged_events.add(right)
+            merged_events.append(left_event)
+        merged_events.extend(right)
         return merged_events
 
     @staticmethod
-    def merge_and_filter_waittimes(left: list[WaitTimesByDay], right: list[WaitTimesByDay], events: list[Event]) -> list[WaitTimesByDay]:
+    def merge_and_filter_waittimes(left: list[WaitTimesDay], right: list[WaitTimesDay], events: list[Event]) -> list[WaitTimesDay]:
         wait_times_filtered = []
         wait_times = LeftMerge.merge_fields(left, right)
         if wait_times is None:
             return None
         for wait_times_by_day in wait_times:
-            wait_times_by_day_filtered = []
-            for wait_time in wait_times_by_day.daily_wait_times:
-                if any([wait_time.timestamp in event for event in events]):
-                    wait_times_by_day_filtered.append(wait_time)
+            filtered_data = []
+            for wait_time_data in wait_times_by_day.data:
+                if any([wait_time_data.timestamp in event for event in events]):
+                    filtered_data.append(wait_time_data)
             wait_times_filtered.append(
-                WaitTimesByDay(canonical_date=wait_times_by_day.canonical_date, wait_times=wait_times_by_day_filtered)
+                WaitTimesDay(canonical_date=wait_times_by_day.canonical_date, data=filtered_data)
             )
         return wait_times_filtered
         
@@ -81,4 +84,4 @@ class LeftMerge(DfgNode):
         return self.children
 
     def description(self):
-        return "Merge"
+        return "LeftMerge"

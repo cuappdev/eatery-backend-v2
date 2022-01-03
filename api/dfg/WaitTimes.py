@@ -4,7 +4,7 @@ from datetime import date, datetime, timedelta
 import pytz
 
 from api.datatype.Eatery import Eatery, EateryID
-from api.datatype.WaitTimesByDay import WaitTimesByDay
+from api.datatype.WaitTimesDay import WaitTimesDay
 from api.datatype.WaitTime import WaitTime
 
 from api.dfg.DfgNode import DfgNode
@@ -26,11 +26,11 @@ class WaitTimes(DfgNode):
                 past_day = date - timedelta(days = 7 * i)
                 past_days.append(past_day)
             transaction_avg_counts = TransactionHistory.objects.filter(canonical_date__in=past_days) \
-                .values("id", "block_end_time") \
+                .values("eatery_id", "block_end_time") \
                 .annotate(transaction_avg=Avg("transaction_count"))
             for unit in transaction_avg_counts:
                 transaction_history = TransactionHistorySerializer(unit)
-                eatery_id = EateryID(transaction_history.data['id'])
+                eatery_id = EateryID(transaction_history.data['eatery_id'])
                 eatery_ids.add(eatery_id)
                 if eatery_id not in transactions_on_date:
                     transactions_on_date[eatery_id] = []
@@ -43,10 +43,10 @@ class WaitTimes(DfgNode):
             eatery_wait_times_by_day = []
             for date in transactions_by_date:
                 if eatery_id in transactions_by_date[date]:
-                    eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(eatery_id))
+                    eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(eatery_id, date, transactions_by_date[date][eatery_id]))
             eateries.append(
                 Eatery(
-                    eatery_id=eatery_id, 
+                    id=eatery_id, 
                     wait_times = eatery_wait_times_by_day
                 )
             )
@@ -87,8 +87,8 @@ class WaitTimes(DfgNode):
         eatery_id: int, 
         date: date, 
         transactions: list[TransactionHistorySerializer]
-    ) -> WaitTimesByDay:
-        wait_times = []
+    ) -> WaitTimesDay:
+        wait_times_data = []
         customers_waiting_in_line = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         for index in reversed(range(0, len(transactions))):
             base_times = WaitTimes.base_time_to_get_food(eatery_id)
@@ -112,13 +112,13 @@ class WaitTimes(DfgNode):
                 customers_waiting_in_line.append(0.0)
                 block_end_time = datetime.strptime(transactions[index].data['block_end_time'], '%H:%M:%S').time()
                 timestamp = int(WaitTimes.timestamp_combined(date, block_end_time) - 5 * 60 / 2)
-                wait_times.insert(0, WaitTime(
+                wait_times_data.insert(0, WaitTime(
                         timestamp=timestamp, 
                         wait_time_low = wait_time_low,
                         wait_time_expected= wait_time_expected,
                         wait_time_high = wait_time_high))
                 
-        return WaitTimesByDay(date, wait_times)
+        return WaitTimesDay(canonical_date = date, data = wait_times_data)
 
     @staticmethod
     def timestamp_combined(date: datetime.date, time: datetime.time):
@@ -130,7 +130,5 @@ class WaitTimes(DfgNode):
         tz = pytz.timezone('America/New_York')
         return int(tz.localize(datetime.combine(date, time)).timestamp())
 
-
-
     def description(self):
-        return "FetchTransactionCounts"
+        return "WaitTimes"

@@ -5,9 +5,9 @@ from django.db import models
 # [transaction_count] transactions at [name] in time range [block_end_time - 5 minutes, block_end_time] on [canonical_date]
 class TransactionHistory(models.Model):
     class Meta:
-        unique_together = ('id', 'block_end_time', 'canonical_date')
+        unique_together = ('eatery_id', 'block_end_time', 'canonical_date')
         indexes = [models.Index(fields = ['canonical_date'])]  
-    id = models.IntegerField()
+    eatery_id = models.IntegerField()
     canonical_date = models.DateField()
     block_end_time = models.TimeField()
     transaction_count = models.IntegerField()
