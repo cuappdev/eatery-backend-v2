@@ -41,6 +41,8 @@ class AddWaitTimesToEateries(DfgNode):
             return [9, 15, 21]
         elif eatery_name == "Terrace Restaurant":
             return [15, 27, 36]
+        elif eatery_name == "Okenshields":
+            return [4, 8, 12]
         else:
             return [18, 21, 24]
     
@@ -54,6 +56,8 @@ class AddWaitTimesToEateries(DfgNode):
             return [150, 210, 270]
         elif eatery_name == "Terrace Restaurant":
             return [180, 300, 420]
+        elif eatery_name == "Okenshields":
+            return [80, 120, 180]
         else:
             return [180, 240, 300]
 
@@ -72,6 +76,10 @@ class AddWaitTimesToEateries(DfgNode):
             how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index].data["transaction_avg"]
             prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
+                # TODO: Send a slack error here instead
+                print(how_long_ago_guest_arrival)
+                print(date)
+                print(transactions[index].data)
                 print("Fatal Wait Times Error - prev_bucket_guest_arrival far too large.")
             else:
                 customers_waiting_in_line[prev_bucket_guest_arrival] += transactions[index].data["transaction_avg"]
