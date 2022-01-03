@@ -10,7 +10,6 @@ from api.datatype.MenuItem import MenuItem
 
 from datetime import date
 
-
 class CornellDiningNow(DfgNode):
 
     CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
@@ -27,7 +26,6 @@ class CornellDiningNow(DfgNode):
             eateries = []
             for json_eatery in json_eateries:
                 eateries.append(CornellDiningNow.parse_eatery(json_eatery))
-
             return eateries
 
         else:
@@ -41,8 +39,7 @@ class CornellDiningNow(DfgNode):
         }
         return Eatery(
             id=CornellDiningNow.dining_id_to_internal_id(json_eatery["id"]),
-            about=json_eatery["about"],
-            about_short=json_eatery["aboutshort"],
+            name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
             latitude=json_eatery["latitude"],
             longitude=json_eatery["longitude"],
@@ -88,7 +85,8 @@ class CornellDiningNow(DfgNode):
                     description=json_event["descr"],
                     start_timestamp=json_event["startTimestamp"],
                     end_timestamp=json_event["endTimestamp"],
-                    menu=CornellDiningNow.eatery_menu_from_json(json_event["menu"], json_dining_items, is_cafe)
+                    menu=CornellDiningNow.eatery_menu_from_json(json_event["menu"], json_dining_items, is_cafe),
+                    exists=True
                 ))
 
         return events

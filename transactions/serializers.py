@@ -17,7 +17,7 @@ class TransactionHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = TransactionHistory
         fields = (
-            "name",
+            "eatery_id",
             "canonical_date",
             "block_end_time",
             "transaction_avg"

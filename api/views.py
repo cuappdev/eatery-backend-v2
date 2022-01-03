@@ -2,42 +2,41 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
-from api.dfg.WaitTimes import FetchTransactionCounts
 
 from api.dfg.CornellDiningNow import CornellDiningNow
 from api.dfg.EateryStubs import EateryStubs
 from api.dfg.ExternalEateries import ExternalEateries
 
-from api.dfg.AssembleEateries import AssembleEateries
-from api.dfg.AddWaitTimesToEateries import AddWaitTimesToEateries
-
 from api.dfg.DictResponseWrapper import DictResponseWrapper
 from api.dfg.EateryToJson import EateryToJson
 from api.dfg.InMemoryCache import InMemoryCache
+from api.dfg.LeftMerge import LeftMerge
+from api.dfg.WaitTimes import WaitTimes
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
         InMemoryCache(
-            AddWaitTimesToEateries(
-                eateries=AssembleEateries(
-                    stubs=EateryStubs(),
-                    cornell_dining=CornellDiningNow(),
-                    override=ExternalEateries()
-                ),
-                transaction_counts = FetchTransactionCounts()
+            LeftMerge(
+                WaitTimes(),
+                LeftMerge(
+                    ExternalEateries(),
+                    LeftMerge(
+                        CornellDiningNow(),
+                        EateryStubs()
+                    )
+                )
             )
         )
     ),
     re_raise_exceptions=True
 )
 
-
 def index(request):
     tzinfo = pytz.timezone("US/Eastern")
     reload = request.GET.get('reload')
     result = dataflow_graph(
         tzinfo=tzinfo,
-        reload=reload is not None and reload is not "false",
+        reload=reload is not None and reload != "false",
         start=date.today(),
         end=date.today() + timedelta(days=7)
     )
