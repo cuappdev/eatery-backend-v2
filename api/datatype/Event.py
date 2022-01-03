@@ -2,10 +2,9 @@ from typing import Optional
 
 from datetime import date, datetime, time
 
-from api.dfg.preparation.datatype.Menu import Menu
+from api.datatype.Menu import Menu
 
 import pytz
-
 
 class Event:
 
@@ -15,13 +14,15 @@ class Event:
             canonical_date: date,
             start_timestamp: int,
             end_timestamp: int,
-            menu: Menu
+            menu: Menu,
+            exists: bool
     ):
         self.description = description
         self.canonical_date = canonical_date
         self.start_timestamp = start_timestamp
         self.end_timestamp = end_timestamp
-        self.menu = menu
+        self.menu = menu,
+        self.exists = exists
 
     def to_json(self):
         return {

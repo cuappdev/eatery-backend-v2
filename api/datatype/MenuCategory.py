@@ -1,4 +1,4 @@
-from api.dfg.preparation.datatype.MenuItem import MenuItem
+from api.datatype.MenuItem import MenuItem
 
 class MenuCategory:
 
