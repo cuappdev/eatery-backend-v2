@@ -2,7 +2,7 @@ from typing import Optional
 
 from datetime import date, datetime, time
 
-from api.datatype.Menu import Menu
+from api.dfg.preparation.datatype.Menu import Menu
 
 import pytz
 

@@ -5,14 +5,16 @@ from typing import Union
 import pytz
 
 from api.dfg.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery
-from api.datatype.Event import Event
-from api.datatype.Menu import Menu
-from api.datatype.MenuCategory import MenuCategory
-from api.datatype.MenuItem import MenuItem
+
+from api.dfg.preparation.datatype.OverrideEatery import OverrideEatery
+from api.dfg.preparation.datatype.OverrideEvent import OverrideEvent
+from api.dfg.preparation.datatype.Menu import Menu
+from api.dfg.preparation.datatype.MenuCategory import MenuCategory
+from api.dfg.preparation.datatype.MenuItem import MenuItem
 
 import json
 
+# eventually need to deprecate this for a custom DB backend storing all of the overrides
 
 class ExternalEateries(DfgNode):
     # TODO: Make parsing of ExternalEateries the same as parsing of normal eateries, except from file, and then read external data on top of this
@@ -29,7 +31,7 @@ class ExternalEateries(DfgNode):
         'sunday'
     ]
 
-    def __call__(self, *args, **kwargs) -> list[Eatery]:
+    def __call__(self, *args, **kwargs) -> list[OverrideEatery]:
         eateries = []
 
         with open(ExternalEateries.EXTERNAL_EATERIES_PATH) as f:
@@ -48,8 +50,8 @@ class ExternalEateries(DfgNode):
         return eateries
 
     @staticmethod
-    def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> Eatery:
-        return Eatery(
+    def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> OverrideEatery:
+        return OverrideEatery(
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
             events=ExternalEateries.eatery_events_from_json(
@@ -62,7 +64,9 @@ class ExternalEateries(DfgNode):
             latitude=json_eatery["coordinates"]["latitude"],
             longitude=json_eatery["coordinates"]["longitude"],
             payment_methods=ExternalEateries.generate_payment_methods(json_eatery["payMethods"]),
-            online_order_url=json_eatery["onlineOrderUrl"] if json_eatery["onlineOrdering"] else None
+            location=json_eatery["location"],
+            online_order=json_eatery["onlineOrdering"],
+            online_order_url=json_eatery["onlineOrderUrl"]
         )
 
 
@@ -88,7 +92,7 @@ class ExternalEateries(DfgNode):
             json_dining_items: list,
             start_date: datetime.date,
             end_date: datetime.date
-    ) -> list[Event]:
+    ) -> list[OverrideEvent]:
         weekday_to_event_templates: dict[int: list[dict]] = {}
 
         for json_weekday_event_templates in json_operating_hours:
@@ -111,12 +115,12 @@ class ExternalEateries(DfgNode):
                         weekday_to_event_templates[weekday] = []
 
                     weekday_to_event_templates[weekday].append(event_template)
-        resolved_events: list[Event] = []
+        resolved_events: list[OverrideEvent] = []
         current = start_date
         while current <= end_date:
             if current.weekday() in weekday_to_event_templates:
                 for event_template in weekday_to_event_templates[current.weekday()]:
-                    event = Event(
+                    event = OverrideEvent(
                         description=event_template["descr"],
                         canonical_date=current,
                         menu=ExternalEateries.eatery_menu_from_json(json_dining_items),
@@ -127,7 +131,8 @@ class ExternalEateries(DfgNode):
                         end_timestamp=ExternalEateries.timestamp_combined(
                             current,
                             ExternalEateries.time_since_midnight(event_template["end"])
-                        )
+                        ),
+                        exists=True
                     )
 
                     resolved_events.append(event)

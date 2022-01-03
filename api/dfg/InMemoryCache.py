@@ -33,7 +33,6 @@ class InMemoryCache(DfgNode):
         self.max_size = max_size
         self.snapshots: list[DataSnapshot] = []
         
-
     def current_time(self):
         return time.time()
 
@@ -49,8 +48,9 @@ class InMemoryCache(DfgNode):
         return oldest_snapshot_index
 
     def __call__(self, *args, **kwargs):
+        should_reload = kwargs.get("reload")
         for snapshot in self.snapshots:
-            if snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
+            if not should_reload and snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
                 print(f"{self}: Returning from cache")
                 return snapshot.get_data()
 
@@ -62,9 +62,6 @@ class InMemoryCache(DfgNode):
             index_to_replace = self.fifo_index()
             self.snapshots[index_to_replace] = new_snapshot
         return new_snapshot.get_data()
-
-    def children(self):
-        return [self.child]
 
     def to_json(self, *args, **kwargs):
         for snapshot in self.snapshots:

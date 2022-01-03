@@ -1,9 +1,7 @@
 from typing import Union
 
-from api.datatype.EateryResult import EateryResult
+from api.dfg.waittimes.datatype.EateryWithWaitTimes import EateryWithWaitTimes
 from api.dfg.DfgNode import DfgNode
-
-
 class EateryToJson(DfgNode):
 
     def __init__(self, child: DfgNode):
@@ -14,7 +12,7 @@ class EateryToJson(DfgNode):
         return EateryToJson.to_json(result, *args, **kwargs)
 
     @staticmethod
-    def to_json(obj: Union[list, dict, EateryResult], *args, **kwargs):
+    def to_json(obj: Union[list, dict, EateryWithWaitTimes], *args, **kwargs):
         if isinstance(obj, list):
             return [
                 EateryToJson.to_json(elem, *args, **kwargs)
@@ -33,6 +31,3 @@ class EateryToJson(DfgNode):
                 start=kwargs.get("start"),
                 end=kwargs.get("end")
             )
-
-    def children(self):
-        return [self.child]

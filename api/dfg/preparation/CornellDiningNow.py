@@ -1,12 +1,12 @@
-from typing import Union
+import requests
 
 from api.dfg.DfgNode import DfgNode
-import requests
-from api.datatype.Eatery import Eatery
-from api.datatype.Event import Event
-from api.datatype.Menu import Menu
-from api.datatype.MenuCategory import MenuCategory
-from api.datatype.MenuItem import MenuItem
+from api.dfg.preparation.datatype.CornellDiningEatery import CornellDiningEatery
+from api.dfg.preparation.datatype.Event import Event
+from api.dfg.preparation.datatype.Menu import Menu
+from api.dfg.preparation.datatype.MenuCategory import MenuCategory
+from api.dfg.preparation.datatype.MenuItem import MenuItem
+
 from datetime import date
 
 
@@ -14,7 +14,7 @@ class CornellDiningNow(DfgNode):
 
     CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
 
-    def __call__(self, *args, **kwargs) -> list[Eatery]:
+    def __call__(self, *args, **kwargs) -> list[CornellDiningEatery]:
         try:
             response = requests.get(CornellDiningNow.CORNELL_DINING_URL).json()
 
@@ -33,13 +33,15 @@ class CornellDiningNow(DfgNode):
             raise Exception(response["message"])
 
     @staticmethod
-    def parse_eatery(json_eatery: dict) -> Eatery:
+    def parse_eatery(json_eatery: dict) -> CornellDiningEatery:
         is_cafe = "Cafe" in {
             eatery_type["descr"]
             for eatery_type in json_eatery["eateryTypes"]
         }
-        return Eatery(
+        return CornellDiningEatery(
             name=json_eatery["name"],
+            about=json_eatery["about"],
+            about_short=json_eatery["aboutshort"],
             campus_area=json_eatery["campusArea"]["descrshort"],
             latitude=json_eatery["latitude"],
             longitude=json_eatery["longitude"],
@@ -49,7 +51,9 @@ class CornellDiningNow(DfgNode):
                 is_cafe = is_cafe
             ),
             payment_methods=CornellDiningNow.generate_payment_methods(json_eatery["payMethods"]),
-            online_order_url=json_eatery["onlineOrderUrl"] if json_eatery["onlineOrdering"] else None
+            location=json_eatery["location"],
+            online_order=json_eatery["onlineOrdering"],
+            online_order_url=json_eatery["onlineOrderUrl"]
         )
 
     @staticmethod

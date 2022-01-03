@@ -6,11 +6,11 @@ from typing import Optional
 
 import pytz
 
-from api.datatype.Eatery import Eatery
-from api.datatype.Event import Event
-from api.datatype.Menu import Menu
-from api.datatype.MenuCategory import MenuCategory
-from api.datatype.MenuItem import MenuItem
+from api.dfg.assembly.datatype.Eatery import Eatery
+from api.dfg.preparation.datatype.Event import Event
+from api.dfg.preparation.datatype.Menu import Menu
+from api.dfg.preparation.datatype.MenuCategory import MenuCategory
+from api.dfg.preparation.datatype.MenuItem import MenuItem
 from api.dfg.DfgNode import DfgNode
 
 import os.path
@@ -39,11 +39,11 @@ class GoogleSheetsEateries(DfgNode):
     def __call__(self, *args, **kwargs):
         eateries = []
 
-        with open(self.external_eateries_path) as f:
-            json_eateries = json.load(f)["eateries"]
+        # with open(self.external_eateries_path) as f:
+        #     json_eateries = json.load(f)["eateries"]
 
-            for json_eatery in json_eateries:
-                eateries.append(self.eatery_from_json(json_eatery))
+        #     for json_eatery in json_eateries:
+        #         eateries.append(self.eatery_from_json(json_eatery))
 
         return eateries
 
