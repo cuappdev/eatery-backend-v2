@@ -10,75 +10,75 @@ class UpdateTransactionsController:
 
     # Converts the Vendor's name for the eatery into the name stored in our backend
     @staticmethod
-    def eatery_name(vendor_eatery_name):
+    def vendor_name_to_internal_id(vendor_eatery_name):
         vendor_eatery_name = ''.join(c.lower() for c in vendor_eatery_name if c.isalpha())
         if vendor_eatery_name == "bearnecessities":
-            return "Bear Necessities Grill & C-Store"
+            return 4
         elif vendor_eatery_name == "northstarmarketplace":
-            return "North Star Dining Room"
+            return 25
         elif vendor_eatery_name == "jansensmarket":
-            return "Jansen's Market"
+            return 19
         elif vendor_eatery_name == "stockinghallcafe" or vendor_eatery_name == "stockinghall":
-            return "Cornell Dairy Bar"
+            return 11
         elif vendor_eatery_name == "marthas":
-            return "Martha's Café"
+            return 22
         elif vendor_eatery_name == "cafejennie":
-            return "Café Jennie"
+            return 8
         elif vendor_eatery_name == "goldiescafe":
-            return "Goldie's Café"
+            return 14
         elif vendor_eatery_name == "alicecookhouse":
-            return "Cook House Dining Room"
+            return 10
         elif vendor_eatery_name == "carlbeckerhouse":
-            return "Becker House Dining Room"
+            return 5
         elif vendor_eatery_name == "duffield":
-            return "Mattin's Café"
+            return 23
         elif vendor_eatery_name == "greendragon":
-            return "Green Dragon"
+            return 15
         elif vendor_eatery_name == "trillium":
-            return "Trillium"
+            return 32
         elif vendor_eatery_name == "olinlibecafe":
-            return "Amit Bhatia Libe Café"
+            return 2
         elif vendor_eatery_name == "carolscafe":
-            return "Carol's Café"
+            return 9
         elif vendor_eatery_name == "statlerterrace":
-            return "Terrace Restaurant"
+            return 33
         elif vendor_eatery_name == "busstopbagels":
-            return "Bus Stop Bagels"
+            return 7
         elif vendor_eatery_name == "kosher":
-            return "104West!"
+            return 1
         elif vendor_eatery_name == "jansensatbethehouse":
-            return "Jansen's Dining Room at Bethe House"
+            return 18
         elif vendor_eatery_name == "keetonhouse":
-            return "Keeton House Dining Room"
+            return 20
         elif vendor_eatery_name == "rpme":
-            return "Robert Purcell Marketplace Eatery"
+            return 28
         elif vendor_eatery_name == "rosehouse":
-            return "Rose House Dining Room"
+            return 29
         elif vendor_eatery_name == "risley":
-            return "Risley Dining Room"
+            return 27
         elif vendor_eatery_name == "frannysft":
-            return "Franny's"
+            return 13
         elif vendor_eatery_name == "mccormicks":
-            return "McCormick's at Moakley House"
+            return 24
         elif vendor_eatery_name == "sage":
-            return "Atrium Café"
+            return 3
         elif vendor_eatery_name == "straightmarket":
-            return "Straight from the Market"
+            return 31
         elif vendor_eatery_name == "crossingscafe":
-            return "Crossings Café"
+            return 12
         elif vendor_eatery_name == "okenshields":
-            return "Okenshields"
+            return 26
         elif vendor_eatery_name == "bigredbarn":
-            return "Big Red Barn"
+            return 6
         elif vendor_eatery_name == "rustys":
-            return "Rusty's"
+            return 30
         elif vendor_eatery_name == "manncafe":
-            return "Mann Café"
+            return 21
         elif vendor_eatery_name == "statlermacs":
-            return "Mac's Café"
+            return 34
         else:
             # TODO: Add a slack notif / flag that a wait time location was not recognized
-            return ""
+            return -1
 
     def __init__(self, data):
         self._data = data
@@ -106,13 +106,13 @@ class UpdateTransactionsController:
         num_inserted = 0
         ignored_names = set()
         for place in self._data["UNITS"]:
-            name = UpdateTransactionsController.eatery_name(place["UNIT_NAME"])
-            if len(name) == 0:
+            internal_id = UpdateTransactionsController.vendor_name_to_internal_id(place["UNIT_NAME"])
+            if id < 0:
                 ignored_names.add(place["UNIT_NAME"])
             else:
                 num_inserted += 1
                 try:
-                    TransactionHistory.objects.create(name = name, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
+                    TransactionHistory.objects.create(id = internal_id, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
                 except:
                     num_inserted -= 1
         return {

@@ -2,14 +2,14 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
-from api.dfg.waittimes.FetchTransactionCounts import FetchTransactionCounts
+from api.dfg.WaitTimes import FetchTransactionCounts
 
-from api.dfg.preparation.CornellDiningNow import CornellDiningNow
-from api.dfg.preparation.EateryStubs import EateryStubs
-from api.dfg.preparation.ExternalEateries import ExternalEateries
+from api.dfg.CornellDiningNow import CornellDiningNow
+from api.dfg.EateryStubs import EateryStubs
+from api.dfg.ExternalEateries import ExternalEateries
 
-from api.dfg.assembly.AssembleEateries import AssembleEateries
-from api.dfg.waittimes.AddWaitTimesToEateries import AddWaitTimesToEateries
+from api.dfg.AssembleEateries import AssembleEateries
+from api.dfg.AddWaitTimesToEateries import AddWaitTimesToEateries
 
 from api.dfg.DictResponseWrapper import DictResponseWrapper
 from api.dfg.EateryToJson import EateryToJson

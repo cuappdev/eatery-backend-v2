@@ -6,11 +6,11 @@ from typing import Optional
 
 import pytz
 
-from api.dfg.assembly.datatype.Eatery import Eatery
-from api.dfg.preparation.datatype.Event import Event
-from api.dfg.preparation.datatype.Menu import Menu
-from api.dfg.preparation.datatype.MenuCategory import MenuCategory
-from api.dfg.preparation.datatype.MenuItem import MenuItem
+from api.datatype.Eatery import Eatery
+from api.datatype.Event import Event
+from api.datatype.Menu import Menu
+from api.datatype.MenuCategory import MenuCategory
+from api.datatype.MenuItem import MenuItem
 from api.dfg.DfgNode import DfgNode
 
 import os.path

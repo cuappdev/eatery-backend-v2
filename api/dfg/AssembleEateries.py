@@ -2,9 +2,9 @@
 
 from typing import Optional, TypeVar
 from api.dfg.DfgNode import DfgNode
-from api.dfg.assembly.datatype.Eatery import Eatery
+from api.datatype.Eatery import Eatery
 from api.dfg.preparation.datatype.EateryStub import EateryStub
-from api.dfg.preparation.datatype.Event import Event
+from api.datatype.Event import Event
 from api.dfg.preparation.datatype.OverrideEatery import OverrideEatery
 from api.dfg.preparation.datatype.CornellDiningEatery import CornellDiningEatery
 from api.dfg.preparation.datatype.OverrideEvent import OverrideEvent
