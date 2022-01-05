@@ -24,3 +24,6 @@ class EateryFromJson(DfgNode):
             ]
         else:
             return Eatery.from_json(obj)
+    
+    def description(self):
+        return "EateryFromJson"

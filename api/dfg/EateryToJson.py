@@ -27,3 +27,6 @@ class EateryToJson(DfgNode):
                 start=kwargs.get("start"),
                 end=kwargs.get("end")
             )
+    
+    def description(self):
+        return "EateryToJson"

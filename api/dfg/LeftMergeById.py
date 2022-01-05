@@ -39,7 +39,7 @@ class LeftMergeById(DfgNode):
         return merged_lst
 
     def description(self):
-        return "LeftMerge"
+        return "LeftMergeById"
 
 
 def _pop_first(lst: list):
