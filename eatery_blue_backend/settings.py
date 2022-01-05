@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-tup==8h@6!ewid!sfi*)jomsejj4j@=w=u*2ri9g0*0$3)1dkq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["d706-2601-187-8400-2076-1158-3d93-7b45-1456.ngrok.io", "127.0.0.1"]
+ALLOWED_HOSTS = ["d706-2601-187-8400-2076-1158-3d93-7b45-1456.ngrok.io", "127.0.0.1", "localhost"]
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "transactions"
+    "transactions",
+    "eateries"
 ]
 
 MIDDLEWARE = [

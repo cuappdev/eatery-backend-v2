@@ -5,80 +5,82 @@ from datetime import datetime, timedelta, tzinfo
 from random import randrange
 import pytz
 
+from api.datatype.Eatery import EateryID
+
 from transactions.models import TransactionHistory
 class UpdateTransactionsController:
 
     # Converts the Vendor's name for the eatery into the name stored in our backend
     @staticmethod
-    def eatery_name(vendor_eatery_name):
+    def vendor_name_to_internal_id(vendor_eatery_name):
         vendor_eatery_name = ''.join(c.lower() for c in vendor_eatery_name if c.isalpha())
         if vendor_eatery_name == "bearnecessities":
-            return "Bear Necessities Grill & C-Store"
+            return EateryID.BEAR_NECESSITIES
         elif vendor_eatery_name == "northstarmarketplace":
-            return "North Star Dining Room"
+            return EateryID.NORTH_STAR_DINING
         elif vendor_eatery_name == "jansensmarket":
-            return "Jansen's Market"
+            return EateryID.JANSENS_MARKET
         elif vendor_eatery_name == "stockinghallcafe" or vendor_eatery_name == "stockinghall":
-            return "Cornell Dairy Bar"
+            return EateryID.DAIRY_BAR
         elif vendor_eatery_name == "marthas":
-            return "Martha's Café"
+            return EateryID.MARTHAS_CAFE
         elif vendor_eatery_name == "cafejennie":
-            return "Café Jennie"
+            return EateryID.CAFE_JENNIE
         elif vendor_eatery_name == "goldiescafe":
-            return "Goldie's Café"
+            return EateryID.GOLDIES_CAFE
         elif vendor_eatery_name == "alicecookhouse":
-            return "Cook House Dining Room"
+            return EateryID.COOK_HOUSE
         elif vendor_eatery_name == "carlbeckerhouse":
-            return "Becker House Dining Room"
+            return EateryID.BECKER_HOUSE
         elif vendor_eatery_name == "duffield":
-            return "Mattin's Café"
+            return EateryID.MATTINS_CAFE
         elif vendor_eatery_name == "greendragon":
-            return "Green Dragon"
+            return EateryID.GREEN_DRAGON
         elif vendor_eatery_name == "trillium":
-            return "Trillium"
+            return EateryID.TRILLIUM
         elif vendor_eatery_name == "olinlibecafe":
-            return "Amit Bhatia Libe Café"
+            return EateryID.LIBE_CAFE
         elif vendor_eatery_name == "carolscafe":
-            return "Carol's Café"
+            return EateryID.CAROLS_CAFE
         elif vendor_eatery_name == "statlerterrace":
-            return "Terrace Restaurant"
+            return EateryID.TERRACE
         elif vendor_eatery_name == "busstopbagels":
-            return "Bus Stop Bagels"
+            return EateryID.BUS_STOP_BAGELS
         elif vendor_eatery_name == "kosher":
-            return "104West!"
+            return EateryID.ONE_ZERO_FOUR_WEST
         elif vendor_eatery_name == "jansensatbethehouse":
-            return "Jansen's Dining Room at Bethe House"
+            return EateryID.BETHE_HOUSE
         elif vendor_eatery_name == "keetonhouse":
-            return "Keeton House Dining Room"
+            return EateryID.KEETON_HOUSE
         elif vendor_eatery_name == "rpme":
-            return "Robert Purcell Marketplace Eatery"
+            return EateryID.RPCC
         elif vendor_eatery_name == "rosehouse":
-            return "Rose House Dining Room"
+            return EateryID.ROSE_HOUSE
         elif vendor_eatery_name == "risley":
-            return "Risley Dining Room"
+            return EateryID.RISLEY
         elif vendor_eatery_name == "frannysft":
-            return "Franny's"
+            return EateryID.FRANNYS
         elif vendor_eatery_name == "mccormicks":
-            return "McCormick's at Moakley House"
+            return EateryID.MCCORMICKS
         elif vendor_eatery_name == "sage":
-            return "Atrium Café"
+            return EateryID.ATRIUM_CAFE
         elif vendor_eatery_name == "straightmarket":
-            return "Straight from the Market"
+            return EateryID.STRAIGHT_FROM_THE_MARKET
         elif vendor_eatery_name == "crossingscafe":
-            return "Crossings Café"
+            return EateryID.CROSSINGS_CAFE
         elif vendor_eatery_name == "okenshields":
-            return "Okenshields"
+            return EateryID.OKENSHIELDS
         elif vendor_eatery_name == "bigredbarn":
-            return "Big Red Barn"
+            return EateryID.BIG_RED_BARN
         elif vendor_eatery_name == "rustys":
-            return "Rusty's"
+            return EateryID.RUSTYS
         elif vendor_eatery_name == "manncafe":
-            return "Mann Café"
+            return EateryID.MANN_CAFE
         elif vendor_eatery_name == "statlermacs":
-            return "Mac's Café"
+            return EateryID.MACS_CAFE
         else:
             # TODO: Add a slack notif / flag that a wait time location was not recognized
-            return ""
+            return None
 
     def __init__(self, data):
         self._data = data
@@ -106,13 +108,13 @@ class UpdateTransactionsController:
         num_inserted = 0
         ignored_names = set()
         for place in self._data["UNITS"]:
-            name = UpdateTransactionsController.eatery_name(place["UNIT_NAME"])
-            if len(name) == 0:
+            internal_id = UpdateTransactionsController.vendor_name_to_internal_id(place["UNIT_NAME"]).value
+            if internal_id == None:
                 ignored_names.add(place["UNIT_NAME"])
             else:
                 num_inserted += 1
                 try:
-                    TransactionHistory.objects.create(name = name, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
+                    TransactionHistory.objects.create(eatery_id = internal_id, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
                 except:
                     num_inserted -= 1
         return {

@@ -2,42 +2,44 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
-from api.dfg.waittimes.FetchTransactionCounts import FetchTransactionCounts
 
-from api.dfg.preparation.CornellDiningNow import CornellDiningNow
-from api.dfg.preparation.EateryStubs import EateryStubs
-from api.dfg.preparation.ExternalEateries import ExternalEateries
-
-from api.dfg.assembly.AssembleEateries import AssembleEateries
-from api.dfg.waittimes.AddWaitTimesToEateries import AddWaitTimesToEateries
+from api.dfg.CornellDiningNow import CornellDiningNow
+from api.dfg.EateryStubs import EateryStubs
+from api.dfg.ExternalEateries import ExternalEateries
 
 from api.dfg.DictResponseWrapper import DictResponseWrapper
 from api.dfg.EateryToJson import EateryToJson
 from api.dfg.InMemoryCache import InMemoryCache
+from api.dfg.macros.LeftMergeEateries import LeftMergeEateries
+from api.dfg.WaitTimes import WaitTimes
+from api.dfg.WaitTimeFilter import WaitTimeFilter
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
         InMemoryCache(
-            AddWaitTimesToEateries(
-                eateries=AssembleEateries(
-                    stubs=EateryStubs(),
-                    cornell_dining=CornellDiningNow(),
-                    override=ExternalEateries()
-                ),
-                transaction_counts = FetchTransactionCounts()
+            WaitTimeFilter(
+                LeftMergeEateries(
+                    WaitTimes(),
+                    LeftMergeEateries(
+                        ExternalEateries(),
+                        LeftMergeEateries(
+                            CornellDiningNow(),
+                            EateryStubs()
+                        )
+                    )
+                )
             )
         )
     ),
     re_raise_exceptions=True
 )
 
-
 def index(request):
     tzinfo = pytz.timezone("US/Eastern")
     reload = request.GET.get('reload')
     result = dataflow_graph(
         tzinfo=tzinfo,
-        reload=reload is not None and reload is not "false",
+        reload=reload is not None and reload != "false",
         start=date.today(),
         end=date.today() + timedelta(days=7)
     )
