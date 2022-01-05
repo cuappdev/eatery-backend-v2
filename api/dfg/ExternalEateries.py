@@ -132,8 +132,7 @@ class ExternalEateries(DfgNode):
                         end_timestamp=ExternalEateries.timestamp_combined(
                             current,
                             ExternalEateries.time_since_midnight(event_template["end"])
-                        ),
-                        exists=True
+                        )
                     )
 
                     resolved_events.append(event)

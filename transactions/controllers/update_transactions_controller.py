@@ -80,7 +80,7 @@ class UpdateTransactionsController:
             return EateryID.MACS_CAFE
         else:
             # TODO: Add a slack notif / flag that a wait time location was not recognized
-            return EateryID.NULL
+            return None
 
     def __init__(self, data):
         self._data = data
@@ -109,7 +109,7 @@ class UpdateTransactionsController:
         ignored_names = set()
         for place in self._data["UNITS"]:
             internal_id = UpdateTransactionsController.vendor_name_to_internal_id(place["UNIT_NAME"]).value
-            if internal_id < 0:
+            if internal_id == None:
                 ignored_names.add(place["UNIT_NAME"])
             else:
                 num_inserted += 1
