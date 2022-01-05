@@ -17,3 +17,6 @@ class LeftMergeEateries(DfgNode):
 
     def __call__(self, *args, **kwargs):
         return self.macro(*args, **kwargs)
+
+    def description(self):
+        return "LeftMergeEateries"
