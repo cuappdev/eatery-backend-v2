@@ -191,11 +191,11 @@ class CornellDiningNow(DfgNode):
         elif id == 30:
             return EateryID.ROSE_HOUSE
         elif id == 21:
-            return EateryID.ROSE_HOUSE
+            return EateryID.RUSTYS
         elif id == 13:
             return EateryID.STRAIGHT_FROM_THE_MARKET
         elif id == 23:
-            return EateryID.TERRACE
+            return EateryID.TRILLIUM
         else:
             return None
 
