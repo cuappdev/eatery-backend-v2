@@ -32,3 +32,6 @@ class WaitTimeFilter(DfgNode):
                 eatery_clone.wait_times = wait_times_filtered
                 result.append(eatery_clone)
         return result
+    
+    def description(self):
+        return "WaitTimeFilter"
