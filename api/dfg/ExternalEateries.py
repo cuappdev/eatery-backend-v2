@@ -1,23 +1,22 @@
 import datetime
+import json
 import re
-from typing import Union
 
 import pytz
-
-from api.dfg.DfgNode import DfgNode
 
 from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
+from api.dfg.DfgNode import DfgNode
 
-import json
 
 # eventually need to deprecate this for a custom DB backend storing all of the overrides
 
 class ExternalEateries(DfgNode):
-    # TODO: Make parsing of ExternalEateries the same as parsing of normal eateries, except from file, and then read external data on top of this
+    # TODO: Make parsing of ExternalEateries the same as parsing of normal eateries, except from file, and then read
+    # external data on top of this
     EXTERNAL_EATERIES_PATH = "static_sources/external_eateries.json"
 
     # based on date.weekday()
@@ -52,13 +51,13 @@ class ExternalEateries(DfgNode):
     @staticmethod
     def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> Eatery:
         return Eatery(
-            id = EateryID(json_eatery["id"]),
+            id=EateryID(json_eatery["id"]),
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
             events=ExternalEateries.eatery_events_from_json(
                 json_operating_hours=json_eatery["operatingHours"],
                 json_dates_closed=json_eatery["datesClosed"],
-                json_dining_items = json_eatery["diningItems"],
+                json_dining_items=json_eatery["diningItems"],
                 start_date=start,
                 end_date=end,
             ),
@@ -69,7 +68,6 @@ class ExternalEateries(DfgNode):
             online_order=json_eatery["onlineOrdering"],
             online_order_url=json_eatery["onlineOrderUrl"]
         )
-
 
     @staticmethod
     def generate_payment_methods(json_paymethods: list):
@@ -84,7 +82,6 @@ class ExternalEateries(DfgNode):
         if takes_swipes:
             payment_methods.append("swipes")
         return payment_methods
-    
 
     @staticmethod
     def eatery_events_from_json(
@@ -148,7 +145,7 @@ class ExternalEateries(DfgNode):
         if not match:
             return datetime.time()
 
-        hours = int(match.group(1))%12
+        hours = int(match.group(1)) % 12
         minutes = int(match.group(2))
         is_pm = match.group(3) == "pm"
         return datetime.time(
@@ -162,7 +159,7 @@ class ExternalEateries(DfgNode):
         for item in json_dining_items:
             if item['category'] not in category_map:
                 category_map[item['category']] = []
-            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name = item['item']))
+            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name=item['item']))
         categories = []
         for category_name in category_map:
             categories.append(MenuCategory(category_name, category_map[category_name]))
@@ -180,11 +177,3 @@ class ExternalEateries(DfgNode):
 
     def description(self):
         return "ExternalEateries"
-
-
-if __name__ == "__main__":
-    from api.dfg.EateryToJson import EateryToJson
-    import json
-
-    dfg = EateryToJson(ExternalEateries())
-    print(json.dumps(dfg(), indent=2))

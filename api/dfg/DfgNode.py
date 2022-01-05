@@ -4,7 +4,7 @@ class DfgNode:
         raise Exception()
 
     def children(self):
-            return []
+        return []
 
     def description(self):
         raise Exception()

@@ -1,6 +1,7 @@
 from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.DfgNode import DfgNode
 
+
 # Removes all wait times that are not part of the eatery's events
 
 class WaitTimeFilter(DfgNode):
@@ -21,7 +22,11 @@ class WaitTimeFilter(DfgNode):
                 for day_wait_times in eatery.wait_times:
                     filtered_data = []
                     for wait_time_data in day_wait_times.data:
-                        eatery_events = eatery.events(tzinfo=kwargs.get("tzinfo"), start=kwargs.get("start"), end=kwargs.get("end"))
+                        eatery_events = eatery.events(
+                            tzinfo=kwargs.get("tzinfo"),
+                            start=kwargs.get("start"),
+                            end=kwargs.get("end")
+                        )
                         if any([wait_time_data.timestamp in event for event in eatery_events]):
                             filtered_data.append(wait_time_data)
                     wait_times_filtered.append(WaitTimesDay(
@@ -32,6 +37,6 @@ class WaitTimeFilter(DfgNode):
                 eatery_clone.wait_times = wait_times_filtered
                 result.append(eatery_clone)
         return result
-    
+
     def description(self):
         return "WaitTimeFilter"

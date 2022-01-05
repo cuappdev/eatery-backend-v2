@@ -6,7 +6,8 @@ from typing import Optional
 from api.dfg.EateryToJson import EateryToJson
 
 
-class DataSnapshot():
+class DataSnapshot:
+
     def __init__(self, args, kwargs, data, time):
         self.data = data
         self.recorded_time = time
@@ -25,6 +26,7 @@ class DataSnapshot():
     def get_recorded_time(self):
         return self.recorded_time
 
+
 class InMemoryCache(DfgNode):
 
     def __init__(self, child, expiration: float = 3600, max_size: int = 5):
@@ -32,7 +34,7 @@ class InMemoryCache(DfgNode):
         self.expiration = expiration
         self.max_size = max_size
         self.snapshots: list[DataSnapshot] = []
-        
+
     def current_time(self):
         return time.time()
 
@@ -68,8 +70,6 @@ class InMemoryCache(DfgNode):
             if snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
                 return snapshot.to_json()
         return EateryToJson.to_json(self.child(*args, **kwargs), *args, **kwargs)
-    
+
     def description(self):
         return "InMemoryCache"
-
-
