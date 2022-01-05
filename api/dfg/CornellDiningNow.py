@@ -85,8 +85,7 @@ class CornellDiningNow(DfgNode):
                     description=json_event["descr"],
                     start_timestamp=json_event["startTimestamp"],
                     end_timestamp=json_event["endTimestamp"],
-                    menu=CornellDiningNow.eatery_menu_from_json(json_event["menu"], json_dining_items, is_cafe),
-                    exists=True
+                    menu=CornellDiningNow.eatery_menu_from_json(json_event["menu"], json_dining_items, is_cafe)
                 ))
 
         return events
@@ -198,7 +197,7 @@ class CornellDiningNow(DfgNode):
         elif id == 23:
             return EateryID.TERRACE
         else:
-            return EateryID.NULL
+            return None
 
     def description(self):
         return "CornellDiningNow"

@@ -18,4 +18,13 @@ class WaitTime:
             "wait_time_expected": self.wait_time_expected,
             "wait_time_high": self.wait_time_high
         }
+
+    @staticmethod
+    def from_json(wait_time_json):
+        return WaitTime(
+            timestamp = wait_time_json["timestamp"],
+            wait_time_low=wait_time_json["wait_time_low"],
+            wait_time_expected=wait_time_json["wait_time_expected"],
+            wait_time_high=wait_time_json["wait_time_high"]
+        )
     

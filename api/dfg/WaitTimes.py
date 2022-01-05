@@ -30,11 +30,12 @@ class WaitTimes(DfgNode):
                 .annotate(transaction_avg=Avg("transaction_count"))
             for unit in transaction_avg_counts:
                 transaction_history = TransactionHistorySerializer(unit)
-                eatery_id = EateryID(transaction_history.data['eatery_id'])
-                eatery_ids.add(eatery_id)
-                if eatery_id not in transactions_on_date:
-                    transactions_on_date[eatery_id] = []
-                transactions_on_date[eatery_id].append(transaction_history)
+                if transaction_history.data['eatery_id'] != 0:
+                    eatery_id = EateryID(transaction_history.data['eatery_id'])
+                    eatery_ids.add(eatery_id)
+                    if eatery_id not in transactions_on_date:
+                        transactions_on_date[eatery_id] = []
+                    transactions_on_date[eatery_id].append(transaction_history)
             transactions_by_date[date] = transactions_on_date
             date += timedelta(days=1)
         
@@ -98,9 +99,6 @@ class WaitTimes(DfgNode):
             prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
                 # TODO: Send a slack error here instead
-                print(how_long_ago_guest_arrival)
-                print(date)
-                print(transactions[index].data)
                 print("Fatal Wait Times Error - prev_bucket_guest_arrival far too large.")
             else:
                 customers_waiting_in_line[prev_bucket_guest_arrival] += transactions[index].data["transaction_avg"]

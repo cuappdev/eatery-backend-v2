@@ -14,15 +14,13 @@ class Event:
             canonical_date: date,
             start_timestamp: int,
             end_timestamp: int,
-            menu: Menu,
-            exists: bool
+            menu: Menu
     ):
         self.description = description
         self.canonical_date = canonical_date
         self.start_timestamp = start_timestamp
         self.end_timestamp = end_timestamp
         self.menu = menu
-        self.exists = exists
 
     def to_json(self):
         return {
@@ -32,6 +30,16 @@ class Event:
             "end_timestamp": self.end_timestamp,
             "menu": self.menu.to_json()
         }
+
+    @staticmethod
+    def from_json(event_json):
+        return Event(
+            description=event_json["description"],
+            canonical_date=date.fromisoformat(event_json["canonical_date"]),
+            start_timestamp=event_json["start_timestamp"],
+            end_timestamp=event_json["end_timestamp"],
+            menu=Menu.from_json(event_json["menu"])
+        )
 
     def __contains__(self, item: int):
         return self.start_timestamp <= item <= self.end_timestamp
@@ -44,7 +52,7 @@ def _combined_timestamp(date: date, time: time, tzinfo: pytz.timezone) -> int:
 def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Optional[date], end: Optional[date]):
     if events is None:
         return []
-
+        
     if start is None and end is None:
         return events
 

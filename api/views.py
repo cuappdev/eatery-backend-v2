@@ -10,19 +10,22 @@ from api.dfg.ExternalEateries import ExternalEateries
 from api.dfg.DictResponseWrapper import DictResponseWrapper
 from api.dfg.EateryToJson import EateryToJson
 from api.dfg.InMemoryCache import InMemoryCache
-from api.dfg.LeftMerge import LeftMerge
+from api.dfg.macros.LeftMergeEateries import LeftMergeEateries
 from api.dfg.WaitTimes import WaitTimes
+from api.dfg.WaitTimeFilter import WaitTimeFilter
 
 dataflow_graph = DictResponseWrapper(
     EateryToJson(
         InMemoryCache(
-            LeftMerge(
-                WaitTimes(),
-                LeftMerge(
-                    ExternalEateries(),
-                    LeftMerge(
-                        CornellDiningNow(),
-                        EateryStubs()
+            WaitTimeFilter(
+                LeftMergeEateries(
+                    WaitTimes(),
+                    LeftMergeEateries(
+                        ExternalEateries(),
+                        LeftMergeEateries(
+                            CornellDiningNow(),
+                            EateryStubs()
+                        )
                     )
                 )
             )
