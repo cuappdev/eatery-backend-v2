@@ -1,5 +1,6 @@
 from api.datatype.MenuItem import MenuItem
 
+
 class MenuCategory:
 
     def __init__(self, category: str, items: list[MenuItem]):
@@ -11,7 +12,7 @@ class MenuCategory:
             "category": self.category,
             "items": [item.to_json() for item in self.items]
         }
-    
+
     @staticmethod
     def from_json(category_json):
         return MenuCategory(
