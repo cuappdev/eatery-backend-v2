@@ -90,10 +90,11 @@ class WaitTimes(DfgNode):
 
     @staticmethod
     def generate_eatery_wait_times_by_day(
-            eatery_id: EateryID,
-            date: date,
-            transactions: list[TransactionHistorySerializer]
+        eatery_id: EateryID,
+        date: date,
+        transactions: list[TransactionHistorySerializer]
     ) -> WaitTimesDay:
+        
         wait_times_data = []
         customers_waiting_in_line = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         for index in reversed(range(0, len(transactions))):
