@@ -20,3 +20,10 @@ class MenuItem:
             "healthy": self.healthy,
             "name": self.name
         }
+    
+    @staticmethod
+    def from_json(item_json):
+        return MenuItem(
+            healthy=item_json["healthy"],
+            name=item_json["name"]
+        )

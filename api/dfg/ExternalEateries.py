@@ -6,11 +6,11 @@ import pytz
 
 from api.dfg.DfgNode import DfgNode
 
-from api.dfg.preparation.datatype.OverrideEatery import OverrideEatery
-from api.dfg.preparation.datatype.OverrideEvent import OverrideEvent
-from api.dfg.preparation.datatype.Menu import Menu
-from api.dfg.preparation.datatype.MenuCategory import MenuCategory
-from api.dfg.preparation.datatype.MenuItem import MenuItem
+from api.datatype.Eatery import Eatery, EateryID
+from api.datatype.Event import Event
+from api.datatype.Menu import Menu
+from api.datatype.MenuCategory import MenuCategory
+from api.datatype.MenuItem import MenuItem
 
 import json
 
@@ -31,7 +31,7 @@ class ExternalEateries(DfgNode):
         'sunday'
     ]
 
-    def __call__(self, *args, **kwargs) -> list[OverrideEatery]:
+    def __call__(self, *args, **kwargs) -> list[Eatery]:
         eateries = []
 
         with open(ExternalEateries.EXTERNAL_EATERIES_PATH) as f:
@@ -50,8 +50,9 @@ class ExternalEateries(DfgNode):
         return eateries
 
     @staticmethod
-    def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> OverrideEatery:
-        return OverrideEatery(
+    def eatery_from_json(json_eatery: dict, start: datetime.date, end: datetime.date) -> Eatery:
+        return Eatery(
+            id = EateryID(json_eatery["id"]),
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
             events=ExternalEateries.eatery_events_from_json(
@@ -92,7 +93,7 @@ class ExternalEateries(DfgNode):
             json_dining_items: list,
             start_date: datetime.date,
             end_date: datetime.date
-    ) -> list[OverrideEvent]:
+    ) -> list[Event]:
         weekday_to_event_templates: dict[int: list[dict]] = {}
 
         for json_weekday_event_templates in json_operating_hours:
@@ -115,12 +116,12 @@ class ExternalEateries(DfgNode):
                         weekday_to_event_templates[weekday] = []
 
                     weekday_to_event_templates[weekday].append(event_template)
-        resolved_events: list[OverrideEvent] = []
+        resolved_events: list[Event] = []
         current = start_date
         while current <= end_date:
             if current.weekday() in weekday_to_event_templates:
                 for event_template in weekday_to_event_templates[current.weekday()]:
-                    event = OverrideEvent(
+                    event = Event(
                         description=event_template["descr"],
                         canonical_date=current,
                         menu=ExternalEateries.eatery_menu_from_json(json_dining_items),
@@ -131,8 +132,7 @@ class ExternalEateries(DfgNode):
                         end_timestamp=ExternalEateries.timestamp_combined(
                             current,
                             ExternalEateries.time_since_midnight(event_template["end"])
-                        ),
-                        exists=True
+                        )
                     )
 
                     resolved_events.append(event)

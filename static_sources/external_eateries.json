@@ -1,6 +1,7 @@
 {
     "eateries": [
         {
+            "id": 33,
             "slug": "Terrace",
             "external": true,
             "name": "Terrace Restaurant",
@@ -93,6 +94,7 @@
             ]
         },
         {
+            "id": 34,
             "slug": "Macs",
             "external": true,
             "name": "Mac's Café",
@@ -194,6 +196,7 @@
             ]
         },
         {
+            "id": 35,
             "slug": "Zeus",
             "external": true,
             "name": "Temple of Zeus",
@@ -273,6 +276,7 @@
             ]
         },
         {
+            "id": 36,
             "slug": "Gimme-Coffee",
             "external": true,
             "name": "Gimme Coffee",
@@ -335,6 +339,7 @@
             ]
         },
         {
+            "id": 37,
             "slug": "Louies-Lunch",
             "external": true,
             "name": "Louie's Lunch",
@@ -464,6 +469,7 @@
             ]
         },
         {
+            "id": 38,
             "slug": "Anabels-Grocery",
             "external": true,
             "name": "Anabel's Grocery",

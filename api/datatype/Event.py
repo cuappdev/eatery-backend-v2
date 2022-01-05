@@ -2,10 +2,9 @@ from typing import Optional
 
 from datetime import date, datetime, time
 
-from api.dfg.preparation.datatype.Menu import Menu
+from api.datatype.Menu import Menu
 
 import pytz
-
 
 class Event:
 
@@ -32,6 +31,16 @@ class Event:
             "menu": self.menu.to_json()
         }
 
+    @staticmethod
+    def from_json(event_json):
+        return Event(
+            description=event_json["description"],
+            canonical_date=date.fromisoformat(event_json["canonical_date"]),
+            start_timestamp=event_json["start_timestamp"],
+            end_timestamp=event_json["end_timestamp"],
+            menu=Menu.from_json(event_json["menu"])
+        )
+
     def __contains__(self, item: int):
         return self.start_timestamp <= item <= self.end_timestamp
 
@@ -41,6 +50,9 @@ def _combined_timestamp(date: date, time: time, tzinfo: pytz.timezone) -> int:
 
 
 def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Optional[date], end: Optional[date]):
+    if events is None:
+        return []
+        
     if start is None and end is None:
         return events
 
