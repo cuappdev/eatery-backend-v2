@@ -10,8 +10,8 @@ from api.datatype.MenuItem import MenuItem
 
 from datetime import date
 
-class CornellDiningNow(DfgNode):
 
+class CornellDiningNow(DfgNode):
     CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
@@ -45,8 +45,8 @@ class CornellDiningNow(DfgNode):
             longitude=json_eatery["longitude"],
             events=CornellDiningNow.eatery_events_from_json(
                 json_operating_hours=json_eatery["operatingHours"],
-                json_dining_items = json_eatery["diningItems"],
-                is_cafe = is_cafe
+                json_dining_items=json_eatery["diningItems"],
+                is_cafe=is_cafe
             ),
             payment_methods=CornellDiningNow.generate_payment_methods(json_eatery["payMethods"]),
             location=json_eatery["location"],
@@ -103,12 +103,12 @@ class CornellDiningNow(DfgNode):
         for item in json_dining_items:
             if item['category'] not in category_map:
                 category_map[item['category']] = []
-            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name = item['item']))
+            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name=item['item']))
         categories = []
         for category_name in category_map:
             categories.append(MenuCategory(category_name, category_map[category_name]))
         return Menu(categories=categories)
-    
+
     @staticmethod
     def dining_hall_menu_from_json(json_menu: list) -> Menu:
         json_menu = sorted(
@@ -173,13 +173,13 @@ class CornellDiningNow(DfgNode):
         elif id == 29:
             return EateryID.KEETON_HOUSE
         elif id == 42:
-            return EateryID.MANN_CAFE 
+            return EateryID.MANN_CAFE
         elif id == 18:
             return EateryID.MARTHAS_CAFE
         elif id == 19:
             return EateryID.MATTINS_CAFE
         elif id == 33:
-            return EateryID.MCCORMICKS 
+            return EateryID.MCCORMICKS
         elif id == 3:
             return EateryID.NORTH_STAR_DINING
         elif id == 20:
@@ -187,15 +187,15 @@ class CornellDiningNow(DfgNode):
         elif id == 4:
             return EateryID.RISLEY
         elif id == 5:
-            return EateryID.RPCC 
+            return EateryID.RPCC
         elif id == 30:
             return EateryID.ROSE_HOUSE
         elif id == 21:
-            return EateryID.ROSE_HOUSE
+            return EateryID.RUSTYS
         elif id == 13:
             return EateryID.STRAIGHT_FROM_THE_MARKET
         elif id == 23:
-            return EateryID.TERRACE
+            return EateryID.TRILLIUM
         else:
             return None
 

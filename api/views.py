@@ -34,6 +34,7 @@ dataflow_graph = DictResponseWrapper(
     re_raise_exceptions=True
 )
 
+
 def index(request):
     tzinfo = pytz.timezone("US/Eastern")
     reload = request.GET.get('reload')
@@ -44,6 +45,7 @@ def index(request):
         end=date.today() + timedelta(days=7)
     )
     return JsonResponse(result)
+
 
 def google_sheets_eateries(request):
     # dfg = DictResponseWrapper(

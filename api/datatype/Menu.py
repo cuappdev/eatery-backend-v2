@@ -1,5 +1,6 @@
 from api.datatype.MenuCategory import MenuCategory
 
+
 class Menu:
 
     def __init__(self, categories: list[MenuCategory]):

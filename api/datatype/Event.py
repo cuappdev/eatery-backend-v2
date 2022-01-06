@@ -6,6 +6,7 @@ from api.datatype.Menu import Menu
 
 import pytz
 
+
 class Event:
 
     def __init__(
@@ -52,7 +53,7 @@ def _combined_timestamp(date: date, time: time, tzinfo: pytz.timezone) -> int:
 def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Optional[date], end: Optional[date]):
     if events is None:
         return []
-        
+
     if start is None and end is None:
         return events
 

@@ -3,7 +3,9 @@ from api.dfg.EateryToJson import EateryToJson
 from api.dfg.EateryFromJson import EateryFromJson
 from api.dfg.LeftMergeById import LeftMergeById
 
+
 class LeftMergeEateries(DfgNode):
+
     def __init__(self, left: DfgNode, right: DfgNode):
         self.macro = EateryFromJson(
             LeftMergeById(
