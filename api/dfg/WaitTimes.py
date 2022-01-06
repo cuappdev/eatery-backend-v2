@@ -45,8 +45,8 @@ class WaitTimes(DfgNode):
                 if eatery_id in transactions_by_date[date]:
                     transactions = transactions_by_date[date][eatery_id]
                 eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(
-                    eatery_id, 
-                    date, 
+                    eatery_id,
+                    date,
                     transactions
                 ))
             eateries.append(
