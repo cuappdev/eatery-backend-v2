@@ -22,9 +22,8 @@ class WaitTime:
     @staticmethod
     def from_json(wait_time_json):
         return WaitTime(
-            timestamp = wait_time_json["timestamp"],
+            timestamp=wait_time_json["timestamp"],
             wait_time_low=wait_time_json["wait_time_low"],
             wait_time_expected=wait_time_json["wait_time_expected"],
             wait_time_high=wait_time_json["wait_time_high"]
         )
-    

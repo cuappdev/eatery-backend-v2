@@ -3,6 +3,7 @@ from typing import Union
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery
 
+
 class EateryFromJson(DfgNode):
 
     def __init__(self, child: DfgNode):
@@ -14,7 +15,7 @@ class EateryFromJson(DfgNode):
 
     def children(self):
         return [self.child]
-    
+
     @staticmethod
     def from_json(obj: Union[list, dict], *args, **kwargs):
         if isinstance(obj, list):
@@ -24,6 +25,6 @@ class EateryFromJson(DfgNode):
             ]
         else:
             return Eatery.from_json(obj)
-    
+
     def description(self):
         return "EateryFromJson"
