@@ -2,6 +2,8 @@ from typing import Union
 
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery
+
+
 class EateryToJson(DfgNode):
 
     def __init__(self, child: DfgNode):
@@ -13,7 +15,7 @@ class EateryToJson(DfgNode):
 
     def children(self):
         return [self.child]
-    
+
     @staticmethod
     def to_json(obj: Union[list, Eatery], *args, **kwargs):
         if isinstance(obj, list):
@@ -27,6 +29,6 @@ class EateryToJson(DfgNode):
                 start=kwargs.get("start"),
                 end=kwargs.get("end")
             )
-    
+
     def description(self):
         return "EateryToJson"
