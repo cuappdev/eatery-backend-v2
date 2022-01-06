@@ -15,12 +15,11 @@ class WaitTimes(DfgNode):
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         transactions_by_date = {}
-        past_days = []
         date = kwargs.get("start")
-        eatery_ids = set()
         while date <= kwargs.get("end"):
             # We only calculate the wait times for this first day
             transactions_on_date = {}
+            past_days = []
             for i in range(1, 13):
                 # Look at the last 13 weeks, for each block_end_time for the same day of week, average together the transaction_count
                 past_day = date - timedelta(days = 7 * i)
@@ -32,19 +31,20 @@ class WaitTimes(DfgNode):
                 transaction_history = TransactionHistorySerializer(unit)
                 if transaction_history.data['eatery_id'] != 0:
                     eatery_id = EateryID(transaction_history.data['eatery_id'])
-                    eatery_ids.add(eatery_id)
                     if eatery_id not in transactions_on_date:
                         transactions_on_date[eatery_id] = []
                     transactions_on_date[eatery_id].append(transaction_history)
             transactions_by_date[date] = transactions_on_date
             date += timedelta(days=1)
-        
+    
         eateries = []
-        for eatery_id in eatery_ids:
+        for eatery_id in EateryID:
             eatery_wait_times_by_day = []
             for date in transactions_by_date:
+                transactions = []
                 if eatery_id in transactions_by_date[date]:
-                    eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(eatery_id, date, transactions_by_date[date][eatery_id]))
+                    transactions = transactions_by_date[date][eatery_id]
+                eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(eatery_id, date, transactions))
             eateries.append(
                 Eatery(
                     id=eatery_id, 
@@ -71,7 +71,7 @@ class WaitTimes(DfgNode):
     # Expected amount of time (in seconds) for a person to get food, assuming an empty eatery, not including the amount of time to check out
     # Returns [lower, expected, upper]
     @staticmethod
-    def base_time_to_get_food(eatery_id: int) -> float:
+    def base_time_to_get_food(eatery_id: EateryID) -> float:
         if eatery_id == EateryID.MACS_CAFE:
             return [240, 300, 360]
         elif eatery_id == EateryID.MATTINS_CAFE:
@@ -85,7 +85,7 @@ class WaitTimes(DfgNode):
 
     @staticmethod
     def generate_eatery_wait_times_by_day(
-        eatery_id: int, 
+        eatery_id: EateryID, 
         date: date, 
         transactions: list[TransactionHistorySerializer]
     ) -> WaitTimesDay:
@@ -115,7 +115,6 @@ class WaitTimes(DfgNode):
                         wait_time_low = wait_time_low,
                         wait_time_expected= wait_time_expected,
                         wait_time_high = wait_time_high))
-                
         return WaitTimesDay(canonical_date = date, data = wait_times_data)
 
     @staticmethod
