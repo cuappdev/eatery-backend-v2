@@ -1,13 +1,88 @@
 from django.db import models
+from datetime import datetime
+class EateryStore(models.Model):
+    class CampusArea(models.TextChoices):
+        WEST = 'WST', 'West'
+        NORTH = 'NRTH', 'North'
+        CENTRAL = 'CNTRL', 'Central'
+        COLLEGETOWN = 'CTWN', 'Collegetown'
+        NONE = 'NN', ''
 
-# Create your models here.
-# class Eatery(models.Model):
-#     class Meta:
-#         unique_together = ('name', 'block_end_time', 'canonical_date')
-#         indexes = [models.Index(fields = ['canonical_date'])]  
-#     canonical_date = models.DateField()
-#     block_end_time = models.TimeField()
-#     transaction_count = models.IntegerField()
+    id = models.IntegerField(primary_key=True)
+    name = models.CharField(max_length=40)
+    menu_summary = models.CharField(max_length = 60)
+    image_url = models.URLField()
+    location = models.CharField(max_length=30)
+    campus_area = models.CharField(max_length=5, choices=CampusArea.choices, default=CampusArea.NONE)
+    online_order = models.BooleanField(null = True)
+    online_order_url = models.URLField()
+    latitude = models.FloatField(null = True)
+    longitude = models.FloatField(null = True)
+    payment_accepts_meal_swipes = models.BooleanField(null = True)
+    payment_accepts_brbs = models.BooleanField(null = True)
+    payment_accepts_cash = models.BooleanField(null = True)
+
+class ExceptionStore(models.Model):
+    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+    description = models.CharField(max_length = 80)
+    start_timestamp = models.DateTimeField()
+    end_timestamp = models.DateTimeField()
+
+class MenuItemStore(models.Model):
+    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=40)
+    description = models.CharField(max_length = 50)
+    price = models.FloatField(null = True)
+
+class MenuStore(models.Model):
+    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length = 40)
+
+class ForSale(models.Model):
+    item_id = models.ForeignKey(MenuItemStore, on_delete=models.DO_NOTHING)
+    menu_id = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
+    category = models.CharField(max_length=40)
+
+class EventDescription(models.TextChoices):
+    BREAKFAST = 'BRKFST'
+    LUNCH = 'LNCH'
+    DINNER = 'DNNR'
+    GENERAL = 'GNRL'
+class RepeatingEventSchedule(models.Model):
+    class DayOfTheWeek(models.TextChoices):
+        MONDAY = 'MON'
+        TUESDAY = 'TUE'
+        WEDNESDAY = 'WED'
+        THURSDAY = 'THU'
+        FRIDAY = 'FRI'
+        SATURDAY = 'SAT'
+        SUNDAY = 'SUN'
+    
+    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+    menu = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
+    day_of_week = models.CharField(choices = DayOfTheWeek.choices, max_length=3)
+    event_description = models.CharField(choices=EventDescription.choices, max_length = 10)
+    start = models.TimeField()
+    end = models.TimeField()
+
+class EventChangeLog(models.Model):
+    class Meta:
+        indexes = [
+            models.Index(fields = ['eatery_id', 'canonical_date']), 
+            models.Index(fields = ['created_at'])
+        ] 
+    class ChangeLogType(models.TextChoices):
+        INSERT = 'INS'
+        DELETE = 'DEL'
+    
+    eatery_id = models.ForeignKey(EateryStore, on_delete = models.DO_NOTHING)
+    menu = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
+    created_at = models.DateTimeField(default=datetime.now)
+    type = models.CharField(choices=ChangeLogType.choices, max_length=3)
+    event_description = models.CharField(choices=EventDescription.choices, max_length= 10)
+    canonical_date = models.DateField()
+    start = models.DateTimeField()
+    end = models.DateTimeField()
 
 
-# TODO: Models for hard-coded eateries
+

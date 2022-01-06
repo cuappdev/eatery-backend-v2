@@ -1,6 +1,8 @@
 from api.dfg.DfgNode import DfgNode
 
-# Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if conflict)
+
+# Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
+# conflict)
 class LeftMergeById(DfgNode):
 
     def __init__(self, left: DfgNode, right: DfgNode):
@@ -16,14 +18,14 @@ class LeftMergeById(DfgNode):
         left_json = _pop_first(left_lst)
         right_json = _pop_first(right_lst)
         merged_lst = []
-        while left_json != None and right_json != None:
+        while left_json is not None and right_json is not None:
             if left_json["id"] == right_json["id"]:
                 merged_json = {}
                 for key in right_json:
-                    if right_json[key] != None:
+                    if right_json[key] is not None:
                         merged_json[key] = right_json[key]
                 for key in left_json:
-                    if left_json[key] != None:
+                    if left_json[key] is not None:
                         merged_json[key] = left_json[key]
                 merged_lst.append(merged_json)
                 left_json = _pop_first(left_lst)
