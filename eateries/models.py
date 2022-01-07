@@ -24,40 +24,48 @@ class EateryStore(models.Model):
 
 class ExceptionStore(models.Model):
     eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
-    description = models.CharField(max_length = 100)
+    description = models.CharField(max_length = 250)
     start_timestamp = models.DateTimeField()
     end_timestamp = models.DateTimeField()
-
-class MenuItemStore(models.Model):
-    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
-    name = models.CharField(max_length=40)
-    description = models.CharField(max_length = 100, blank=True)
-    base_price = models.FloatField(null = True, blank=True)
-
-class MenuSubItemStore(models.Model):
-    item_id = models.ForeignKey(MenuItemStore, on_delete=models.DO_NOTHING)
-    additional_price = models.FloatField(null = True, blank=True)
-    total_price = models.FloatField(null = True, blank=True)
-    name = models.CharField(max_length=40)
-    item_subsection = models.CharField(max_length=40)
-
 
 class MenuStore(models.Model):
     eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length = 40)
 
-class ForSale(models.Model):
-    item_id = models.ForeignKey(MenuItemStore, on_delete=models.DO_NOTHING)
+class CategoryStore(models.Model):
     menu_id = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
-    category = models.CharField(max_length=40)
+    category = models.CharField(max_length = 40)
+
+class ItemStore(models.Model):
+    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+    name = models.CharField(max_length=40)
+    description = models.CharField(max_length = 200, blank=True)
+    base_price = models.FloatField(null = True, blank=True)
+
+class SubItemStore(models.Model):
+    item_id = models.ForeignKey(ItemStore, on_delete=models.DO_NOTHING)
+    additional_price = models.FloatField(null = True, blank=True)
+    total_price = models.FloatField(null = True, blank=True)
+    name = models.CharField(max_length=40)
+    item_subsection = models.CharField(max_length=40)
+
+class CategoryItemAssociation(models.Model):
+    item_id = models.ForeignKey(ItemStore, on_delete=models.DO_NOTHING)
+    category_id = models.ForeignKey(CategoryStore, on_delete=models.DO_NOTHING)
+
 
 class EventDescription(models.TextChoices):
     BREAKFAST = 'BRKFST'
+    BRUNCH = 'BRNCH'
     LUNCH = 'LNCH'
     DINNER = 'DNNR'
     GENERAL = 'GNRL'
 
-class RepeatingEventSchedule(models.Model):
+class EventSchedule(models.Model):
+    eatery_id: models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
+
+class DayOfWeekEventSchedule(EventSchedule):
+     
     class DayOfTheWeek(models.TextChoices):
         MONDAY = 'MON'
         TUESDAY = 'TUE'
@@ -66,32 +74,22 @@ class RepeatingEventSchedule(models.Model):
         FRIDAY = 'FRI'
         SATURDAY = 'SAT'
         SUNDAY = 'SUN'
-    
-    eatery_id = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
-    menu = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
+
+    event_description: models.CharField(choices=EventDescription.choices, max_length = 10)
+    menu: models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
     day_of_week = models.CharField(choices = DayOfTheWeek.choices, max_length=3)
-    event_description = models.CharField(choices=EventDescription.choices, max_length = 10)
     start = models.TimeField()
     end = models.TimeField()
 
-class EventChangeLog(models.Model):
-    class Meta:
-        indexes = [
-            models.Index(fields = ['eatery_id', 'canonical_date']), 
-            models.Index(fields = ['created_at'])
-        ] 
-    class ChangeLogType(models.TextChoices):
-        INSERT = 'INS'
-        DELETE = 'DEL'
-    
-    eatery_id = models.ForeignKey(EateryStore, on_delete = models.DO_NOTHING)
-    menu = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
-    created_at = models.DateTimeField(default=datetime.now)
-    type = models.CharField(choices=ChangeLogType.choices, max_length=3)
-    event_description = models.CharField(choices=EventDescription.choices, max_length= 10)
+class DateEventSchedule(EventSchedule):
+    event_description: models.CharField(choices=EventDescription.choices, max_length = 10)
+    menu: models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
     canonical_date = models.DateField()
-    start = models.DateTimeField()
-    end = models.DateTimeField()
+    start_timestamp = models.DateTimeField()
+    end_timestamp = models.DateTimeField()
 
+class ClosedEventSchedule(EventSchedule):
+    event_description: models.CharField(choices=EventDescription.choices, max_length = 10)
+    canonical_date = models.DateField()
 
 

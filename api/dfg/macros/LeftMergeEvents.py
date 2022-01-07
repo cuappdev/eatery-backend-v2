@@ -1,19 +1,23 @@
 from api.dfg.DfgNode import DfgNode
+
 from api.dfg.util.ConvertToJson import ConvertToJson
-from api.dfg.util.ConvertFromJson import EateryFromJson
+from api.dfg.util.ConvertFromJson import EventFromJson
 from api.dfg.util.LeftMerge import LeftMerge
 
-class LeftMergeEateries(DfgNode):
-
+# Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
+# conflict)
+class LeftMergeEvents(DfgNode):
     def __init__(self, left: DfgNode, right: DfgNode):
         def comparator(left, right):
-            if left["id"] == right["id"]:
+            left_val = (left["canonical_date"], left["description"])
+            right_val = (right["canonical_date"], right["description"])
+            if left_val == right_val:
                 return 0
-            elif left["id"] < right["id"]:
+            elif left_val < right_val:
                 return -1
             else:
                 return 1
-        self.macro = EateryFromJson(
+        self.macro = EventFromJson(
             LeftMerge(
                 ConvertToJson(left),
                 ConvertToJson(right),
@@ -28,4 +32,4 @@ class LeftMergeEateries(DfgNode):
         return self.macro(*args, **kwargs)
 
     def description(self):
-        return "LeftMergeEateries"
+        return "LeftMergeEvents"

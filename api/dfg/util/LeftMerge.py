@@ -1,25 +1,28 @@
 from api.dfg.DfgNode import DfgNode
-
+from typing import Callable, TypeVar
+from functools import cmp_to_key
+T = TypeVar("T")
 
 # Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
 # conflict)
-class LeftMergeById(DfgNode):
+class LeftMerge(DfgNode):
 
-    def __init__(self, left: DfgNode, right: DfgNode):
+    def __init__(self, left: DfgNode, right: DfgNode, comparator: Callable[[T, T], int]):
         self.left = left
         self.right = right
+        self.comparator = comparator
 
     def children(self):
         return [self.left, self.right]
 
     def __call__(self, *args, **kwargs):
-        left_lst = sorted(self.left(*args, **kwargs), key=lambda x: x["id"])
-        right_lst = sorted(self.right(*args, **kwargs), key=lambda x: x["id"])
+        left_lst = sorted(self.left(*args, **kwargs), key=cmp_to_key(self.comparator))
+        right_lst = sorted(self.right(*args, **kwargs), key=cmp_to_key(self.comparator))
         left_json = _pop_first(left_lst)
         right_json = _pop_first(right_lst)
         merged_lst = []
         while left_json is not None and right_json is not None:
-            if left_json["id"] == right_json["id"]:
+            if self.comparator(left_json, right_json) == 0:
                 merged_json = {}
                 for key in right_json:
                     if right_json[key] is not None:
@@ -30,7 +33,7 @@ class LeftMergeById(DfgNode):
                 merged_lst.append(merged_json)
                 left_json = _pop_first(left_lst)
                 right_json = _pop_first(right_lst)
-            elif left_json["id"] < right_json["id"]:
+            elif self.comparator(left_json, right_json) < 0:
                 merged_lst.append(left_json)
                 left_json = _pop_first(left_lst)
             else:
@@ -41,7 +44,7 @@ class LeftMergeById(DfgNode):
         return merged_lst
 
     def description(self):
-        return "LeftMergeById"
+        return "LeftMerge"
 
 
 def _pop_first(lst: list):

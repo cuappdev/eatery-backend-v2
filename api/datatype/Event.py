@@ -23,7 +23,12 @@ class Event:
         self.end_timestamp = end_timestamp
         self.menu = menu
 
-    def to_json(self):
+    def to_json(
+        self,
+        tzinfo: Optional[pytz.timezone] = None,
+        start: Optional[date] = None,
+        end: Optional[date] = None
+    ):
         return {
             "description": self.description,
             "canonical_date": str(self.canonical_date),
