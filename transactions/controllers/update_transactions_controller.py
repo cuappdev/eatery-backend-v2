@@ -86,12 +86,6 @@ class UpdateTransactionsController:
         self._data = data
 
     def process(self):
-        if "error" in self._data:
-            return {
-                "success": False,
-                "result": None,
-                "error": self._data["error"]
-            }
         if self._data["TIMESTAMP"] == "Invalid date":
             return {
                 "success": False,

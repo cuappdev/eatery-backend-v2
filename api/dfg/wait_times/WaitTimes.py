@@ -18,7 +18,6 @@ class WaitTimes(DfgNode):
         self.cache = cache
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
-        print(self.eatery_id)
         if "transactions" not in self.cache:
             transactions = {}
             date = kwargs.get("start")
