@@ -13,49 +13,34 @@ from transactions.serializers import TransactionHistorySerializer
 
 class WaitTimes(DfgNode):
 
+    def __init__(self, eatery_id: EateryID, cache):
+        self.eatery_id = eatery_id
+        self.cache = cache
+
     def __call__(self, *args, **kwargs) -> list[Eatery]:
-        transactions_by_date = {}
-        date = kwargs.get("start")
-        while date <= kwargs.get("end"):
-            # We only calculate the wait times for this first day
-            transactions_on_date = {}
-            past_days = []
-            for i in range(1, 13):
-                # Look at the last 13 weeks, for each block_end_time for the same day of week, average together the
-                # transaction_count
-                past_day = date - timedelta(days=7 * i)
-                past_days.append(past_day)
-            transaction_avg_counts = TransactionHistory.objects.filter(canonical_date__in=past_days) \
-                .values("eatery_id", "block_end_time") \
-                .annotate(transaction_avg=Avg("transaction_count"))
-            for unit in transaction_avg_counts:
-                transaction_history = TransactionHistorySerializer(unit)
-                if transaction_history.data['eatery_id'] != 0:
-                    eatery_id = EateryID(transaction_history.data['eatery_id'])
-                    if eatery_id not in transactions_on_date:
-                        transactions_on_date[eatery_id] = []
-                    transactions_on_date[eatery_id].append(transaction_history)
-            transactions_by_date[date] = transactions_on_date
-            date += timedelta(days=1)
-        eateries = []
-        for eatery_id in EateryID:
-            eatery_wait_times_by_day = []
-            for date in transactions_by_date:
-                transactions = []
-                if eatery_id in transactions_by_date[date]:
-                    transactions = transactions_by_date[date][eatery_id]
-                eatery_wait_times_by_day.append(WaitTimes.generate_eatery_wait_times_by_day(
-                    eatery_id,
-                    date,
-                    transactions
-                ))
-            eateries.append(
-                Eatery(
-                    id=eatery_id,
-                    wait_times=eatery_wait_times_by_day
-                )
-            )
-        return eateries
+        print(self.eatery_id)
+        if "transactions" not in self.cache:
+            transactions = {}
+            date = kwargs.get("start")
+            while date <= kwargs.get("end"):
+                transactions[date] = []
+                past_days = []
+                for i in range(1, 13):
+                    past_days.append(date - timedelta(days=7*i))
+                transaction_avg_counts = TransactionHistory.objects.filter(canonical_date__in=past_days) \
+                    .values("eatery_id", "block_end_time") \
+                    .annotate(transaction_avg=Avg("transaction_count"))
+                for unit in transaction_avg_counts:
+                    transactions[date].append(TransactionHistorySerializer(unit))
+                date += timedelta(days=1)
+            self.cache["transactions"] = transactions
+        
+        eatery_wait_times = []
+        for date in self.cache["transactions"]:
+            eatery_transaction_avgs = [transaction_avg for transaction_avg in self.cache["transactions"][date] if transaction_avg.data["eatery_id"] == self.eatery_id.value]
+            eatery_wait_times.append(WaitTimes.generate_eatery_wait_times_by_day(self.eatery_id, date, eatery_transaction_avgs))
+
+        return eatery_wait_times
 
     # Expected amount of time (in seconds) for the length of the line to decrease by 1 person
     # Returns [lower, expected, upper]
@@ -100,10 +85,7 @@ class WaitTimes(DfgNode):
             base_times = WaitTimes.base_time_to_get_food(eatery_id)
             line_decrease_times = WaitTimes.line_decrease_by_one_time(eatery_id)
             # we assume all the guests in this transaction bucket showed up [how_long_ago_guest_arrival] minutes ago
-            how_long_ago_guest_arrival = (
-                    base_times[1]
-                    + line_decrease_times[1] * transactions[index].data["transaction_avg"]
-            )
+            how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index].data["transaction_avg"]
             prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
                 # TODO: Send a slack error here instead

@@ -3,7 +3,7 @@ import time
 from api.dfg.DfgNode import DfgNode
 from typing import Optional
 
-from api.dfg.EateryToJson import EateryToJson
+from api.dfg.util.ConvertToJson import ConvertToJson
 
 
 class DataSnapshot:
@@ -21,7 +21,7 @@ class DataSnapshot:
         return self.data
 
     def to_json(self):
-        return EateryToJson.to_json(self.data, *self.args, **self.kwargs)
+        return ConvertToJson.to_json(self.data, *self.args, **self.kwargs)
 
     def get_recorded_time(self):
         return self.recorded_time
@@ -69,7 +69,7 @@ class InMemoryCache(DfgNode):
         for snapshot in self.snapshots:
             if snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
                 return snapshot.to_json()
-        return EateryToJson.to_json(self.child(*args, **kwargs), *args, **kwargs)
+        return ConvertToJson.to_json(self.child(*args, **kwargs), *args, **kwargs)
 
     def description(self):
         return "InMemoryCache"
