@@ -1,5 +1,6 @@
 env/ 
 .env
+eatery-dev.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/ 
