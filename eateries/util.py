@@ -13,5 +13,3 @@ class SnapshotFileName(Enum):
     DATE_EVENT_SCHEDULE = "date_event_schedule.txt"
     CLOSED_EVENT_SCHEDULE = "closed_event_schedule.txt"
     TRANSACTION_HISTORY = "transaction_history.txt"
-
-    
