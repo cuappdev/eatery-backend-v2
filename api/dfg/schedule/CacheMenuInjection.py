@@ -16,14 +16,14 @@ class CacheMenuInjection(DfgNode):
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         if "menus" not in self.cache:
-            eatery_menus_categories_map = {}
             associations = CategoryItemAssociation.objects \
                 .select_related("item") \
                 .select_related("category") \
                 .select_related("category__menu") \
-                .all()
-            
+                .all()      
             subitems = SubItemStore.objects.all()
+            
+            eatery_menus_categories_map = {}
             item_subitem_map = {}
             for subitem in subitems:
                 item_id = subitem.item_id
@@ -55,7 +55,6 @@ class CacheMenuInjection(DfgNode):
                     item_sections = []
                     for section in item_subitem_map[association.item.id]:
                         item_sections.append(MenuItemSection(section, item_subitem_map[association.item.id][section]))
-
                 eatery_menus_categories_map[eatery_id][menu_id][category].append(
                     MenuItem(
                         name = association.item.name,
@@ -65,7 +64,6 @@ class CacheMenuInjection(DfgNode):
                         sections = item_sections
                     )
                 )
-            
             eatery_menus_map = {}
             for eatery_id in eatery_menus_categories_map:
                 eatery_menus_map[eatery_id] = {}
@@ -82,6 +80,8 @@ class CacheMenuInjection(DfgNode):
                         categories=categories
                     )
             self.cache["menus"] = eatery_menus_map
+
+        # self.cache["menus"] is a map of form {[eatery_id]: {[menu_id]: [Menu]}}
         return self.child(*args, **kwargs)
 
     def description(self):
