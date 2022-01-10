@@ -52,8 +52,8 @@ class Command(BaseCommand):
         # closed_event_schedules = models.ClosedEventSchedule.objects.filter(canonical_date_gte=datetime.now().date)
         # self.write_to_file(closed_event_schedules, f"{folder_path}/{SnapshotFileName.CLOSED_EVENT_SCHEDULE}")
 
-        # day_of_week_event_schedules = models.DayOfWeekEventSchedule.objects.all()
-        # self.write_to_file(day_of_week_event_schedules, f"{folder_path}/{SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE}")
+        day_of_week_event_schedules = models.DayOfWeekEventSchedule.objects.all()
+        self.write_to_file(serializers.DayOfWeekEventScheduleSerializer(day_of_week_event_schedules, many=True), f"{folder_path}/{SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE}")
 
         # # TODO: Need to filter here for only the valid schedules
         # event_schedules = models.EventSchedule.objects.all()
