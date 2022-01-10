@@ -4,11 +4,13 @@ import pytz
 from django.db.models import Avg
 
 from api.datatype.Eatery import Eatery, EateryID
+from api.datatype.Event import Event
 from api.datatype.WaitTime import WaitTime
 from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.DfgNode import DfgNode
 from transactions.models import TransactionHistory
 
+tz = pytz.timezone('America/New_York')
 
 class WaitTimes(DfgNode):
 
@@ -96,7 +98,7 @@ class WaitTimes(DfgNode):
 
                 customers_waiting_in_line.append(0.0)
                 block_end_time = transactions[index]['block_end_time']
-                timestamp = int(WaitTimes.timestamp_combined(date, block_end_time) - 5 * 60 / 2)
+                timestamp = int(Event.combined_timestamp(date, block_end_time, tz) - 5 * 60 / 2)
                 wait_times_data.insert(0, WaitTime(
                     timestamp=timestamp,
                     wait_time_low=wait_time_low,
@@ -106,15 +108,6 @@ class WaitTimes(DfgNode):
 
         return WaitTimesDay(canonical_date=date, data=wait_times_data)
 
-    @staticmethod
-    def timestamp_combined(date: datetime.date, time: datetime.time):
-        """
-        Returns the Unix (UTC) timestamp of the combined (date, time) in the
-        New York timezone.
-        """
-
-        tz = pytz.timezone('America/New_York')
-        return int(tz.localize(datetime.combine(date, time)).timestamp())
 
     def description(self):
         return "WaitTimes"

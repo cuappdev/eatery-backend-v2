@@ -93,6 +93,9 @@ class DayOfWeekEventSchedule(EventSchedule):
     day_of_week = models.CharField(choices = DayOfTheWeek.choices, max_length=10)
     start = models.TimeField()
     end = models.TimeField()
+    class Meta:
+        unique_together = ('eatery', 'day_of_week', 'event_description')
+    
 
 class DateEventSchedule(EventSchedule):
     event_description = models.CharField(choices=EventDescription.choices, max_length = 10)
