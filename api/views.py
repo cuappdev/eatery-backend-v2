@@ -6,7 +6,7 @@ from api.datatype.Eatery import Eatery
 
 from api.dfg.CornellDiningNow import CornellDiningNow
 from api.dfg.EateryStubs import EateryStubs
-from api.dfg.ExternalEateries import ExternalEateries
+from api.dfg.EateriesFromDB import EateriesFromDB
 from api.dfg.macros.EateryEvents import EateryEvents
 
 from api.dfg.util.DictResponseWrapper import DictResponseWrapper
@@ -41,7 +41,7 @@ main_dfg = DictResponseWrapper(
                             )
                         ),
                         LeftMergeEateries(
-                            ExternalEateries(),
+                            EateriesFromDB(),
                             LeftMergeEateries(
                                 CornellDiningNow(),
                                 EateryStubs()

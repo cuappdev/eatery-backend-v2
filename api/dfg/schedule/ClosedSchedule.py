@@ -1,6 +1,6 @@
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
-from eateries.models import ClosedEventSchedule
+# from eateries.models import ClosedEventSchedule
 
 class ClosedSchedule(DfgNode):
 
@@ -9,7 +9,7 @@ class ClosedSchedule(DfgNode):
         self.child = child
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
-        ClosedEventSchedule.objects.all()
+        # ClosedEventSchedule.objects.all()
         return self.child(*args, **kwargs)
 
     def children(self):

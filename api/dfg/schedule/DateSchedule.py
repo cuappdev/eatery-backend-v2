@@ -1,6 +1,6 @@
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
-from eateries.models import DateEventSchedule
+# from eateries.models import DateEventSchedule
 
 class DateSchedule(DfgNode):
 
@@ -8,7 +8,7 @@ class DateSchedule(DfgNode):
         self.eatery_id = eatery_id
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
-        DateEventSchedule.objects.all()
+        # DateEventSchedule.objects.all()
         return []
 
     def description(self):

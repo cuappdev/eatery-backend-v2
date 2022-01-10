@@ -87,11 +87,7 @@ class UpdateTransactionsController:
 
     def process(self):
         if self._data["TIMESTAMP"] == "Invalid date":
-            return {
-                "success": False,
-                "result": None,
-                "error": "Invalid date"
-            }
+            return 0
         tz = pytz.timezone('America/New_York')
         recent_datetime = tz.localize(datetime.strptime(self._data["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p'))
         canonical_date = recent_datetime.date()
@@ -109,14 +105,8 @@ class UpdateTransactionsController:
                 num_inserted += 1
                 try:
                     TransactionHistory.objects.create(eatery_id = internal_id, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
-                except:
+                except Exception as e:
+                    print(e)
                     num_inserted -= 1
-        return {
-            "success": True,
-            "result": {
-                "num_inserted": num_inserted,
-                "ignored_names": list(ignored_names)
-            },
-            "error": None
-        }
+        return num_inserted
         
