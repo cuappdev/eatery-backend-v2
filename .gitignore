@@ -12,6 +12,7 @@ __pycache__/
 *$py.class
 
 # More Python stuff
+.DS_Store
 env/ 
 .Python
 build/

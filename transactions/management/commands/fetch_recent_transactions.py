@@ -23,4 +23,4 @@ class Command(BaseCommand):
             res = UpdateTransactionsController(resp.json()).process()
             if res["success"]:
                 num_inserted = res["result"]["num_inserted"]
-        print("{} Entries Inserted".format(num_inserted))
+        # print("{} Entries Inserted".format(num_inserted))
