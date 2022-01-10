@@ -5,8 +5,7 @@ from api.datatype.MenuItemSection import MenuItemSection
 from api.datatype.MenuSubItem import MenuSubItem
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
-from eateries.models import MenuStore, CategoryItemAssociation, SubItemStore
-# from eateries.models import DateEventSchedule
+from eateries.models import CategoryItemAssociation, SubItemStore
 
 class CacheMenuInjection(DfgNode):
 
@@ -22,7 +21,7 @@ class CacheMenuInjection(DfgNode):
                 .select_related("category__menu") \
                 .all()      
             subitems = SubItemStore.objects.all()
-            
+
             eatery_menus_categories_map = {}
             item_subitem_map = {}
             for subitem in subitems:
