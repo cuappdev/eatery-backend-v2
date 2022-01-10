@@ -8,7 +8,6 @@ from api.datatype.WaitTime import WaitTime
 from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.DfgNode import DfgNode
 from transactions.models import TransactionHistory
-from transactions.serializers import TransactionHistorySerializer
 
 
 class WaitTimes(DfgNode):
@@ -30,13 +29,13 @@ class WaitTimes(DfgNode):
                     .values("eatery_id", "block_end_time") \
                     .annotate(transaction_avg=Avg("transaction_count"))
                 for unit in transaction_avg_counts:
-                    transactions[date].append(TransactionHistorySerializer(unit))
+                    transactions[date].append(unit)
                 date += timedelta(days=1)
             self.cache["transactions"] = transactions
         
         eatery_wait_times = []
         for date in self.cache["transactions"]:
-            eatery_transaction_avgs = [transaction_avg for transaction_avg in self.cache["transactions"][date] if transaction_avg.data["eatery_id"] == self.eatery_id.value]
+            eatery_transaction_avgs = [transaction_avg for transaction_avg in self.cache["transactions"][date] if transaction_avg["eatery_id"] == self.eatery_id.value]
             eatery_wait_times.append(WaitTimes.generate_eatery_wait_times_by_day(self.eatery_id, date, eatery_transaction_avgs))
 
         return eatery_wait_times
@@ -75,29 +74,28 @@ class WaitTimes(DfgNode):
     def generate_eatery_wait_times_by_day(
         eatery_id: EateryID,
         date: date,
-        transactions: list[TransactionHistorySerializer]
+        transactions: list
     ) -> WaitTimesDay:
-        
         wait_times_data = []
         customers_waiting_in_line = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         for index in reversed(range(0, len(transactions))):
             base_times = WaitTimes.base_time_to_get_food(eatery_id)
             line_decrease_times = WaitTimes.line_decrease_by_one_time(eatery_id)
             # we assume all the guests in this transaction bucket showed up [how_long_ago_guest_arrival] minutes ago
-            how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index].data["transaction_avg"]
+            how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index]["transaction_avg"]
             prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
                 # TODO: Send a slack error here instead
                 print("Fatal Wait Times Error - prev_bucket_guest_arrival far too large.")
             else:
-                customers_waiting_in_line[prev_bucket_guest_arrival] += transactions[index].data["transaction_avg"]
+                customers_waiting_in_line[prev_bucket_guest_arrival] += transactions[index]["transaction_avg"]
                 num_customers = customers_waiting_in_line.pop(0)
                 wait_time_low = int(base_times[0] + line_decrease_times[0] * num_customers)
                 wait_time_expected = int(base_times[1] + line_decrease_times[1] * num_customers)
                 wait_time_high = int(base_times[2] + line_decrease_times[2] * num_customers)
 
                 customers_waiting_in_line.append(0.0)
-                block_end_time = datetime.strptime(transactions[index].data['block_end_time'], '%H:%M:%S').time()
+                block_end_time = transactions[index]['block_end_time']
                 timestamp = int(WaitTimes.timestamp_combined(date, block_end_time) - 5 * 60 / 2)
                 wait_times_data.insert(0, WaitTime(
                     timestamp=timestamp,
