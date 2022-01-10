@@ -87,6 +87,7 @@ class WaitTimes(DfgNode):
             how_long_ago_guest_arrival = base_times[1] + line_decrease_times[1] * transactions[index]["transaction_avg"]
             prev_bucket_guest_arrival = int(how_long_ago_guest_arrival // (5 * 60))
             if prev_bucket_guest_arrival > 9:
+                pass
                 # TODO: Send a slack error here instead
                 # print("Fatal Wait Times Error - prev_bucket_guest_arrival far too large.")
             else:
