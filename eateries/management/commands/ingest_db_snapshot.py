@@ -30,7 +30,7 @@ class Command(BaseCommand):
         self.ingest_data(serializers.ItemStoreSerializer, SnapshotFileName.ITEM_STORE)
         self.ingest_data(serializers.SubItemStoreSerializer, SnapshotFileName.SUBITEM_STORE)
         self.ingest_data(serializers.CategoryItemAssociationSerializer, SnapshotFileName.CATEGORY_ITEM_ASSOCIATION)
-
+        self.ingest_data(serializers.DayOfWeekEventScheduleSerializer, SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE)
 
         # with open(f"{folder_path}/{SnapshotFileName.EXCEPTION_STORE.value}", "r") as file:
         #     serialized_objs = []

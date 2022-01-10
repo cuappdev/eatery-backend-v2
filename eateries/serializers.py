@@ -36,3 +36,8 @@ class CategoryItemAssociationSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.CategoryItemAssociation
         fields = '__all__'
+
+class DayOfWeekEventScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.DayOfWeekEventSchedule
+        fields = '__all__'
