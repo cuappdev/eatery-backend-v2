@@ -29,7 +29,7 @@ class UpdateTransactionsController:
                 try:
                     TransactionHistory.objects.create(eatery_id = internal_id, canonical_date = canonical_date, block_end_time = block_end_time, transaction_count=place["CROWD_COUNT"])
                 except Exception as e:
-                    print(e)
+                    # print(e)
                     num_inserted -= 1
         return num_inserted
         
