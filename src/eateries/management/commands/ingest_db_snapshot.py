@@ -16,7 +16,7 @@ class Command(BaseCommand):
             for line in file:
                 if (len(line) > 2):
                     json_objs.append(json.loads(line))
-            serialized_objs = serializer(data=json~_objs, many=True)
+            serialized_objs = serializer(data=json_objs, many=True)
             serialized_objs.is_valid()
             serialized_objs.save()
 
