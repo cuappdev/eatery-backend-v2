@@ -3,7 +3,7 @@ import time
 from api.dfg.DfgNode import DfgNode
 from typing import Optional
 
-from api.dfg.util.ConvertToJson import ConvertToJson
+from api.dfg.system.ConvertToJson import ConvertToJson
 
 
 class DataSnapshot:

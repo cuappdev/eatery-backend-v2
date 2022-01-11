@@ -7,9 +7,9 @@ class EateryStoreSerializer(serializers.ModelSerializer):
         model = models.EateryStore
         fields = '__all__'
 
-class ExceptionStoreSerializer(serializers.ModelSerializer):
+class AlertStoreSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ExceptionStore
+        model = models.AlertStore
         fields = '__all__'
 
 class MenuStoreSerializer(serializers.ModelSerializer):

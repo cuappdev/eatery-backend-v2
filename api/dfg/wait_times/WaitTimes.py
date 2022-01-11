@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 
 import pytz
 from django.db.models import Avg
@@ -10,7 +10,7 @@ from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.DfgNode import DfgNode
 from transactions.models import TransactionHistory
 
-tz = pytz.timezone('America/New_York')
+from util.time import combined_timestamp
 
 class WaitTimes(DfgNode):
 
@@ -38,7 +38,7 @@ class WaitTimes(DfgNode):
         eatery_wait_times = []
         for date in self.cache["transactions"]:
             eatery_transaction_avgs = [transaction_avg for transaction_avg in self.cache["transactions"][date] if transaction_avg["eatery_id"] == self.eatery_id.value]
-            eatery_wait_times.append(WaitTimes.generate_eatery_wait_times_by_day(self.eatery_id, date, eatery_transaction_avgs))
+            eatery_wait_times.append(WaitTimes.generate_eatery_wait_times_by_day(self.eatery_id, date, eatery_transaction_avgs, kwargs.get("tzinfo")))
 
         return eatery_wait_times
 
@@ -76,7 +76,8 @@ class WaitTimes(DfgNode):
     def generate_eatery_wait_times_by_day(
         eatery_id: EateryID,
         date: date,
-        transactions: list
+        transactions: list,
+        tzinfo: pytz.tzinfo
     ) -> WaitTimesDay:
         wait_times_data = []
         customers_waiting_in_line = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
@@ -99,7 +100,7 @@ class WaitTimes(DfgNode):
 
                 customers_waiting_in_line.append(0.0)
                 block_end_time = transactions[index]['block_end_time']
-                timestamp = int(Event.combined_timestamp(date, block_end_time, tz) - 5 * 60 / 2)
+                timestamp = int(combined_timestamp(date, block_end_time, tzinfo) - 5 * 60 / 2)
                 wait_times_data.insert(0, WaitTime(
                     timestamp=timestamp,
                     wait_time_low=wait_time_low,

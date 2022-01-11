@@ -3,7 +3,7 @@ from typing import Optional
 from enum import Enum
 
 import pytz
-from api.datatype.EateryException import EateryException
+from api.datatype.EateryAlert import EateryAlert
 
 from api.datatype.Event import Event, filter_range
 from api.datatype.WaitTimesDay import WaitTimesDay
@@ -66,7 +66,7 @@ class Eatery:
             online_order: Optional[bool] = None,
             online_order_url: Optional[str] = None,
             wait_times: Optional[list[WaitTimesDay]] = None,
-            exceptions: Optional[list[EateryException]] = None
+            alerts: Optional[list[EateryAlert]] = None
     ):
         self.id = id
         self.name = name
@@ -81,7 +81,7 @@ class Eatery:
         self.online_order = online_order
         self.online_order_url = online_order_url
         self.wait_times = wait_times
-        self.exceptions = exceptions
+        self.alerts = alerts
 
     def events(
             self,
@@ -113,34 +113,30 @@ class Eatery:
             "online_order": self.online_order,
             "online_order_url": self.online_order_url,
             "wait_times": None if self.wait_times is None else [wait_time.to_json() for wait_time in self.wait_times],
-            "exceptions": None if self.exceptions is None else [exception.to_json() for exception in self.exceptions]
+            "alerts": None if self.alerts is None else [alert.to_json() for alert in self.alerts]
         }
         return eatery
-
-    @staticmethod 
-    def parse_field(json, key):
-        return None if key not in json else json[key]
 
     @staticmethod
     def from_json(eatery_json):
         return Eatery(
             id=None if "id" not in eatery_json else EateryID(eatery_json["id"]),
-            name=Eatery.parse_field(eatery_json, "name"),
-            image_url=Eatery.parse_field(eatery_json, "image_url"),
-            menu_summary=Eatery.parse_field(eatery_json, "menu_summary"),
-            campus_area=Eatery.parse_field(eatery_json, "campus_area"),
+            name=eatery_json.get("name"),
+            image_url=eatery_json.get("image_url"),
+            menu_summary=eatery_json.get("menu_summary"),
+            campus_area=eatery_json.get("campus_area"),
             events=None if "events" not in eatery_json or eatery_json["events"] is None
             else [Event.from_json(event) for event in eatery_json["events"]],
-            latitude=Eatery.parse_field(eatery_json, "latitude"),
-            longitude=Eatery.parse_field(eatery_json, "longitude"),
-            payment_methods=Eatery.parse_field(eatery_json, "payment_methods"),
-            location=Eatery.parse_field(eatery_json, "location"),
-            online_order=Eatery.parse_field(eatery_json, "online_order"),
-            online_order_url=Eatery.parse_field(eatery_json, "online_order_url"),
+            latitude=eatery_json.get("latitude"),
+            longitude=eatery_json.get("longitude"),
+            payment_methods=eatery_json.get("payment_methods"),
+            location=eatery_json.get("location"),
+            online_order=eatery_json.get("online_order"),
+            online_order_url=eatery_json.get("online_order_url"),
             wait_times=None if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
             else [WaitTimesDay.from_json(day_wait_time) for day_wait_time in eatery_json["wait_times"]],
-            exceptions=None if "exceptions" not in eatery_json or eatery_json["exceptions"] is None
-            else [EateryException.from_json(exception) for exception in eatery_json["exceptions"]]
+            alerts=None if "alerts" not in eatery_json or eatery_json["alerts"] is None
+            else [EateryAlert.from_json(alert) for alert in eatery_json["alerts"]]
         )
 
     def clone(self):

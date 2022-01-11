@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 from datetime import datetime
 from pathlib import Path
 
-from eateries.util import SnapshotFileName
+from util.constants import SnapshotFileName
 
 import eateries.models as models
 import eateries.serializers as serializers
@@ -14,7 +14,9 @@ import json
 class Command(BaseCommand):
     help = 'Saves the current state of the database'
 
-    def write_to_file(self, serialized_lst, file_path):
+    def write_to_file(self, serializer, db_objects, folder_path, file_name_enum: SnapshotFileName):
+        file_path = f"{folder_path}/{file_name_enum.value}"
+        serialized_lst = serializer(db_objects, many=True)
         with open(file_path, "w") as file:
             for obj in serialized_lst.data:
                 file.write(json.dumps(obj) + "\n")
@@ -26,25 +28,25 @@ class Command(BaseCommand):
         Path(folder_path).mkdir(parents=True, exist_ok=True)
         
         eateries = models.EateryStore.objects.all()
-        self.write_to_file(serializers.EateryStoreSerializer(eateries, many=True), f"{folder_path}/{SnapshotFileName.EATERY_STORE.value}")
+        self.write_to_file(serializers.EateryStoreSerializer, eateries, folder_path, SnapshotFileName.EATERY_STORE)
 
-        exceptions = models.ExceptionStore.objects.filter(end_timestamp__gte=datetime.now().timestamp())
-        self.write_to_file(serializers.ExceptionStoreSerializer(exceptions, many=True), f"{folder_path}/{SnapshotFileName.EXCEPTION_STORE.value}")
+        alerts = models.AlertStore.objects.filter(end_timestamp__gte=datetime.now().timestamp())
+        self.write_to_file(serializers.AlertStoreSerializer, alerts, folder_path, SnapshotFileName.ALERT_STORE)
 
         menus = models.MenuStore.objects.all()
-        self.write_to_file(serializers.MenuStoreSerializer(menus, many=True), f"{folder_path}/{SnapshotFileName.MENU_STORE.value}")
+        self.write_to_file(serializers.MenuStoreSerializer, menus, folder_path, SnapshotFileName.MENU_STORE)
 
         categories = models.CategoryStore.objects.all()
-        self.write_to_file(serializers.CategoryStoreSerializer(categories, many=True), f"{folder_path}/{SnapshotFileName.CATEGORY_STORE.value}")
+        self.write_to_file(serializers.CategoryStoreSerializer, categories, folder_path, SnapshotFileName.CATEGORY_STORE)
 
         items = models.ItemStore.objects.all()
-        self.write_to_file(serializers.ItemStoreSerializer(items, many=True), f"{folder_path}/{SnapshotFileName.ITEM_STORE.value}")
+        self.write_to_file(serializers.ItemStoreSerializer, items, folder_path, SnapshotFileName.ITEM_STORE)
 
         subitems = models.SubItemStore.objects.all()
-        self.write_to_file(serializers.SubItemStoreSerializer(subitems, many=True), f"{folder_path}/{SnapshotFileName.SUBITEM_STORE.value}")
+        self.write_to_file(serializers.SubItemStoreSerializer, subitems, folder_path, SnapshotFileName.SUBITEM_STORE)
 
         category_item_associations = models.CategoryItemAssociation.objects.all()
-        self.write_to_file(serializers.CategoryItemAssociationSerializer(category_item_associations, many=True), f"{folder_path}/{SnapshotFileName.CATEGORY_ITEM_ASSOCIATION.value}")
+        self.write_to_file(serializers.CategoryItemAssociationSerializer, category_item_associations, folder_path, SnapshotFileName.CATEGORY_ITEM_ASSOCIATION)
 
         # date_event_schedules = models.DateEventSchedule.objects.filter(canonical_date_gte=datetime.now().date)
         # self.write_to_file(date_event_schedules, f"{folder_path}/{SnapshotFileName.DATE_EVENT_SCHEDULE}")
@@ -53,7 +55,7 @@ class Command(BaseCommand):
         # self.write_to_file(closed_event_schedules, f"{folder_path}/{SnapshotFileName.CLOSED_EVENT_SCHEDULE}")
 
         day_of_week_event_schedules = models.DayOfWeekEventSchedule.objects.all()
-        self.write_to_file(serializers.DayOfWeekEventScheduleSerializer(day_of_week_event_schedules, many=True), f"{folder_path}/{SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE.value}")
+        self.write_to_file(serializers.DayOfWeekEventScheduleSerializer, day_of_week_event_schedules, folder_path, SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE)
 
         # # TODO: Need to filter here for only the valid schedules
         # event_schedules = models.EventSchedule.objects.all()
