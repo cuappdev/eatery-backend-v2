@@ -14,7 +14,6 @@ class EateryStore(models.Model):
     image_url = models.URLField(blank=True)
     location = models.CharField(max_length=30, blank=True)
     campus_area = models.CharField(max_length=15, choices=CampusArea.choices, default=CampusArea.NONE, blank=True)
-    online_order = models.BooleanField(null = True, blank=True)
     online_order_url = models.URLField(blank=True)
     latitude = models.FloatField(null = True, blank=True)
     longitude = models.FloatField(null = True, blank=True)

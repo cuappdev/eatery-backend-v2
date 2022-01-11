@@ -63,7 +63,6 @@ class Eatery:
             longitude: Optional[float] = None,
             payment_methods: Optional[list[str]] = None,
             location: Optional[str] = None,
-            online_order: Optional[bool] = None,
             online_order_url: Optional[str] = None,
             wait_times: Optional[list[WaitTimesDay]] = None,
             alerts: Optional[list[EateryAlert]] = None
@@ -78,7 +77,6 @@ class Eatery:
         self.known_events = events
         self.payment_methods = payment_methods
         self.location = location
-        self.online_order = online_order
         self.online_order_url = online_order_url
         self.wait_times = wait_times
         self.alerts = alerts
@@ -110,7 +108,6 @@ class Eatery:
             "payment_methods": None if self.payment_methods is None
             else [payment_method for payment_method in self.payment_methods],
             "location": self.location,
-            "online_order": self.online_order,
             "online_order_url": self.online_order_url,
             "wait_times": None if self.wait_times is None else [wait_time.to_json() for wait_time in self.wait_times],
             "alerts": None if self.alerts is None else [alert.to_json() for alert in self.alerts]
@@ -131,7 +128,6 @@ class Eatery:
             longitude=eatery_json.get("longitude"),
             payment_methods=eatery_json.get("payment_methods"),
             location=eatery_json.get("location"),
-            online_order=eatery_json.get("online_order"),
             online_order_url=eatery_json.get("online_order_url"),
             wait_times=None if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
             else [WaitTimesDay.from_json(day_wait_time) for day_wait_time in eatery_json["wait_times"]],
