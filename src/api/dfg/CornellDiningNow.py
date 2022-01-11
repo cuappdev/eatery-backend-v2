@@ -37,7 +37,6 @@ class CornellDiningNow(DfgNode):
             longitude=json_eatery["longitude"],
             payment_methods=CornellDiningNow.generate_payment_methods(json_eatery["payMethods"]),
             location=json_eatery["location"],
-            online_order=json_eatery["onlineOrdering"],
             online_order_url=json_eatery["onlineOrderUrl"]
         )
 

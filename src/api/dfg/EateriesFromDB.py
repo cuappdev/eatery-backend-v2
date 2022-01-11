@@ -47,7 +47,6 @@ class EateriesFromDB(DfgNode):
             longitude=serialized_eatery["longitude"],
             payment_methods=EateriesFromDB.payment_methods(serialized_eatery),
             location=EateriesFromDB.none_repr(serialized_eatery["location"]),
-            online_order=serialized_eatery["online_order"],
             online_order_url=EateriesFromDB.none_repr(serialized_eatery["online_order_url"]),
             alerts = EateriesFromDB.alerts(serialized_eatery["id"], serialized_alerts)
         )
