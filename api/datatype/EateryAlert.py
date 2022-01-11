@@ -1,4 +1,4 @@
-class EateryException:
+class EateryAlert:
 
     def __init__(
         self, 
@@ -21,10 +21,10 @@ class EateryException:
         }
 
     @staticmethod
-    def from_json(exception_json):
-        return EateryException(
-            id = exception_json["id"],
-            description=exception_json["description"],
-            start_timestamp=exception_json["start_timestamp"],
-            end_timestamp=exception_json["end_timestamp"]
+    def from_json(alert_json):
+        return EateryAlert(
+            id = alert_json["id"],
+            description=alert_json["description"],
+            start_timestamp=alert_json["start_timestamp"],
+            end_timestamp=alert_json["end_timestamp"]
         )

@@ -1,6 +1,7 @@
 from typing import Optional
-from datetime import date, time, datetime
+from datetime import date, time
 from api.datatype.Menu import Menu
+from util.time import combined_timestamp
 
 import pytz
 
@@ -48,16 +49,6 @@ class Event:
     def __contains__(self, item: int):
         return self.start_timestamp <= item <= self.end_timestamp
 
-    #TODO: Restructure to move to some util file into major folder outside of api
-    @staticmethod
-    def combined_timestamp(date: date, time: time, tzinfo: pytz.timezone) -> int:
-        """
-            Returns the Unix (UTC) timestamp of the combined (date, time) in the
-            New York timezone.
-        """
-        return int(tzinfo.localize(datetime.combine(date, time)).timestamp())
-
-
 def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Optional[date], end: Optional[date]):
     if events is None:
         return []
@@ -66,14 +57,14 @@ def filter_range(events: list[Event], tzinfo: Optional[pytz.timezone], start: Op
         return events
 
     elif tzinfo is not None and start is not None and end is None:
-        start_ts = Event.combined_timestamp(start, time(), tzinfo)
+        start_ts = combined_timestamp(start, time(), tzinfo)
         return [event for event in events if (
                 (start_ts in event) or start == event.canonical_date
         )]
 
     elif tzinfo is not None and start is not None and end is not None:
-        start_ts = Event.combined_timestamp(start, time(), tzinfo)
-        end_ts = Event.combined_timestamp(end, time(), tzinfo)
+        start_ts = combined_timestamp(start, time(), tzinfo)
+        end_ts = combined_timestamp(end, time(), tzinfo)
         return [event for event in events if (
                 (start_ts in event) or (end_ts in event) or start <= event.canonical_date <= end
         )]

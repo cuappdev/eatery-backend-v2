@@ -1,10 +1,10 @@
 
 from api.datatype.Event import Event
-from api.datatype.Menu import Menu
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
-from eateries.models import DayOfWeekEventSchedule, MenuStore
+from eateries.models import DayOfWeekEventSchedule
 from datetime import timedelta, datetime
+from util.time import combined_timestamp
 
 import pytz
 
@@ -17,8 +17,6 @@ class DayOfWeekSchedule(DfgNode):
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         if "day_of_week_schedules" not in self.cache:
             self.cache["day_of_week_schedules"] = DayOfWeekEventSchedule.objects.all().values()
-        
-        tz = pytz.timezone('America/New_York')
         schedules = [sched for sched in self.cache["day_of_week_schedules"] if EateryID(sched["eatery_id"]) == self.eatery_id]
         events = []
         date = kwargs.get("start")
@@ -28,8 +26,8 @@ class DayOfWeekSchedule(DfgNode):
                 events.append(Event(
                     description=sched["event_description"],
                     canonical_date=date,
-                    start_timestamp=Event.combined_timestamp(date, sched["start"], tz),
-                    end_timestamp=Event.combined_timestamp(date, sched["end"], tz),
+                    start_timestamp=combined_timestamp(date=date, time=sched["start"], tzinfo=kwargs.get("tzinfo")),
+                    end_timestamp=combined_timestamp(date=date, time=sched["end"], tzinfo=kwargs.get("tzinfo")),
                     menu=self.cache["menus"][self.eatery_id][sched["menu_id"]]
                 ))
             date += timedelta(days = 1)

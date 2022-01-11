@@ -23,6 +23,6 @@ class MenuSubItem:
     def from_json(item_json):
         return MenuSubItem(
             name=item_json["name"],
-            total_price=None if "total_price" not in item_json else item_json["total_price"],
-            additional_price=None if "additional_price" not in item_json else item_json["additional_price"]
+            total_price=item_json.get("total_price"),
+            additional_price=item_json.get("additional_price")
         )

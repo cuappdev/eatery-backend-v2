@@ -1,7 +1,7 @@
 from api.dfg.DfgNode import DfgNode
-from api.dfg.util.ConvertToJson import ConvertToJson
-from api.dfg.util.ConvertFromJson import EateryFromJson
-from api.dfg.util.LeftMerge import LeftMerge
+from api.dfg.system.ConvertToJson import ConvertToJson
+from api.dfg.system.ConvertFromJson import EateryFromJson
+from api.dfg.system.LeftMerge import LeftMerge
 
 class LeftMergeEateries(DfgNode):
 

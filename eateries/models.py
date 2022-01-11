@@ -22,7 +22,7 @@ class EateryStore(models.Model):
     payment_accepts_brbs = models.BooleanField(null = True, blank=True)
     payment_accepts_cash = models.BooleanField(null = True, blank=True)
 
-class ExceptionStore(models.Model):
+class AlertStore(models.Model):
     id = models.IntegerField(primary_key=True)
     eatery = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
     description = models.CharField(max_length = 250)
