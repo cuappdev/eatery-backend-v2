@@ -1,5 +1,5 @@
 from api.dfg.DfgNode import DfgNode
-from typing import Callable, TypeVar
+from typing import Callable, TypeVar, Any
 from functools import cmp_to_key
 T = TypeVar("T")
 
@@ -15,7 +15,7 @@ class LeftMerge(DfgNode):
     def children(self):
         return [self.left, self.right]
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self: Any, *args, **kwargs):
         left_lst = sorted(self.left(*args, **kwargs), key=cmp_to_key(self.comparator))
         right_lst = sorted(self.right(*args, **kwargs), key=cmp_to_key(self.comparator))
         left_json = _pop_first(left_lst)
@@ -39,6 +39,10 @@ class LeftMerge(DfgNode):
             else:
                 merged_lst.append(right_json)
                 right_json = _pop_first(right_lst)
+        if left_json is not None:
+            merged_lst.append(left_json)
+        if right_json is not None:
+            merged_lst.append(right_json)
         merged_lst.extend(left_lst)
         merged_lst.extend(right_lst)
         return merged_lst
