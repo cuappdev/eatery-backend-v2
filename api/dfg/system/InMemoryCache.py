@@ -3,7 +3,7 @@ import time
 from api.dfg.DfgNode import DfgNode
 from typing import Optional
 
-from api.dfg.util.ConvertToJson import ConvertToJson
+from api.dfg.system.ConvertToJson import ConvertToJson
 
 
 class DataSnapshot:
@@ -53,10 +53,10 @@ class InMemoryCache(DfgNode):
         should_reload = kwargs.get("reload")
         for snapshot in self.snapshots:
             if not should_reload and snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
-                print(f"{self}: Returning from cache")
+                # print(f"{self}: Returning from cache")
                 return snapshot.get_data()
 
-        print(f"{self}: Fetching data")
+        # print(f"{self}: Fetching data")
         new_snapshot = DataSnapshot(args, kwargs, self.child(*args, **kwargs), self.current_time())
         if len(self.snapshots) < self.max_size:
             self.snapshots.append(new_snapshot)

@@ -4,7 +4,7 @@ from api.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
-from api.util import dining_id_to_internal_id, CORNELL_DINING_URL
+from util.constants import dining_id_to_internal_id, CORNELL_DINING_URL
 
 from datetime import date
 import requests

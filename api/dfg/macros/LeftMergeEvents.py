@@ -1,8 +1,8 @@
 from api.dfg.DfgNode import DfgNode
 
-from api.dfg.util.ConvertToJson import ConvertToJson
-from api.dfg.util.ConvertFromJson import EventFromJson
-from api.dfg.util.LeftMerge import LeftMerge
+from api.dfg.system.ConvertToJson import ConvertToJson
+from api.dfg.system.ConvertFromJson import EventFromJson
+from api.dfg.system.LeftMerge import LeftMerge
 
 # Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
 # conflict)
