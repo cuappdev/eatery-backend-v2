@@ -3,6 +3,7 @@ from typing import Optional
 from enum import Enum
 
 import pytz
+from api.datatype.EateryAlert import EateryAlert
 
 from api.datatype.Event import Event, filter_range
 from api.datatype.WaitTimesDay import WaitTimesDay
@@ -48,13 +49,14 @@ class EateryID(Enum):
     LOUIES = 37
     ANABELS_GROCERY = 38
 
-
 class Eatery:
 
     def __init__(
             self,
             id: EateryID,
             name: Optional[str] = None,
+            image_url: Optional[str] = None,
+            menu_summary: Optional[str] = None,
             campus_area: Optional[str] = None,
             events: Optional[list[Event]] = None,
             latitude: Optional[float] = None,
@@ -63,10 +65,13 @@ class Eatery:
             location: Optional[str] = None,
             online_order: Optional[bool] = None,
             online_order_url: Optional[str] = None,
-            wait_times: Optional[list[WaitTimesDay]] = None
+            wait_times: Optional[list[WaitTimesDay]] = None,
+            alerts: Optional[list[EateryAlert]] = None
     ):
         self.id = id
         self.name = name
+        self.image_url = image_url
+        self.menu_summary = menu_summary
         self.campus_area = campus_area
         self.latitude = latitude
         self.longitude = longitude
@@ -76,6 +81,7 @@ class Eatery:
         self.online_order = online_order
         self.online_order_url = online_order_url
         self.wait_times = wait_times
+        self.alerts = alerts
 
     def events(
             self,
@@ -94,6 +100,8 @@ class Eatery:
         eatery = {
             "id": self.id.value,
             "name": self.name,
+            "image_url": self.image_url,
+            "menu_summary": self.menu_summary,
             "campus_area": self.campus_area,
             "events": None if self.known_events is None
             else [event.to_json() for event in self.events(tzinfo, start, end)],
@@ -104,7 +112,8 @@ class Eatery:
             "location": self.location,
             "online_order": self.online_order,
             "online_order_url": self.online_order_url,
-            "wait_times": None if self.wait_times is None else [wait_time.to_json() for wait_time in self.wait_times]
+            "wait_times": None if self.wait_times is None else [wait_time.to_json() for wait_time in self.wait_times],
+            "alerts": None if self.alerts is None else [alert.to_json() for alert in self.alerts]
         }
         return eatery
 
@@ -112,18 +121,22 @@ class Eatery:
     def from_json(eatery_json):
         return Eatery(
             id=None if "id" not in eatery_json else EateryID(eatery_json["id"]),
-            name=None if "name" not in eatery_json else eatery_json["name"],
-            campus_area=None if "campus_area" not in eatery_json else eatery_json["campus_area"],
+            name=eatery_json.get("name"),
+            image_url=eatery_json.get("image_url"),
+            menu_summary=eatery_json.get("menu_summary"),
+            campus_area=eatery_json.get("campus_area"),
             events=None if "events" not in eatery_json or eatery_json["events"] is None
             else [Event.from_json(event) for event in eatery_json["events"]],
-            latitude=None if "latitude" not in eatery_json else eatery_json["latitude"],
-            longitude=None if "longitude" not in eatery_json else eatery_json["longitude"],
-            payment_methods=None if "payment_methods" not in eatery_json else eatery_json["payment_methods"],
-            location=None if "location" not in eatery_json else eatery_json["location"],
-            online_order=None if "online_order" not in eatery_json else eatery_json["online_order"],
-            online_order_url=None if "online_order_url" not in eatery_json else eatery_json["online_order_url"],
+            latitude=eatery_json.get("latitude"),
+            longitude=eatery_json.get("longitude"),
+            payment_methods=eatery_json.get("payment_methods"),
+            location=eatery_json.get("location"),
+            online_order=eatery_json.get("online_order"),
+            online_order_url=eatery_json.get("online_order_url"),
             wait_times=None if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
-            else [WaitTimesDay.from_json(day_wait_time) for day_wait_time in eatery_json["wait_times"]]
+            else [WaitTimesDay.from_json(day_wait_time) for day_wait_time in eatery_json["wait_times"]],
+            alerts=None if "alerts" not in eatery_json or eatery_json["alerts"] is None
+            else [EateryAlert.from_json(alert) for alert in eatery_json["alerts"]]
         )
 
     def clone(self):

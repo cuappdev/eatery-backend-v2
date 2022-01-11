@@ -6,14 +6,14 @@ from api.datatype.Eatery import Eatery
 
 from api.dfg.CornellDiningNow import CornellDiningNow
 from api.dfg.EateryStubs import EateryStubs
-from api.dfg.ExternalEateries import ExternalEateries
+from api.dfg.EateriesFromDB import EateriesFromDB
 from api.dfg.macros.EateryEvents import EateryEvents
 
-from api.dfg.util.DictResponseWrapper import DictResponseWrapper
-from api.dfg.util.ConvertToJson import ConvertToJson
-from api.dfg.util.EateryGenerator import EateryGenerator
-from api.dfg.util.InMemoryCache import InMemoryCache
-from api.dfg.util.Mapping import Mapping
+from api.dfg.system.DictResponseWrapper import DictResponseWrapper
+from api.dfg.system.ConvertToJson import ConvertToJson
+from api.dfg.system.EateryGenerator import EateryGenerator
+from api.dfg.system.InMemoryCache import InMemoryCache
+from api.dfg.system.Mapping import Mapping
 
 from api.dfg.macros.LeftMergeEateries import LeftMergeEateries
 
@@ -41,7 +41,7 @@ main_dfg = DictResponseWrapper(
                             )
                         ),
                         LeftMergeEateries(
-                            ExternalEateries(),
+                            EateriesFromDB(),
                             LeftMergeEateries(
                                 CornellDiningNow(),
                                 EateryStubs()
