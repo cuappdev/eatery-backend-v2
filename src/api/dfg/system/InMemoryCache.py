@@ -51,12 +51,14 @@ class InMemoryCache(DfgNode):
 
     def __call__(self, *args, **kwargs):
         should_reload = kwargs.get("reload")
+        best_snapshot = None
         for snapshot in self.snapshots:
             if not should_reload and snapshot.is_usable_snapshot(self.current_time() - self.expiration, args, kwargs):
-                # print(f"{self}: Returning from cache")
-                return snapshot.get_data()
+                if best_snapshot == None or snapshot.recorded_time > best_snapshot.recorded_time:
+                    best_snapshot = snapshot
+        if best_snapshot is not None:
+            return snapshot.get_data()
 
-        # print(f"{self}: Fetching data")
         new_snapshot = DataSnapshot(args, kwargs, self.child(*args, **kwargs), self.current_time())
         if len(self.snapshots) < self.max_size:
             self.snapshots.append(new_snapshot)
