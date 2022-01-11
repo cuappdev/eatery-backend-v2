@@ -1,6 +1,5 @@
 from api.dfg.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
-# from eateries.models import ClosedEventSchedule
 
 class ClosedSchedule(DfgNode):
 
