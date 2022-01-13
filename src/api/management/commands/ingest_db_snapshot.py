@@ -5,11 +5,13 @@ import api.serializers as serializers
 import json
 
 class Command(BaseCommand):
-    help = 'Overrides current state of the db with a db snapshot'
+    help = 'Overrides current state of the db with a db snapshot. Takes --file argument'
+
+    def add_arguments(self, parser):
+        parser.add_argument('--input', type=str)
 
     # Only writes data if the table has been flushed
-    def ingest_data(self, serializer, file_name: SnapshotFileName):
-        folder_path = "/Users/connorreinhold/Documents/AppDev/new-eatery/eatery-blue-backend/src/db_snapshots/2022-01-11 15:18:05"
+    def ingest_data(self, serializer, folder_path: str, file_name: SnapshotFileName):
         with open(f"{folder_path}/{file_name.value}", "r") as file:     
             json_objs = []
             for line in file:
@@ -20,11 +22,12 @@ class Command(BaseCommand):
             serialized_objs.save()
 
     def handle(self, *args, **options):
-        self.ingest_data(serializers.EateryStoreSerializer, SnapshotFileName.EATERY_STORE)
-        self.ingest_data(serializers.AlertStoreSerializer, SnapshotFileName.ALERT_STORE)
-        self.ingest_data(serializers.MenuStoreSerializer, SnapshotFileName.MENU_STORE)
-        self.ingest_data(serializers.CategoryStoreSerializer, SnapshotFileName.CATEGORY_STORE)
-        self.ingest_data(serializers.ItemStoreSerializer, SnapshotFileName.ITEM_STORE)
-        self.ingest_data(serializers.SubItemStoreSerializer, SnapshotFileName.SUBITEM_STORE)
-        self.ingest_data(serializers.CategoryItemAssociationSerializer, SnapshotFileName.CATEGORY_ITEM_ASSOCIATION)
-        self.ingest_data(serializers.DayOfWeekEventScheduleSerializer, SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE)
+        folder_path = options["input"]
+        self.ingest_data(serializers.EateryStoreSerializer, folder_path, SnapshotFileName.EATERY_STORE)
+        self.ingest_data(serializers.AlertStoreSerializer, folder_path, SnapshotFileName.ALERT_STORE)
+        self.ingest_data(serializers.MenuStoreSerializer, folder_path, SnapshotFileName.MENU_STORE)
+        self.ingest_data(serializers.CategoryStoreSerializer, folder_path, SnapshotFileName.CATEGORY_STORE)
+        self.ingest_data(serializers.ItemStoreSerializer, folder_path, SnapshotFileName.ITEM_STORE)
+        self.ingest_data(serializers.SubItemStoreSerializer, folder_path, SnapshotFileName.SUBITEM_STORE)
+        self.ingest_data(serializers.CategoryItemAssociationSerializer, folder_path, SnapshotFileName.CATEGORY_ITEM_ASSOCIATION)
+        self.ingest_data(serializers.DayOfWeekEventScheduleSerializer, folder_path, SnapshotFileName.DAY_OF_WEEK_EVENT_SCHEDULE)
