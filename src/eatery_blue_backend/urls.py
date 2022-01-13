@@ -16,7 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+from dfg.views import MainDfgView
+from eateries.views import ReportView
+
+api = [
+    path("", MainDfgView.as_view(), name="main"),
+    path("report", ReportView.as_view(), name="report")
+]
+
 urlpatterns = [
-    path("api", include("api.urls")),
+    path("api/", include(api)),
     path("admin/", admin.site.urls),
 ]
