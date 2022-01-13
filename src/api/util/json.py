@@ -11,7 +11,6 @@ class FieldType(Enum):
 
 def verify_json_fields(json, field_type_map: Mapping[str, FieldType]):
     for field in field_type_map:
-        print(field)
         if field not in json:
             return False
         if field_type_map[field] is FieldType.INT:
