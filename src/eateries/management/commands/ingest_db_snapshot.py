@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     # Only writes data if the table has been flushed
     def ingest_data(self, serializer, file_name: SnapshotFileName):
-        folder_path = "db_snapshots/2022-01-10 13:05:44"
+        folder_path = "/Users/connorreinhold/Documents/AppDev/new-eatery/eatery-blue-backend/src/db_snapshots/2022-01-11 15:18:05"
         with open(f"{folder_path}/{file_name.value}", "r") as file:     
             json_objs = []
             for line in file:
