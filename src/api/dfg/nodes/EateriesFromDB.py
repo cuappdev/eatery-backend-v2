@@ -56,5 +56,8 @@ class EateriesFromDB(DfgNode):
             end_timestamp=serialized_alert["end_timestamp"]
         )
 
+    def description(self):
+        return "EateriesFromDB"
+
 
 

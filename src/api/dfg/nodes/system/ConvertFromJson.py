@@ -52,4 +52,4 @@ class EventFromJson(DfgNode):
             return Event.from_json(obj)
 
     def description(self):
-        return "EventFromJson"
+        return "ConvertFromJson"
