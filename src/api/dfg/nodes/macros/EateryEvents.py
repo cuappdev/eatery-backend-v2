@@ -36,4 +36,4 @@ class EateryEvents(DfgNode):
         return self.macro(*args, **kwargs)
 
     def description(self):
-        return "LeftMergeEvents"
+        return "EateryEvents"

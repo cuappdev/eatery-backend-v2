@@ -13,4 +13,4 @@ class DateSchedule(DfgNode):
         return []
 
     def description(self):
-        return "EateryStubs"
+        return "DateSchedule"
