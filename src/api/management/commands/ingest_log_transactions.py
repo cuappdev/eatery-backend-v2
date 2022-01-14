@@ -8,12 +8,16 @@ from api.controllers.delete_all_transactions import DeleteAllTransactionsControl
 class Command(BaseCommand):
     help = 'Transfers log data from the old storage format (log.txt file) into the TransactionHistoryStore table'
 
+    def add_arguments(self, parser):
+        parser.add_argument('--input', type=str)
+
     def handle(self, *args, **options):
         num_deleted = DeleteAllTransactionsController().process()
         counter = 0
         num_inserted = 0
+        file_path = options["input"]
         # Transaction Histories used to be stored in a giant log file. Ingest that log file into the db
-        with open("../static_sources/data.log", "r") as log:
+        with open(file_path, "r") as log:
             for line in log:
                 try:
                     data = json.loads(line)
