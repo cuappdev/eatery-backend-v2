@@ -98,7 +98,7 @@ class Eatery:
             end: Optional[date] = None
     ):
         eatery = {
-            "id": self.id.value,
+            "id": None if self.id is None else self.id.value,
             "name": self.name,
             "image_url": self.image_url,
             "menu_summary": self.menu_summary,
