@@ -9,6 +9,10 @@ class LeftMergeEateries(DfgNode):
         def comparator(left, right):
             if left["id"] == right["id"]:
                 return 0
+            elif left["id"] == None:
+                return -1
+            elif right["id"] == None:
+                return 1
             elif left["id"] < right["id"]:
                 return -1
             else:
