@@ -48,6 +48,7 @@ class EateryID(Enum):
     GIMME_COFFEE = 36
     LOUIES = 37
     ANABELS_GROCERY = 38
+    MORRISON_DINING = 39
 
 class Eatery:
 
@@ -122,7 +123,7 @@ class Eatery:
     @staticmethod
     def from_json(eatery_json):
         return Eatery(
-            id=None if "id" not in eatery_json else EateryID(eatery_json["id"]),
+            id=None if "id" not in eatery_json or eatery_json["id"] is None else EateryID(eatery_json["id"]),
             name=eatery_json.get("name"),
             image_url=eatery_json.get("image_url"),
             menu_summary=eatery_json.get("menu_summary"),
