@@ -83,6 +83,8 @@ def dining_id_to_internal_id(id: int):
         return EateryID.STRAIGHT_FROM_THE_MARKET
     elif id == 23:
         return EateryID.TRILLIUM
+    elif id == 43:
+        return EateryID.MORRISON_DINING
     else:
         return None
 
