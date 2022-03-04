@@ -7,11 +7,14 @@ import json
 from api.datatype.Eatery import EateryID
 from api.dfg.main import main_dfg
 from api.controllers.create_report import CreateReportController
+from api.controllers.update_eatery import UpdateEateryController
 from api.util.json import verify_json_fields, success_json, error_json, FieldType
 # Create your views here.
 
+
 class MainDfgView(APIView):
     dfg = main_dfg
+
     def get(self, request):
         tzinfo = pytz.timezone("US/Eastern")
         reload = request.GET.get('reload')
@@ -22,6 +25,7 @@ class MainDfgView(APIView):
             end=date.today() + timedelta(days=7)
         )
         return JsonResponse(result)
+
 
 class ReportView(APIView):
     def post(self, request):
@@ -34,3 +38,20 @@ class ReportView(APIView):
             content=json_body["content"]
         ).process()
         return JsonResponse(success_json("Reported"))
+
+
+class UpdateView(APIView):
+    def post(self, request):
+        text_params = request.POST
+        try:
+            image_param = request.FILES.get("image")
+            print(image_param)
+        except:
+            image_param = None
+        # Will add JSON verification here
+        UpdateEateryController(
+            text_params.get("id"),
+            text_params,
+            image_param
+        ).process()
+        return JsonResponse(success_json("Updated"))
