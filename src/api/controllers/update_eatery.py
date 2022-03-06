@@ -1,6 +1,5 @@
 from django.http import QueryDict
 from api.models import EateryStore
-from mimetypes import guess_extension, guess_type
 import base64
 import requests
 import os
@@ -13,7 +12,7 @@ class UpdateEateryController:
         the values we want to map them to
 
         Requires: id is a valid id and all keys in update_map are valid fields
-            in the EateryStore class
+            in the EateryStore class (except username/password cannot be provided)
         Raises: Exception when invalid keys are provided
         """
         self.id = id
@@ -23,8 +22,26 @@ class UpdateEateryController:
             img_url = self.upload_image(image)
             self.update_data["image_url"] = img_url
 
+        allowed_fields = [
+            "id",
+            "name",
+            "menu_summary",
+            "image_url",
+            "location",
+            "campus_area",
+            "online_order_url",
+            "latitude",
+            "longitude",
+            "payment_accepts_meal_swipes",
+            "payment_accepts_brbs",
+            "payment_accepts_cash",
+        ]
+
         for key, val in update_map.items():
             try:
+                if key not in allowed_fields:
+                    print("e")
+                    raise Exception
                 self.update_data[key] = val
             except:
                 raise Exception("Invalid update field(s) provided")
