@@ -12,7 +12,8 @@ class UpdateEateryController:
         the values we want to map them to
 
         Requires: id is a valid id and all keys in update_map are valid fields
-            in the EateryStore class (except username/password cannot be provided)
+            in the EateryStore class (except username/password cannot be provided),
+            as well as an optional image field containing an image file to be uploaded
         Raises: Exception when invalid keys are provided
         """
         self.id = id
