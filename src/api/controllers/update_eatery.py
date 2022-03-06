@@ -1,5 +1,6 @@
 from django.http import QueryDict
 from api.models import EateryStore
+from mimetypes import guess_extension, guess_type
 import base64
 import requests
 import os
@@ -38,6 +39,8 @@ class UpdateEateryController:
         valid_extensions = ["jpg", "jpeg", "gif", "png"]
         extension = (str(image)).split(".")
         extension = extension[len(extension) - 1]
+        if extension == "jpg":
+            extension = "jpeg"
 
         if extension not in valid_extensions:
             raise Exception("Invalid File Extension")
@@ -57,7 +60,10 @@ class UpdateEateryController:
             },
         )
 
-        return response.json()["data"]
+        try:
+            return response.json()["data"]
+        except:
+            raise Exception("Image uploading unsuccessful")
 
     def process(self):
         """
