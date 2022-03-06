@@ -26,7 +26,6 @@ class UpdateEateryController:
             "id",
             "name",
             "menu_summary",
-            "image_url",
             "location",
             "campus_area",
             "online_order_url",
