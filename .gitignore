@@ -13,6 +13,7 @@ __pycache__/
 
 # More Python stuff
 .DS_Store
+.vscode/
 env/ 
 .Python
 build/
