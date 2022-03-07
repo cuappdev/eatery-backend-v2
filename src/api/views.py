@@ -57,9 +57,12 @@ class UpdateView(APIView):
             image_param = None
 
         try:
-            UpdateEateryController(
-                text_params.get("id"), text_params, image_param
-            ).process()
+            id = int(text_params.get("id"))
+        except:
+            return JsonResponse(error_json("ID must be castable to an int"))
+
+        try:
+            UpdateEateryController(EateryID(id), text_params, image_param).process()
             return JsonResponse(success_json("Updated"))
         except Exception as e:
             return JsonResponse(error_json(str(e)))
