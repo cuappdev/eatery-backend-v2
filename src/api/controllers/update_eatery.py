@@ -1,4 +1,5 @@
 from django.http import QueryDict
+from api.datatype.Eatery import EateryID
 from api.models import EateryStore
 import base64
 import requests
@@ -6,7 +7,7 @@ import os
 
 
 class UpdateEateryController:
-    def __init__(self, id: int, update_map: QueryDict, image):
+    def __init__(self, id: EateryID, update_map: QueryDict, image):
         """
         Update_map is a dictionary that maps the fields we want to update to
         the values we want to map them to
@@ -40,7 +41,6 @@ class UpdateEateryController:
         for key, val in update_map.items():
             try:
                 if key not in allowed_fields:
-                    print("e")
                     raise Exception
                 self.update_data[key] = val
             except:
@@ -86,6 +86,5 @@ class UpdateEateryController:
         """
         Selects DB entry we want to update and updates it using provided data
         """
-
-        # Uses double-splat to map stored update dict to kwargs
-        EateryStore.objects.filter(id=self.id).update(**self.update_data)
+        # use double-splat to convert dict to kwargs
+        EateryStore.objects.filter(id=self.id.value).update(**self.update_data)
