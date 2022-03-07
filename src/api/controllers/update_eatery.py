@@ -40,7 +40,6 @@ class UpdateEateryController:
         for key, val in update_map.items():
             try:
                 if key not in allowed_fields:
-                    print("e")
                     raise Exception
                 self.update_data[key] = val
             except:
@@ -87,5 +86,7 @@ class UpdateEateryController:
         Selects DB entry we want to update and updates it using provided data
         """
 
-        # Uses double-splat to map stored update dict to kwargs
-        EateryStore.objects.filter(id=self.id).update(**self.update_data)
+        supplied_eatery = EateryStore.objects.filter(id=self.id)
+        if list(supplied_eatery) == []:
+            raise Exception("Invalid eatery ID supplied")
+        supplied_eatery.update(**self.update_data)
