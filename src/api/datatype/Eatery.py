@@ -18,7 +18,6 @@ class EateryID(Enum):
     BIG_RED_BARN = 6
     BUS_STOP_BAGELS = 7
     CAFE_JENNIE = 8
-    CAROLS_CAFE = 9
     COOK_HOUSE = 10
     DAIRY_BAR = 11
     CROSSINGS_CAFE = 12
@@ -50,25 +49,25 @@ class EateryID(Enum):
     ANABELS_GROCERY = 38
     MORRISON_DINING = 39
 
-class Eatery:
 
+class Eatery:
     def __init__(
-            self,
-            id: EateryID,
-            name: Optional[str] = None,
-            image_url: Optional[str] = None,
-            menu_summary: Optional[str] = None,
-            campus_area: Optional[str] = None,
-            events: Optional[list[Event]] = None,
-            latitude: Optional[float] = None,
-            longitude: Optional[float] = None,
-            payment_accepts_cash: Optional[bool] = None,
-            payment_accepts_brbs: Optional[bool] = None,
-            payment_accepts_meal_swipes: Optional[bool] = None,
-            location: Optional[str] = None,
-            online_order_url: Optional[str] = None,
-            wait_times: Optional[list[WaitTimesDay]] = None,
-            alerts: Optional[list[EateryAlert]] = None
+        self,
+        id: EateryID,
+        name: Optional[str] = None,
+        image_url: Optional[str] = None,
+        menu_summary: Optional[str] = None,
+        campus_area: Optional[str] = None,
+        events: Optional[list[Event]] = None,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
+        payment_accepts_cash: Optional[bool] = None,
+        payment_accepts_brbs: Optional[bool] = None,
+        payment_accepts_meal_swipes: Optional[bool] = None,
+        location: Optional[str] = None,
+        online_order_url: Optional[str] = None,
+        wait_times: Optional[list[WaitTimesDay]] = None,
+        alerts: Optional[list[EateryAlert]] = None,
     ):
         self.id = id
         self.name = name
@@ -87,18 +86,18 @@ class Eatery:
         self.alerts = alerts
 
     def events(
-            self,
-            tzinfo: Optional[pytz.timezone] = None,
-            start: Optional[date] = None,
-            end: Optional[date] = None,
+        self,
+        tzinfo: Optional[pytz.timezone] = None,
+        start: Optional[date] = None,
+        end: Optional[date] = None,
     ):
         return filter_range(self.known_events, tzinfo, start, end)
 
     def to_json(
-            self,
-            tzinfo: Optional[pytz.timezone] = None,
-            start: Optional[date] = None,
-            end: Optional[date] = None
+        self,
+        tzinfo: Optional[pytz.timezone] = None,
+        start: Optional[date] = None,
+        end: Optional[date] = None,
     ):
         eatery = {
             "id": None if self.id is None else self.id.value,
@@ -106,7 +105,8 @@ class Eatery:
             "image_url": self.image_url,
             "menu_summary": self.menu_summary,
             "campus_area": self.campus_area,
-            "events": None if self.known_events is None
+            "events": None
+            if self.known_events is None
             else [event.to_json() for event in self.events(tzinfo, start, end)],
             "latitude": self.latitude,
             "longitude": self.longitude,
@@ -115,20 +115,27 @@ class Eatery:
             "payment_accepts_meal_swipes": self.payment_accepts_meal_swipes,
             "location": self.location,
             "online_order_url": self.online_order_url,
-            "wait_times": None if self.wait_times is None else [wait_time.to_json() for wait_time in self.wait_times],
-            "alerts": None if self.alerts is None else [alert.to_json() for alert in self.alerts]
+            "wait_times": None
+            if self.wait_times is None
+            else [wait_time.to_json() for wait_time in self.wait_times],
+            "alerts": None
+            if self.alerts is None
+            else [alert.to_json() for alert in self.alerts],
         }
         return eatery
 
     @staticmethod
     def from_json(eatery_json):
         return Eatery(
-            id=None if "id" not in eatery_json or eatery_json["id"] is None else EateryID(eatery_json["id"]),
+            id=None
+            if "id" not in eatery_json or eatery_json["id"] is None
+            else EateryID(eatery_json["id"]),
             name=eatery_json.get("name"),
             image_url=eatery_json.get("image_url"),
             menu_summary=eatery_json.get("menu_summary"),
             campus_area=eatery_json.get("campus_area"),
-            events=None if "events" not in eatery_json or eatery_json["events"] is None
+            events=None
+            if "events" not in eatery_json or eatery_json["events"] is None
             else [Event.from_json(event) for event in eatery_json["events"]],
             latitude=eatery_json.get("latitude"),
             longitude=eatery_json.get("longitude"),
@@ -137,10 +144,15 @@ class Eatery:
             payment_accepts_meal_swipes=eatery_json.get("payment_accepts_meal_swipes"),
             location=eatery_json.get("location"),
             online_order_url=eatery_json.get("online_order_url"),
-            wait_times=None if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
-            else [WaitTimesDay.from_json(day_wait_time) for day_wait_time in eatery_json["wait_times"]],
-            alerts=None if "alerts" not in eatery_json or eatery_json["alerts"] is None
-            else [EateryAlert.from_json(alert) for alert in eatery_json["alerts"]]
+            wait_times=None
+            if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
+            else [
+                WaitTimesDay.from_json(day_wait_time)
+                for day_wait_time in eatery_json["wait_times"]
+            ],
+            alerts=None
+            if "alerts" not in eatery_json or eatery_json["alerts"] is None
+            else [EateryAlert.from_json(alert) for alert in eatery_json["alerts"]],
         )
 
     def clone(self):
