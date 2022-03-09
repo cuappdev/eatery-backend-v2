@@ -13,6 +13,15 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
+            name='LoginStore',
+            fields=[
+                ('id', models.IntegerField(primary_key=True)),
+                #('eatery_id', models.ForeignKey('EateryModel', on_delete = models.DO_NOTHING)),
+                ('username', models.CharField(max_length=50)),
+                ('password_digest', models.CharField(max_length=30))
+            ],
+        ),
+        migrations.CreateModel(
             name='EateryStore',
             fields=[
                 ('id', models.IntegerField(primary_key=True, serialize=False)),

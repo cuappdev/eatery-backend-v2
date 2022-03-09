@@ -7,3 +7,4 @@ from .EventScheduleModel import EventSchedule, ClosedEventSchedule, DateEventSch
 from .MenuModel import MenuStore, CategoryStore, ItemStore, SubItemStore, CategoryItemAssociation
 from .ReportModel import ReportStore
 from .TransactionModel import TransactionHistoryStore
+from .LoginModel import LoginStore

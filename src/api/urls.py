@@ -4,5 +4,6 @@ from api.views import MainDfgView, ReportView
 
 urlpatterns = [
     path("", MainDfgView.as_view(), name="main"),
-    path("report", ReportView.as_view(), name="report")
+    path("report", ReportView.as_view(), name="report"),
+    #path("login", LoginView.as_view(), name="login")
 ]

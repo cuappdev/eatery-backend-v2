@@ -41,3 +41,8 @@ class DayOfWeekEventScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.DayOfWeekEventSchedule
         fields = '__all__'
+
+class LoginStoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.LoginStore
+        fields = '__all__'
