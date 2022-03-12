@@ -1,6 +1,7 @@
 # Security
 .env
 eatery-dev.pem
+.envrc
 
 # Hardcoded stuff
 db_snapshots/

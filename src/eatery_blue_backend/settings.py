@@ -78,14 +78,14 @@ WSGI_APPLICATION = "eatery_blue_backend.wsgi.application"
 
 IS_LOCAL = os.getenv("LOCAL")
 
-if IS_LOCAL:
+if IS_LOCAL == "True":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
             "NAME": BASE_DIR / "db.sqlite3",
         }
     }
-else:
+elif IS_LOCAL == "False":
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
