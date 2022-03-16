@@ -49,6 +49,9 @@ class EateryID(Enum):
     LOUIES = 37
     ANABELS_GROCERY = 38
     MORRISON_DINING = 39
+    BEST_EATERY = 40
+    NULL_EATERY = 41
+    
 
 class Eatery:
 
