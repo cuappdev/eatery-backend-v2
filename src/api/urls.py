@@ -1,9 +1,9 @@
 from django.urls import path
 
-from api.views import MainDfgView, ReportView
+from api.views import MainDfgView, UpdateView, ReportView
 
 urlpatterns = [
     path("", MainDfgView.as_view(), name="main"),
-    path("report", ReportView.as_view(), name="report"),
-    #path("login", LoginView.as_view(), name="login")
+    path("update", UpdateView.as_view(), name="update"),
+    path("report", ReportView.as_view(), name="report")
 ]
