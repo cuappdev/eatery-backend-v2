@@ -1,6 +1,7 @@
-from datetime import date
+from datetime import date, datetime
 from typing import Optional
 from enum import Enum
+from django.forms import DateTimeField
 
 import pytz
 from api.datatype.EateryAlert import EateryAlert
@@ -48,6 +49,7 @@ class EateryID(Enum):
     LOUIES = 37
     ANABELS_GROCERY = 38
     MORRISON_DINING = 39
+    BEST_EATERY = 40
     NULL_EATERY = 41
 
 
@@ -56,6 +58,10 @@ class Eatery:
         self,
         id: EateryID,
         name: Optional[str] = None,
+        email: Optional[str] = None,
+        password: Optional[str] = None,
+        session_token: Optional[str] = None,
+        session_expiration: Optional[datetime] = None,
         image_url: Optional[str] = None,
         menu_summary: Optional[str] = None,
         campus_area: Optional[str] = None,
@@ -72,6 +78,10 @@ class Eatery:
     ):
         self.id = id
         self.name = name
+        self.email = email
+        self.password = password 
+        self.session_token = session_token
+        self.session_expiration = session_expiration
         self.image_url = image_url
         self.menu_summary = menu_summary
         self.campus_area = campus_area
@@ -103,6 +113,10 @@ class Eatery:
         eatery = {
             "id": None if self.id is None else self.id.value,
             "name": self.name,
+            "email": self.email,
+            "password": self.password,
+            "session_token": self.session_token,
+            "session_expiration": self.session_expiration,
             "image_url": self.image_url,
             "menu_summary": self.menu_summary,
             "campus_area": self.campus_area,
@@ -132,6 +146,10 @@ class Eatery:
             if "id" not in eatery_json or eatery_json["id"] is None
             else EateryID(eatery_json["id"]),
             name=eatery_json.get("name"),
+            email = eatery_json.get("email"),
+            password = eatery_json.get("password"),
+            session_token = eatery_json.get("session_token"),
+            session_expiration = eatery_json.get("session_expiration"),
             image_url=eatery_json.get("image_url"),
             menu_summary=eatery_json.get("menu_summary"),
             campus_area=eatery_json.get("campus_area"),

@@ -10,6 +10,10 @@ class EateryStore(models.Model):
 
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40, blank=True)
+    email = models.CharField(max_length=40, blank=True)
+    password = models.CharField(max_length=64, blank=True) #use 64 because we will eventually store hashed password in 64 digits
+    session_token = models.CharField(max_length=64, blank=True)
+    session_expiration = models.DateTimeField(null = True, blank=True)
     menu_summary = models.CharField(max_length = 60, blank=True)
     image_url = models.URLField(blank=True)
     location = models.CharField(max_length=30, blank=True)
