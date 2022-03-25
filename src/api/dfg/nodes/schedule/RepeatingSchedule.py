@@ -3,11 +3,11 @@ from datetime import timedelta
 from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.dfg.nodes.DfgNode import DfgNode
-from api.models import DayOfWeekEventSchedule
+from api.models import RepeatingEventSchedule
 from api.util.time import combined_timestamp
 
 
-class DayOfWeekSchedule(DfgNode):
+class RepeatingSchedule(DfgNode):
     def __init__(self, eatery_id: EateryID, cache):
         self.eatery_id = eatery_id
         self.cache = cache
@@ -16,8 +16,8 @@ class DayOfWeekSchedule(DfgNode):
         if "day_of_week_schedules" not in self.cache:
             self.cache[
                 "day_of_week_schedules"
-            ] = DayOfWeekEventSchedule.objects.all().values()
-        dow_schedules = [
+            ] = RepeatingEventSchedule.objects.all().values()
+        repeating_schedules = [
             sched
             for sched in self.cache["day_of_week_schedules"]
             if EateryID(sched["eatery_id"]) == self.eatery_id
@@ -27,7 +27,7 @@ class DayOfWeekSchedule(DfgNode):
         while date <= kwargs.get("end"):
             day_schedule = [
                 sched
-                for sched in dow_schedules
+                for sched in repeating_schedules
                 if str((date - sched["start_date"]).days % sched["repeat_interval"])
                 in sched["offset_lst"].split(",")
             ]
@@ -53,4 +53,4 @@ class DayOfWeekSchedule(DfgNode):
         return events
 
     def description(self):
-        return "DayOfWeekSchedule"
+        return "RepeatingSchedule"
