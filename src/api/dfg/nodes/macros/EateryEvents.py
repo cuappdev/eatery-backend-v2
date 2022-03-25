@@ -1,7 +1,7 @@
 from api.dfg.nodes.DfgNode import DfgNode
 
 from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
-from api.dfg.nodes.schedule.DayOfWeekSchedule import DayOfWeekSchedule
+from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
 from api.dfg.nodes.schedule.DateSchedule import DateSchedule
 from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
 
@@ -20,13 +20,13 @@ class EateryEvents(DfgNode):
                 LeftMergeEvents(
                     DateSchedule(eatery_id, cache),
                     LeftMergeEvents(
-                        DayOfWeekSchedule(eatery_id, cache),
-                        CornellDiningEvents(eatery_id, cache)
-                    )
+                        RepeatingSchedule(eatery_id, cache),
+                        CornellDiningEvents(eatery_id, cache),
+                    ),
                 ),
-                cache
+                cache,
             ),
-            cache
+            cache,
         )
 
     def children(self):

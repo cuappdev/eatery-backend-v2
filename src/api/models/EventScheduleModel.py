@@ -20,7 +20,7 @@ class EventSchedule(models.Model):
         abstract = True
 
 
-class DayOfWeekEventSchedule(EventSchedule):
+class RepeatingEventSchedule(EventSchedule):
 
     event_description = models.CharField(
         choices=EventDescription.choices, max_length=10
