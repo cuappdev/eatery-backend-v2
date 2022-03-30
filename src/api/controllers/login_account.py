@@ -4,6 +4,8 @@ from api.datatype.Eatery import EateryID
 import os
 import hashlib
 from django.utils import timezone
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 from django.contrib.auth.hashers import PBKDF2PasswordHasher as handler
 from rest_framework import status
 
@@ -29,6 +31,19 @@ def extract_token(request):
 
     return bearer_token
 
+def _urlsafe_base_64():
+    return hashlib.sha1(os.urandom(64)).hexdigest()
+
+def renew_session(user):
+    session_token = _urlsafe_base_64()
+    session_expiration = datetime.now() + timedelta(days=1)
+
+    user.session_token = session_token
+    user.session_expiration = session_expiration
+    user.save()
+    
+    return session_token
+
 class RegisterController:
     """
     If this eatery hasn't registered an email or password yet, then give 
@@ -53,7 +68,6 @@ class RegisterController:
         user = get_user_by_id(self.id)
         if user is not None:
             raise Exception("User already registered")
-        
 
         user = EateryStore.objects.filter(id = self.id.value).first()
         user.email = self.email
@@ -61,29 +75,50 @@ class RegisterController:
         user.save()        
  
 
+class PasswordRequestController:
+    """send an email with link to update password"""
+    def __init__(self, email: str):
+        self.email = email
+
+        self.user = get_user_by_email(email)
+        self.subject = "Password Reset Requested"
+        
+        email_template_name = "password_reset_email.txt"
+        email_info = {
+            "email": email,
+            'domain':'0.0.0.0:8000',
+            'site_name': 'eatery',
+            "uid": _urlsafe_base_64(),
+            "user": self.user,
+            'token': renew_session(self.user),
+            'protocol': 'http',
+        }
+
+        self.reset_email = render_to_string(email_template_name, email_info)
+
+
+    def process(self):
+        send_mail(self.subject, self.reset_email, "admin@example.com", [self.user.email], fail_silently=False)
+
 class UpdatePasswordController:
     """
     Given an email, the current (old) password, 
     change user's password to something new.
     """
-    def __init__(self, email: str, old_password: str, new_password: str):
-        self.email = email
-        self.old_password = old_password
-        self.new_password = new_password 
+    def __init__(self, password: str, token: str):
+        self.password = password 
+        self.token = token
 
     def verify_password(self, password):
-        return password == self.old_password
+        pass
 
     def process(self):
-        user = get_user_by_email(self.email)
+        user = get_user_by_session_token(self.token)
+
         if user is None:
-            raise Exception("user not found")
+            raise Exception("invalid token for password request")
 
-        user_password = getattr(user, "password")
-        if not self.verify_password(user_password):
-            raise Exception("invalid password")
-
-        user.password = self.new_password
+        user.password = hasher.encode(self.password, "seasalt2")
         user.save()
 
     
@@ -95,13 +130,6 @@ class LoginController:
     def __init__(self, email: str, password: str):
         self.email = email
         self.password = password 
-
-    def _urlsafe_base_64(self):
-        return hashlib.sha1(os.urandom(64)).hexdigest()
-
-    def renew_session(self):
-        self.session_token = self._urlsafe_base_64()
-        self.session_expiration = datetime.now() + timedelta(days=1)
 
     def verify_password(self, password):
         return hasher.verify(self.password, password)
@@ -115,12 +143,9 @@ class LoginController:
         if not self.verify_password(user_password):
             raise Exception("Invalid email or password")
 
-        self.renew_session()
-        user.session_token = self.session_token
-        user.session_expiration = self.session_expiration
-        user.save()
+        token = renew_session(user)
 
-        return self.session_token
+        return token
 
 
 class VerificationController:
@@ -142,6 +167,7 @@ class VerificationController:
 
         user_session_token = getattr(user, "session_token")
         user_session_expiration = getattr(user, "session_expiration")
+
         if user_session_token is None or not self.verify_session_token(user_session_token, user_session_expiration):
             raise Exception("Invalid session token. Please log in again.")
         

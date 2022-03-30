@@ -1,3 +1,4 @@
+from re import L
 from django.http import JsonResponse
 from rest_framework.views import APIView
 from datetime import date, timedelta
@@ -5,7 +6,7 @@ import pytz
 import json
 from api.controllers.login_account import LoginController, RegisterController, VerificationController, extract_token, get_user_by_session_token
 
-from api.controllers.login_account import LoginController, VerificationController, UpdatePasswordController
+from api.controllers.login_account import LoginController, VerificationController, UpdatePasswordController, PasswordRequestController
 
 from api.datatype.Eatery import EateryID
 from api.dfg.main import main_dfg
@@ -95,8 +96,8 @@ class RegisterView(APIView):
         password = json_body["password"]
 
         try:
-            t = RegisterController(eatery_id, email, password).process()
-            return JsonResponse(success_json(str(t)))
+            RegisterController(eatery_id, email, password).process()
+            return JsonResponse(success_json("successfully registered"))
 
         except Exception as e:
             return JsonResponse(error_json(str(e)))
@@ -115,7 +116,31 @@ class TestView(APIView):
         except Exception as e:
             return JsonResponse(error_json(str(e)))
 
-class UpdatePassword(APIView):
+class PasswordResetRequestView(APIView):
+    """Send request to change password"""
+
+    def post(self, request):
+        json_body = json.loads(request.body)
+
+        if not verify_json_fields(
+            json_body,
+            {
+                "email": FieldType.STRING,
+            },
+        ):
+            return JsonResponse(error_json("Malformed Request: not password"))
+            
+        email = json_body["email"]
+
+        try:
+            PasswordRequestController(email)
+            return JsonResponse(success_json("sent email"))
+
+        except Exception as e:
+            return JsonResponse(error_json(str(e)))
+
+
+class UpdatePasswordView(APIView):
     """Change password"""
     def post(self, request):
         json_body = json.loads(request.body)
@@ -124,7 +149,6 @@ class UpdatePassword(APIView):
             json_body,
             {
                 "email": FieldType.STRING,
-                "old_password":FieldType.STRING,
                 "new_password": FieldType.STRING
             },
         ):
