@@ -65,15 +65,15 @@ class RegisterController:
 
 
     def process(self):
-        user = get_user_by_id(self.id)
-        if user is not None:
-            raise Exception("User already registered")
-
         user = EateryStore.objects.filter(id = self.id.value).first()
-        user.email = self.email
-        user.password = self.password
-        user.save()        
+
+        if user.email == "":
+            user.email = self.email
+            user.password = self.password
+            user.save()        
  
+        else:
+            raise Exception("user already registered", status.HTTP_400_BAD_REQUEST)
 
 class PasswordRequestController:
     """send an email with link to update password"""
@@ -95,7 +95,6 @@ class PasswordRequestController:
         }
 
         self.reset_email = render_to_string(email_template_name, email_info)
-
 
     def process(self):
         send_mail(self.subject, self.reset_email, "admin@example.com", [self.user.email], fail_silently=False)
@@ -137,11 +136,11 @@ class LoginController:
     def process(self):
         user = get_user_by_email(self.email)
         if user is None:
-            raise Exception("user not found.")
+            raise Exception("User not found", status.HTTP_404_NOT_FOUND)
 
         user_password = getattr(user, "password")
         if not self.verify_password(user_password):
-            raise Exception("Invalid email or password")
+            raise Exception("Invalid email or password", status.HTTP_400_BAD_REQUEST)
 
         token = renew_session(user)
 
@@ -163,13 +162,13 @@ class VerificationController:
     def process(self):
         user = get_user_by_session_token(self.session_token)
         if user is None:
-            raise Exception("user not found")
+            raise Exception("user not found", status.HTTP_404_NOT_FOUND)
 
         user_session_token = getattr(user, "session_token")
         user_session_expiration = getattr(user, "session_expiration")
 
         if user_session_token is None or not self.verify_session_token(user_session_token, user_session_expiration):
-            raise Exception("Invalid session token. Please log in again.")
+            raise Exception("Invalid session token. Please log in again", status.HTTP_401_UNAUTHORIZED)
         
 
         

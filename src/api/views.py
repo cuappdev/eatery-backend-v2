@@ -12,6 +12,7 @@ from api.datatype.Eatery import EateryID
 from api.dfg.main import main_dfg
 from api.controllers.create_report import CreateReportController
 from api.controllers.update_eatery import UpdateEateryController
+from rest_framework import status
 
 from api.util.json import verify_json_fields, success_json, error_json, FieldType
 
@@ -44,7 +45,7 @@ class ReportView(APIView):
                 "content": FieldType.STRING,
             },
         ):
-            return JsonResponse(error_json("Malformed Request"))
+            return JsonResponse(error_json("Malformed Request", status.HTTP_400_BAD_REQUEST))
         CreateReportController(
             eatery_id=EateryID(json_body["eatery_id"]),
             type=json_body["type"],
@@ -63,7 +64,7 @@ class LoginView(APIView):
                 "password": FieldType.STRING
             },
         ):
-            return JsonResponse(error_json("Malformed Request"))
+            return JsonResponse(error_json("Malformed Request", status.HTTP_400_BAD_REQUEST))
 
         email = json_body["email"]
         password = json_body["password"]
@@ -89,7 +90,7 @@ class RegisterView(APIView):
                 "password":FieldType.STRING
             },
         ):
-            return JsonResponse(error_json("Malformed Request"))
+            return JsonResponse(error_json("Malformed Request", status.HTTP_400_BAD_REQUEST))
 
         eatery_id = EateryID(json_body["eatery_id"])
         email = json_body["email"]
@@ -128,7 +129,7 @@ class PasswordResetRequestView(APIView):
                 "email": FieldType.STRING,
             },
         ):
-            return JsonResponse(error_json("Malformed Request: not password"))
+            return JsonResponse(error_json("Malformed Request: not password", status.HTTP_400_BAD_REQUEST))
             
         email = json_body["email"]
 
