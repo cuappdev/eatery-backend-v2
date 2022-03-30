@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from datetime import date, timedelta
 import pytz
 import json
-from api.controllers.login_account import LoginController, VerificationController, extract_token, get_user_by_session_token
+from api.controllers.login_account import LoginController, RegisterController, VerificationController, extract_token, get_user_by_session_token
 
 from api.controllers.login_account import LoginController, VerificationController, UpdatePasswordController
 
@@ -70,6 +70,33 @@ class LoginView(APIView):
         try:
             token = LoginController(email, password).process()
             return JsonResponse(success_json(str(token)))
+
+        except Exception as e:
+            return JsonResponse(error_json(str(e)))
+
+class RegisterView(APIView):
+    """Give an eatery an email and password"""
+    
+    def post(self, request):
+        json_body = json.loads(request.body)
+
+        if not verify_json_fields(
+            json_body,
+            {
+                "eatery_id":FieldType.INT,
+                "email":FieldType.STRING,
+                "password":FieldType.STRING
+            },
+        ):
+            return JsonResponse(error_json("Malformed Request"))
+
+        eatery_id = EateryID(json_body["eatery_id"])
+        email = json_body["email"]
+        password = json_body["password"]
+
+        try:
+            t = RegisterController(eatery_id, email, password).process()
+            return JsonResponse(success_json(str(t)))
 
         except Exception as e:
             return JsonResponse(error_json(str(e)))

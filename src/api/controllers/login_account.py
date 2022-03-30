@@ -1,10 +1,16 @@
-#from api.datatype.Eatery import get_password
 from datetime import datetime, timedelta
-from rsa import verify
 from api.models import EateryStore
+from api.datatype.Eatery import EateryID
 import os
 import hashlib
 from django.utils import timezone
+from django.contrib.auth.hashers import PBKDF2PasswordHasher as handler
+from rest_framework import status
+
+hasher = handler()
+
+def get_user_by_id(id):
+    return EateryStore.objects.filter(id=id.value).first()
 
 def get_user_by_email(email):
     return EateryStore.objects.filter(email=email).first()
@@ -22,6 +28,38 @@ def extract_token(request):
         raise Exception("Malformed Request: missing bearer header")
 
     return bearer_token
+
+class RegisterController:
+    """
+    If this eatery hasn't registered an email or password yet, then give 
+    the eatery associated with EateryID an email and password.
+
+    This:
+        1) avoids registering email and password manually in admin, and 
+        2) stores password hashed (not raw) in EateryStore
+    """
+
+    def __init__(self, id: EateryID, email: str, password: str):
+        self.id = id
+        self.email = email
+        self.password = hasher.encode(password, "seasalt2")
+
+        self.register_user = {}
+        self.register_user["email"] = email
+        self.register_user["password"] = password
+
+
+    def process(self):
+        user = get_user_by_id(self.id)
+        if user is not None:
+            raise Exception("User already registered")
+        
+
+        user = EateryStore.objects.filter(id = self.id.value).first()
+        user.email = self.email
+        user.password = self.password
+        user.save()        
+ 
 
 class UpdatePasswordController:
     """
@@ -66,12 +104,12 @@ class LoginController:
         self.session_expiration = datetime.now() + timedelta(days=1)
 
     def verify_password(self, password):
-        return password == self.password
+        return hasher.verify(self.password, password)
         
     def process(self):
-        user =  get_user_by_email(self.email)
+        user = get_user_by_email(self.email)
         if user is None:
-            raise Exception("Invalid email or password.")
+            raise Exception("user not found.")
 
         user_password = getattr(user, "password")
         if not self.verify_password(user_password):

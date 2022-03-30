@@ -1,6 +1,6 @@
 from django.urls import path
 
-from api.views import MainDfgView, UpdatePassword, UpdateView, ReportView, LoginView, TestView
+from api.views import MainDfgView, RegisterView, UpdatePassword, UpdateView, ReportView, LoginView, TestView
 
 urlpatterns = [
     path("", MainDfgView.as_view(), name="main"),
@@ -8,5 +8,6 @@ urlpatterns = [
     path("report", ReportView.as_view(), name="report"),
     path("login", LoginView.as_view(), name="login"),
     path("changepassword", UpdatePassword.as_view(), name="access"),
-    path("testview", TestView.as_view(), name="test")
+    path("testview", TestView.as_view(), name="test"),
+    path("register", RegisterView.as_view(), name="register")
 ]
