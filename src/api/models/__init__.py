@@ -5,9 +5,8 @@ from .AlertModel import AlertStore
 from .EateryModel import EateryStore
 from .EventScheduleModel import (
     EventSchedule,
-    ClosedEventSchedule,
-    DateEventSchedule,
     RepeatingEventSchedule,
+    ScheduleException,
 )
 from .MenuModel import (
     MenuStore,
