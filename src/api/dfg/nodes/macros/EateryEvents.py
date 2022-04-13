@@ -1,14 +1,12 @@
-from api.dfg.nodes.DfgNode import DfgNode
-
-from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
-from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
-from api.dfg.nodes.schedule.DateSchedule import DateSchedule
-from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
-
-from api.dfg.nodes.macros.LeftMergeEvents import LeftMergeEvents
-
 from api.datatype.Eatery import EateryID
+from api.dfg.nodes.DfgNode import DfgNode
+from api.dfg.nodes.macros.LeftMergeEvents import LeftMergeEvents
 from api.dfg.nodes.schedule.CacheMenuInjection import CacheMenuInjection
+from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
+from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
+from api.dfg.nodes.schedule.DateSchedule import DateSchedule
+from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
+
 
 # Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
 # conflict)

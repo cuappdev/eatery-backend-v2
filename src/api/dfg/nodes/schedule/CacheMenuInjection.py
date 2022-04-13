@@ -1,25 +1,26 @@
+from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
 from api.datatype.MenuItemSection import MenuItemSection
 from api.datatype.MenuSubItem import MenuSubItem
-from api.datatype.Eatery import Eatery, EateryID
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models import CategoryItemAssociation, SubItemStore
 
-class CacheMenuInjection(DfgNode):
 
+class CacheMenuInjection(DfgNode):
     def __init__(self, child: DfgNode, cache):
         self.cache = cache
         self.child = child
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         if "menus" not in self.cache:
-            associations = CategoryItemAssociation.objects \
-                .select_related("item") \
-                .select_related("category") \
-                .select_related("category__menu") \
-                .all()      
+            associations = (
+                CategoryItemAssociation.objects.select_related("item")
+                .select_related("category")
+                .select_related("category__menu")
+                .all()
+            )
             subitems = SubItemStore.objects.all()
 
             eatery_menus_categories_map = {}
@@ -33,9 +34,9 @@ class CacheMenuInjection(DfgNode):
                     item_subitem_map[item_id][item_subsection] = []
                 item_subitem_map[item_id][item_subsection].append(
                     MenuSubItem(
-                        name=subitem.name, 
-                        additional_price=subitem.additional_price, 
-                        total_price=subitem.total_price
+                        name=subitem.name,
+                        additional_price=subitem.additional_price,
+                        total_price=subitem.total_price,
                     )
                 )
 
@@ -53,14 +54,18 @@ class CacheMenuInjection(DfgNode):
                 if association.item.id in item_subitem_map:
                     item_sections = []
                     for section in item_subitem_map[association.item.id]:
-                        item_sections.append(MenuItemSection(section, item_subitem_map[association.item.id][section]))
+                        item_sections.append(
+                            MenuItemSection(
+                                section, item_subitem_map[association.item.id][section]
+                            )
+                        )
                 eatery_menus_categories_map[eatery_id][menu_id][category].append(
                     MenuItem(
-                        name = association.item.name,
-                        healthy = None,
-                        base_price = association.item.base_price,
-                        description = association.item.description,
-                        sections = item_sections
+                        name=association.item.name,
+                        healthy=None,
+                        base_price=association.item.base_price,
+                        description=association.item.description,
+                        sections=item_sections,
                     )
                 )
             eatery_menus_map = {}
@@ -72,12 +77,12 @@ class CacheMenuInjection(DfgNode):
                         categories.append(
                             MenuCategory(
                                 category=category,
-                                items = eatery_menus_categories_map[eatery_id][menu_id][category]
+                                items=eatery_menus_categories_map[eatery_id][menu_id][
+                                    category
+                                ],
                             )
                         )
-                    eatery_menus_map[eatery_id][menu_id] = Menu(
-                        categories=categories
-                    )
+                    eatery_menus_map[eatery_id][menu_id] = Menu(categories=categories)
             self.cache["menus"] = eatery_menus_map
 
         # self.cache["menus"] is a map of form {[eatery_id]: {[menu_id]: [Menu]}}

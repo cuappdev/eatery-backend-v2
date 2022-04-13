@@ -1,7 +1,12 @@
-from api.dfg.nodes.DfgNode import DfgNode
 from api.datatype.Eatery import Eatery, EateryID
+from api.dfg.nodes.DfgNode import DfgNode
+
 
 class ClosedSchedule(DfgNode):
+    """
+    This DfgNode takes in a child consisting of a DfgNode and filters out all schedules from the node
+    if the eatery is closed on that day
+    """
 
     def __init__(self, eatery_id: EateryID, child: DfgNode, cache):
         self.eatery_id = eatery_id

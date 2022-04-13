@@ -1,14 +1,12 @@
-from django.core.management.base import BaseCommand
-
+import json
 from datetime import datetime
 from pathlib import Path
-import pytz
-import json
 
-
-from api.util.constants import SnapshotFileName
 import api.models as models
 import api.serializers as serializers
+import pytz
+from api.util.constants import SnapshotFileName
+from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
@@ -87,11 +85,13 @@ class Command(BaseCommand):
             SnapshotFileName.CATEGORY_ITEM_ASSOCIATION,
         )
 
-        # date_event_schedules = models.DateEventSchedule.objects.filter(canonical_date_gte=datetime.now().date)
-        # self.write_to_file(date_event_schedules, f"{folder_path}/{SnapshotFileName.DATE_EVENT_SCHEDULE}")
-
-        # closed_event_schedules = models.ClosedEventSchedule.objects.filter(canonical_date_gte=datetime.now().date)
-        # self.write_to_file(closed_event_schedules, f"{folder_path}/{SnapshotFileName.CLOSED_EVENT_SCHEDULE}")
+        schedule_exceptions = models.ScheduleException.objects.all()
+        self.write_to_file(
+            serializers.ScheduleExceptionSerializer,
+            schedule_exceptions,
+            folder_path,
+            SnapshotFileName.SCHEDULE_EXCEPTION,
+        )
 
         day_of_week_event_schedules = models.RepeatingEventSchedule.objects.all()
         self.write_to_file(
