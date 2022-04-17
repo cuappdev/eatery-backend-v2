@@ -45,10 +45,9 @@ class ExceptionType(models.TextChoices):
     MODIFIED = "modified"
 
 
-class ScheduleException(models.Model):
-    id = models.IntegerField(primary_key=True)
+class ScheduleException(EventSchedule):
     parent = models.ForeignKey(RepeatingEventSchedule, on_delete=models.DO_NOTHING)
     date = models.DateField()
     exception_type = models.CharField(max_length=10, choices=ExceptionType.choices)
-    start_time = models.DateField(blank=True, null=True)
-    end_time = models.DateField(blank=True, null=True)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)

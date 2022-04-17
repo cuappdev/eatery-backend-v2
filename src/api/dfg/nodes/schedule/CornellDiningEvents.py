@@ -1,16 +1,16 @@
-from api.dfg.nodes.DfgNode import DfgNode
+from datetime import date
+
+import requests
 from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
-from api.util.constants import dining_id_to_internal_id, CORNELL_DINING_URL
+from api.dfg.nodes.DfgNode import DfgNode
+from api.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
-from datetime import date
-import requests
 
 class CornellDiningEvents(DfgNode):
-
     def __init__(self, eatery_id: EateryID, cache):
         self.eatery_id = eatery_id
         self.cache = cache
@@ -35,22 +35,23 @@ class CornellDiningEvents(DfgNode):
     @staticmethod
     def parse_eatery(json_eatery: dict) -> Eatery:
         is_cafe = "Cafe" in {
-            eatery_type["descr"]
-            for eatery_type in json_eatery["eateryTypes"]
+            eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
         }
         return Eatery(
             id=dining_id_to_internal_id(json_eatery["id"]),
             events=CornellDiningEvents.eatery_events_from_json(
                 json_operating_hours=json_eatery["operatingHours"],
                 json_dining_items=json_eatery["diningItems"],
-                is_cafe=is_cafe
-            )
+                is_cafe=is_cafe,
+            ),
         )
+
     @staticmethod
-    def eatery_events_from_json(json_operating_hours: list, json_dining_items: list, is_cafe: bool) -> list[Event]:
+    def eatery_events_from_json(
+        json_operating_hours: list, json_dining_items: list, is_cafe: bool
+    ) -> list[Event]:
         json_operating_hours = sorted(
-            json_operating_hours,
-            key=lambda json_date_events: json_date_events["date"]
+            json_operating_hours, key=lambda json_date_events: json_date_events["date"]
         )
         events = []
 
@@ -58,13 +59,17 @@ class CornellDiningEvents(DfgNode):
             canonical_date = date.fromisoformat(json_date_events["date"])
 
             for json_event in json_date_events["events"]:
-                events.append(Event(
-                    canonical_date=canonical_date,
-                    description=json_event["descr"],
-                    start_timestamp=json_event["startTimestamp"],
-                    end_timestamp=json_event["endTimestamp"],
-                    menu=CornellDiningEvents.eatery_menu_from_json(json_event["menu"], json_dining_items, is_cafe)
-                ))
+                events.append(
+                    Event(
+                        canonical_date=canonical_date,
+                        description=json_event["descr"],
+                        start_timestamp=json_event["startTimestamp"],
+                        end_timestamp=json_event["endTimestamp"],
+                        menu=CornellDiningEvents.eatery_menu_from_json(
+                            json_event["menu"], json_dining_items, is_cafe
+                        ),
+                    )
+                )
 
         return events
 
@@ -79,9 +84,11 @@ class CornellDiningEvents(DfgNode):
     def cafe_menu_from_json(json_dining_items: list) -> Menu:
         category_map = {}
         for item in json_dining_items:
-            if item['category'] not in category_map:
-                category_map[item['category']] = []
-            category_map[item['category']].append(MenuItem(healthy=item['healthy'], name=item['item']))
+            if item["category"] not in category_map:
+                category_map[item["category"]] = []
+            category_map[item["category"]].append(
+                MenuItem(healthy=item["healthy"], name=item["item"])
+            )
         categories = []
         for category_name in category_map:
             categories.append(MenuCategory(category_name, category_map[category_name]))
@@ -90,8 +97,7 @@ class CornellDiningEvents(DfgNode):
     @staticmethod
     def dining_hall_menu_from_json(json_menu: list) -> Menu:
         json_menu = sorted(
-            json_menu,
-            key=lambda json_menu_category: json_menu_category["sortIdx"]
+            json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"]
         )
         menu_categories = []
 
@@ -101,13 +107,11 @@ class CornellDiningEvents(DfgNode):
                 for json_item in json_menu_category["items"]
             ]
 
-            menu_categories.append(MenuCategory(
-                category=json_menu_category["category"],
-                items=items
-            ))
+            menu_categories.append(
+                MenuCategory(category=json_menu_category["category"], items=items)
+            )
 
         return Menu(categories=menu_categories)
-
 
     def description(self):
         return "CornellDiningEvents"

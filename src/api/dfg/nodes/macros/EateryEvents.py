@@ -1,6 +1,7 @@
 from api.datatype.Eatery import EateryID
 from api.dfg.nodes.DfgNode import DfgNode
-from api.dfg.nodes.macros.LeftMergeEvents import LeftMergeEvents
+from api.dfg.nodes.macros.LeftMergeRegularEvents import LeftMergeRegularEvents
+from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents
 from api.dfg.nodes.schedule.CacheMenuInjection import CacheMenuInjection
 from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
 from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
@@ -15,9 +16,9 @@ class EateryEvents(DfgNode):
         self.macro = CacheMenuInjection(
             ClosedSchedule(
                 eatery_id,
-                LeftMergeEvents(
+                LeftMergeRepeatedEvents(
                     DateSchedule(eatery_id, cache),
-                    LeftMergeEvents(
+                    LeftMergeRegularEvents(
                         RepeatingSchedule(eatery_id, cache),
                         CornellDiningEvents(eatery_id, cache),
                     ),
