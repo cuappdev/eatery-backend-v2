@@ -7,7 +7,7 @@ from api.models.EventScheduleModel import ExceptionType, ScheduleException
 from api.util.time import combined_timestamp
 
 
-class DateSchedule(DfgNode):
+class ModifiedSchedules(DfgNode):
     def __init__(self, eatery_id: EateryID, cache):
         self.eatery_id = eatery_id
         self.cache = cache
@@ -49,4 +49,4 @@ class DateSchedule(DfgNode):
         return events
 
     def description(self):
-        return "DateSchedule"
+        return "ModifiedSchedules"

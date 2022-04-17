@@ -5,7 +5,7 @@ from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents
 from api.dfg.nodes.schedule.CacheMenuInjection import CacheMenuInjection
 from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
 from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
-from api.dfg.nodes.schedule.DateSchedule import DateSchedule
+from api.dfg.nodes.schedule.ModifiedSchedules import ModifiedSchedules
 from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
 
 
@@ -17,7 +17,7 @@ class EateryEvents(DfgNode):
             ClosedSchedule(
                 eatery_id,
                 LeftMergeRepeatedEvents(
-                    DateSchedule(eatery_id, cache),
+                    ModifiedSchedules(eatery_id, cache),
                     LeftMergeRegularEvents(
                         RepeatingSchedule(eatery_id, cache),
                         CornellDiningEvents(eatery_id, cache),
