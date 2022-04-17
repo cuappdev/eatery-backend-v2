@@ -4,6 +4,7 @@ from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models.EventScheduleModel import ExceptionType, ScheduleException
+from api.util.time import combined_timestamp
 
 
 class DateSchedule(DfgNode):
@@ -15,7 +16,7 @@ class DateSchedule(DfgNode):
         if "date_exception" not in self.cache:
             self.cache["date_exception"] = ScheduleException.objects.filter(
                 exception_type=ExceptionType.MODIFIED
-            )
+            ).values()
         modified_schedules = [
             sched
             for sched in self.cache["date_exception"]
@@ -29,9 +30,17 @@ class DateSchedule(DfgNode):
                     events.append(
                         Event(
                             canonical_date=date,
-                            generated_by=sched["parent"],
-                            start_timestamp=sched["start_time"],
-                            end_timestamp=sched["end_time"],
+                            generated_by=sched["parent_id"],
+                            start_timestamp=combined_timestamp(
+                                date=date,
+                                time=sched["start_time"],
+                                tzinfo=kwargs.get("tzinfo"),
+                            ),
+                            end_timestamp=combined_timestamp(
+                                date=date,
+                                time=sched["end_time"],
+                                tzinfo=kwargs.get("tzinfo"),
+                            ),
                             description=None,
                             menu=None,
                         )

@@ -34,7 +34,8 @@ class Event:
             "canonical_date": str(self.canonical_date),
             "start_timestamp": self.start_timestamp,
             "end_timestamp": self.end_timestamp,
-            "menu": self.menu.to_json(),
+            "menu": self.menu.to_json() if self.menu else None,
+            "generated_by": self.generated_by,
         }
 
     @staticmethod
@@ -45,6 +46,9 @@ class Event:
             start_timestamp=event_json["start_timestamp"],
             end_timestamp=event_json["end_timestamp"],
             menu=Menu.from_json(event_json["menu"]),
+            generated_by=event_json["generated_by"]
+            if "generated_by" in event_json
+            else None,
         )
 
     def __contains__(self, item: int):
