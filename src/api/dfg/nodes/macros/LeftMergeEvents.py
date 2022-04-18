@@ -7,8 +7,8 @@ from api.dfg.nodes.system.LeftMerge import LeftMerge
 class LeftMergeEvents(DfgNode):
     def __init__(self, left: DfgNode, right: DfgNode, attr_lst: list[str]):
         def comparator(left, right):
-            left_val = [left[attr] for attr in attr_lst]
-            right_val = [right[attr] for attr in attr_lst]
+            left_val = [left.get(attr) for attr in attr_lst]
+            right_val = [right.get(attr) for attr in attr_lst]
             if left_val == right_val:
                 return 0
             else:
