@@ -4,8 +4,6 @@ from api.dfg.nodes.system.ConvertToJson import ConvertToJson
 from api.dfg.nodes.system.LeftMerge import LeftMerge
 
 
-# Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
-# conflict)
 class LeftMergeEvents(DfgNode):
     def __init__(self, left: DfgNode, right: DfgNode, attr_lst: list[str]):
         def comparator(left, right):
@@ -13,8 +11,6 @@ class LeftMergeEvents(DfgNode):
             right_val = [right[attr] for attr in attr_lst]
             if left_val == right_val:
                 return 0
-            elif left_val < right_val:
-                return -1
             else:
                 return 1
 

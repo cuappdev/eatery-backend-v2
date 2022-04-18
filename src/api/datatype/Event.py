@@ -7,6 +7,25 @@ from api.util.time import combined_timestamp
 
 
 class Event:
+    """
+    Represents an event on a particular date
+
+    Attributes
+    ----------
+    description
+        the event description
+    canonical date
+        the date on which the event started
+    start_timestamp
+        timestamp of the exact time the event started
+    end_timestamp
+        timestamp of the exact time the event ended
+    menu
+        the menu associated with the event
+    generated_by
+        id of repeating schedule that generated this event (if exists)
+    """
+
     def __init__(
         self,
         description: str,
@@ -46,9 +65,7 @@ class Event:
             start_timestamp=event_json["start_timestamp"],
             end_timestamp=event_json["end_timestamp"],
             menu=Menu.from_json(event_json["menu"]),
-            generated_by=event_json["generated_by"]
-            if "generated_by" in event_json
-            else None,
+            generated_by=event_json.get("generated_by"),
         )
 
     def __contains__(self, item: int):
@@ -61,6 +78,13 @@ def filter_range(
     start: Optional[date],
     end: Optional[date],
 ):
+    """
+    Filters a list of events based on the parameters provided.
+    If neither start nor end is provided no filtering occurs.
+    If tzinfo and start are provided, returns a new list containing all events that start on start
+    If all 3 optional parameters are provided, returns a new list containing all events
+    between start and end
+    """
     if events is None:
         return []
 
