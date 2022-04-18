@@ -4,6 +4,7 @@ from api.datatype.Eatery import EateryID
 
 CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
 
+
 class SnapshotFileName(Enum):
     EATERY_STORE = "eatery_store.txt"
     ALERT_STORE = "alert_store.txt"
@@ -17,6 +18,8 @@ class SnapshotFileName(Enum):
     DATE_EVENT_SCHEDULE = "date_event_schedule.txt"
     CLOSED_EVENT_SCHEDULE = "closed_event_schedule.txt"
     TRANSACTION_HISTORY = "transaction_history.txt"
+    SCHEDULE_EXCEPTION = "schedule_exception.txt"
+
 
 def dining_id_to_internal_id(id: int):
     if id == 31:
@@ -88,16 +91,19 @@ def dining_id_to_internal_id(id: int):
     else:
         return None
 
+
 # Our transactions vendor
 def vendor_name_to_internal_id(vendor_eatery_name):
-    vendor_eatery_name = ''.join(c.lower() for c in vendor_eatery_name if c.isalpha())
+    vendor_eatery_name = "".join(c.lower() for c in vendor_eatery_name if c.isalpha())
     if vendor_eatery_name == "bearnecessities":
         return EateryID.BEAR_NECESSITIES
     elif vendor_eatery_name == "northstarmarketplace":
         return EateryID.NORTH_STAR_DINING
     elif vendor_eatery_name == "jansensmarket":
         return EateryID.JANSENS_MARKET
-    elif vendor_eatery_name == "stockinghallcafe" or vendor_eatery_name == "stockinghall":
+    elif (
+        vendor_eatery_name == "stockinghallcafe" or vendor_eatery_name == "stockinghall"
+    ):
         return EateryID.DAIRY_BAR
     elif vendor_eatery_name == "marthas":
         return EateryID.MARTHAS_CAFE

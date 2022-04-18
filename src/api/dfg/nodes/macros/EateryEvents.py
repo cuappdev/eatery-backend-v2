@@ -1,14 +1,13 @@
-from api.dfg.nodes.DfgNode import DfgNode
-
-from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
-from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
-from api.dfg.nodes.schedule.DateSchedule import DateSchedule
-from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
-
-from api.dfg.nodes.macros.LeftMergeEvents import LeftMergeEvents
-
 from api.datatype.Eatery import EateryID
+from api.dfg.nodes.DfgNode import DfgNode
+from api.dfg.nodes.macros.LeftMergeRegularEvents import LeftMergeRegularEvents
+from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents
 from api.dfg.nodes.schedule.CacheMenuInjection import CacheMenuInjection
+from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
+from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
+from api.dfg.nodes.schedule.ModifiedSchedules import ModifiedSchedules
+from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
+
 
 # Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if
 # conflict)
@@ -17,9 +16,9 @@ class EateryEvents(DfgNode):
         self.macro = CacheMenuInjection(
             ClosedSchedule(
                 eatery_id,
-                LeftMergeEvents(
-                    DateSchedule(eatery_id, cache),
-                    LeftMergeEvents(
+                LeftMergeRepeatedEvents(
+                    ModifiedSchedules(eatery_id, cache),
+                    LeftMergeRegularEvents(
                         RepeatingSchedule(eatery_id, cache),
                         CornellDiningEvents(eatery_id, cache),
                     ),
