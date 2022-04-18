@@ -47,6 +47,7 @@ class RepeatingSchedule(DfgNode):
                             tzinfo=kwargs.get("tzinfo"),
                         ),
                         menu=self.cache["menus"][self.eatery_id][sched["menu_id"]],
+                        generated_by=sched["id"],
                     )
                 )
             date += timedelta(days=1)

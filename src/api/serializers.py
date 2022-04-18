@@ -49,3 +49,8 @@ class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RepeatingEventSchedule
         fields = "__all__"
+
+class ScheduleExceptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ScheduleException
+        fields = "__all__"

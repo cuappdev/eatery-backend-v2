@@ -1,7 +1,9 @@
-from django.db import models
-from django.core.validators import validate_comma_separated_integer_list
+from enum import Enum
+
 from api.models.EateryModel import EateryStore
 from api.models.MenuModel import MenuStore
+from django.core.validators import validate_comma_separated_integer_list
+from django.db import models
 
 
 class EventDescription(models.TextChoices):
@@ -38,18 +40,14 @@ class RepeatingEventSchedule(EventSchedule):
         unique_together = ("eatery", "event_description")
 
 
-class DateEventSchedule(EventSchedule):
-    event_description = models.CharField(
-        choices=EventDescription.choices, max_length=10
-    )
-    menu = models.ForeignKey(MenuStore, on_delete=models.DO_NOTHING)
-    canonical_date = models.DateField()
-    start_timestamp = models.IntegerField()
-    end_timestamp = models.IntegerField()
+class ExceptionType(models.TextChoices):
+    CLOSED = "closed"
+    MODIFIED = "modified"
 
 
-class ClosedEventSchedule(EventSchedule):
-    event_description = models.CharField(
-        choices=EventDescription.choices, max_length=10
-    )
-    canonical_date = models.DateField()
+class ScheduleException(EventSchedule):
+    parent = models.ForeignKey(RepeatingEventSchedule, on_delete=models.DO_NOTHING)
+    date = models.DateField()
+    exception_type = models.CharField(max_length=10, choices=ExceptionType.choices)
+    start_time = models.TimeField(blank=True, null=True)
+    end_time = models.TimeField(blank=True, null=True)
