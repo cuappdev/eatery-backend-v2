@@ -1,14 +1,15 @@
+import json
+from datetime import date, timedelta
+
+import pytz
 from django.http import JsonResponse
 from rest_framework.views import APIView
-from datetime import date, timedelta
-import pytz
-import json
 
-from api.datatype.Eatery import EateryID
-from api.dfg.main import main_dfg
 from api.controllers.create_report import CreateReportController
 from api.controllers.update_eatery import UpdateEateryController
-from api.util.json import verify_json_fields, success_json, error_json, FieldType
+from api.datatype.Eatery import EateryID
+from api.dfg.main import main_dfg
+from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
 # Create your views here.
 
@@ -34,16 +35,17 @@ class ReportView(APIView):
         if not verify_json_fields(
             json_body,
             {
-                "eatery_id": FieldType.INT,
                 "type": FieldType.STRING,
                 "content": FieldType.STRING,
             },
         ):
             return JsonResponse(error_json("Malformed Request"))
+
+        id_provided = json_body.get("eatery_id")
         CreateReportController(
-            eatery_id=EateryID(json_body["eatery_id"]),
             type=json_body["type"],
             content=json_body["content"],
+            eatery_id=EateryID(id_provided) if id_provided else None,
         ).process()
         return JsonResponse(success_json("Reported"))
 
