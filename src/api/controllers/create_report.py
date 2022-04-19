@@ -1,10 +1,12 @@
 from datetime import datetime
+from typing import Optional
+
 from api.datatype.Eatery import EateryID
 from api.models import ReportStore
 
-class CreateReportController:
 
-    def __init__(self, eatery_id: EateryID, type: str, content: str):
+class CreateReportController:
+    def __init__(self, type: str, content: str, eatery_id: Optional[EateryID] = None):
         self.eatery_id = eatery_id
         self.type = type
         self.content = content
@@ -12,9 +14,8 @@ class CreateReportController:
     def process(self):
         current_timestamp = datetime.now().timestamp()
         ReportStore.objects.create(
-            eatery_id = self.eatery_id.value,
-            type = self.type,
-            content = self.content,
-            created_timestamp = current_timestamp
+            eatery_id=self.eatery_id.value if self.eatery_id else None,
+            type=self.type,
+            content=self.content,
+            created_timestamp=current_timestamp,
         )
-        
