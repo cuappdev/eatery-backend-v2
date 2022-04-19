@@ -35,9 +35,11 @@ class ReportView(APIView):
         if not verify_json_fields(
             json_body,
             {
+                "eatery_id": FieldType.INT or None,
                 "type": FieldType.STRING,
                 "content": FieldType.STRING,
             },
+            ["eatery_id"],
         ):
             return JsonResponse(error_json("Malformed Request"))
 
