@@ -2,7 +2,7 @@ name: Docker Build & Push and Deploy to eatery-blue-backend
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   path-context:
