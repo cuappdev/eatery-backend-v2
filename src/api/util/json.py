@@ -26,6 +26,10 @@ def verify_json_fields(
             if not isinstance(json[field], int) or EateryID(json[field]) == None:
                 return False
 
+    for field in json:
+        if field not in field_type_map and field not in nullable:
+            return False
+
     return True
 
 

@@ -4,6 +4,7 @@ from pathlib import Path
 
 import api.models as models
 import api.serializers as serializers
+import eatery.serializers as eatery_serializers
 import pytz
 from api.util.constants import SnapshotFileName
 from django.core.management.base import BaseCommand
@@ -29,7 +30,7 @@ class Command(BaseCommand):
 
         eateries = models.EateryStore.objects.all()
         self.write_to_file(
-            serializers.EateryStoreSerializer,
+            eatery_serializers.EateryStoreSerializer,
             eateries,
             folder_path,
             SnapshotFileName.EATERY_STORE,
