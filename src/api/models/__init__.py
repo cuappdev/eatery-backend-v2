@@ -1,19 +1,16 @@
 # Need to expose models to django.
 # In this app, models should be imported directly from api.models, not from api.models.package
 
+from eatery.models import EateryStore
+
 from .AlertModel import AlertStore
-from .EateryModel import EateryStore
-from .EventScheduleModel import (
-    EventSchedule,
-    RepeatingEventSchedule,
-    ScheduleException,
-)
+from .EventScheduleModel import EventSchedule, RepeatingEventSchedule, ScheduleException
 from .MenuModel import (
-    MenuStore,
+    CategoryItemAssociation,
     CategoryStore,
     ItemStore,
+    MenuStore,
     SubItemStore,
-    CategoryItemAssociation,
 )
 from .ReportModel import ReportStore
 from .TransactionModel import TransactionHistoryStore

@@ -1,9 +1,9 @@
 from enum import Enum
 
-from api.models.EateryModel import EateryStore
 from api.models.MenuModel import MenuStore
 from django.core.validators import validate_comma_separated_integer_list
 from django.db import models
+from eatery.models import EateryStore
 
 
 class EventDescription(models.TextChoices):

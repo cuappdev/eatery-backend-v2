@@ -1,5 +1,6 @@
 from django.db import models
-from api.models.EateryModel import EateryStore
+from eatery.models import EateryStore
+
 
 class AlertStore(models.Model):
     id = models.IntegerField(primary_key=True)

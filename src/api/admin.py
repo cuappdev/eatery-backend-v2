@@ -1,10 +1,11 @@
+import eatery.models as eatery_models
 from django.contrib import admin
 
 import api.models as models
 
 # Register your models here.
 
-admin.site.register(models.EateryStore)
+admin.site.register(eatery_models.EateryStore)
 admin.site.register(models.MenuStore)
 admin.site.register(models.ItemStore)
 admin.site.register(models.SubItemStore)
