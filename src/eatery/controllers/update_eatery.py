@@ -2,8 +2,8 @@ import base64
 import os
 
 import requests
-from api.datatype.Eatery import EateryID
 from django.http import QueryDict
+from eatery.datatype.Eatery import EateryID
 from eatery.models import EateryStore
 
 

@@ -1,4 +1,3 @@
-from api.datatype.Eatery import EateryID
 from api.dfg.nodes.DfgNode import DfgNode
 from api.dfg.nodes.macros.LeftMergeRegularEvents import LeftMergeRegularEvents
 from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents
@@ -7,6 +6,7 @@ from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
 from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
 from api.dfg.nodes.schedule.ModifiedSchedules import ModifiedSchedules
 from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule
+from eatery.datatype.Eatery import EateryID
 
 
 # Merges two lists of objects, combining objects with matching IDs (keys of object in left array have precedence if

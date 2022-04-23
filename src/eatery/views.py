@@ -1,9 +1,9 @@
-from api.datatype.Eatery import EateryID
-from api.util.json import (FieldType, error_json, success_json,
-                           verify_json_fields)
+from api.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
+
+from eatery.datatype.Eatery import EateryID
 
 from .controllers.update_eatery import UpdateEateryController
 
