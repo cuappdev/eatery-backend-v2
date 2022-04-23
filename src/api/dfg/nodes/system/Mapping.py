@@ -1,9 +1,10 @@
+from typing import Any, Callable
+
 from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery, EateryID
-from typing import Callable, Any
+from eatery.datatype.Eatery import Eatery, EateryID
+
 
 class Mapping(DfgNode):
-
     def __init__(self, child: DfgNode, fn: Callable[[Any, dict], DfgNode]):
         self.child = child
         self.fn = fn

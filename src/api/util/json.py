@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Mapping, Optional
 
-from api.datatype.Eatery import EateryID
+from eatery.datatype.Eatery import EateryID
 
 
 class FieldType(Enum):

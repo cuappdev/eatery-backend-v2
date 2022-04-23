@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from api.datatype.Eatery import Eatery, EateryID
-from api.datatype.EateryAlert import EateryAlert
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models import AlertStore
 from api.serializers import AlertStoreSerializer
+from eatery.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.EateryAlert import EateryAlert
 from eatery.models import EateryStore
 from eatery.serializers import EateryStoreSerializer
 

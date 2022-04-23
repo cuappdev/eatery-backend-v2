@@ -1,12 +1,11 @@
 from datetime import date
-from typing import Optional
 from enum import Enum
+from typing import Optional
 
 import pytz
-from api.datatype.EateryAlert import EateryAlert
-
 from api.datatype.Event import Event, filter_range
 from api.datatype.WaitTimesDay import WaitTimesDay
+from eatery.datatype.EateryAlert import EateryAlert
 
 
 class EateryID(Enum):

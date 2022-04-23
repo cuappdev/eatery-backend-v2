@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import Optional
 
-from api.datatype.Eatery import EateryID
 from api.models import ReportStore
+from eatery.datatype.Eatery import EateryID
 
 
 class CreateReportController:

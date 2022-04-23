@@ -1,11 +1,11 @@
 from typing import Union
 
-from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery
 from api.datatype.Event import Event
+from api.dfg.nodes.DfgNode import DfgNode
+from eatery.datatype.Eatery import Eatery
+
 
 class EateryFromJson(DfgNode):
-
     def __init__(self, child: DfgNode):
         self.child = child
 
@@ -19,18 +19,15 @@ class EateryFromJson(DfgNode):
     @staticmethod
     def from_json(obj: Union[list, dict], *args, **kwargs):
         if isinstance(obj, list):
-            return [
-                EateryFromJson.from_json(elem, *args, **kwargs)
-                for elem in obj
-            ]
+            return [EateryFromJson.from_json(elem, *args, **kwargs) for elem in obj]
         else:
             return Eatery.from_json(obj)
 
     def description(self):
         return "EateryFromJson"
 
-class EventFromJson(DfgNode):
 
+class EventFromJson(DfgNode):
     def __init__(self, child: DfgNode):
         self.child = child
 
@@ -44,10 +41,7 @@ class EventFromJson(DfgNode):
     @staticmethod
     def from_json(obj: Union[list, dict], *args, **kwargs):
         if isinstance(obj, list):
-            return [
-                EventFromJson.from_json(elem, *args, **kwargs)
-                for elem in obj
-            ]
+            return [EventFromJson.from_json(elem, *args, **kwargs) for elem in obj]
         else:
             return Event.from_json(obj)
 
