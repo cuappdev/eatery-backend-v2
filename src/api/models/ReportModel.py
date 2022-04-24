@@ -1,4 +1,4 @@
-from api.models.EateryModel import EateryStore
+from eatery.models import EateryStore
 from django.db import models
 
 

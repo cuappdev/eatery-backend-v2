@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from api.util.constants import SnapshotFileName
 import api.serializers as serializers
+import eatery.serializers as eatery_serializers
 import json
 
 
@@ -26,7 +27,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         folder_path = options["input"]
         self.ingest_data(
-            serializers.EateryStoreSerializer,
+            eatery_serializers.EateryStoreSerializer,
             folder_path,
             SnapshotFileName.EATERY_STORE,
         )

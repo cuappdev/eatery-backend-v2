@@ -1,7 +1,7 @@
 import requests
 
 from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery
+from eatery.datatype.Eatery import Eatery
 from api.util.constants import dining_id_to_internal_id, CORNELL_DINING_URL
 
 class CornellDiningNow(DfgNode):

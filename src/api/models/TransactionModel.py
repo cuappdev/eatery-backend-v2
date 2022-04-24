@@ -1,5 +1,5 @@
 from django.db import models
-from api.models.EateryModel import EateryStore
+from eatery.models import EateryStore
 
 # [transaction_count] transactions at [name] in time range [block_end_time - 5 minutes, block_end_time] on [canonical_date]
 

@@ -1,4 +1,4 @@
-from api.datatype.Eatery import EateryID
+from eatery.datatype.Eatery import EateryID
 from api.dfg.nodes.DfgNode import DfgNode
 from api.dfg.nodes.macros.LeftMergeRegularEvents import LeftMergeRegularEvents
 from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents

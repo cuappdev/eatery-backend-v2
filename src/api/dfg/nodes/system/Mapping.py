@@ -1,5 +1,5 @@
 from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import Eatery, EateryID
 from typing import Callable, Any
 
 class Mapping(DfgNode):

@@ -1,7 +1,7 @@
 from datetime import date
 
 import requests
-from api.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory

@@ -2,13 +2,6 @@ from rest_framework import serializers
 
 import api.models as models
 
-
-class EateryStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.EateryStore
-        fields = "__all__"
-
-
 class AlertStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AlertStore

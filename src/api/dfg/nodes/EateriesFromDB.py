@@ -1,10 +1,12 @@
 from datetime import datetime
 
-from api.datatype.Eatery import Eatery, EateryID
-from api.datatype.EateryAlert import EateryAlert
+from eatery.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.EateryAlert import EateryAlert
 from api.dfg.nodes.DfgNode import DfgNode
-from api.models import EateryStore, AlertStore
-from api.serializers import EateryStoreSerializer, AlertStoreSerializer
+from api.models import AlertStore
+from eatery.models import EateryStore
+from eatery.serializers import EateryStoreSerializer
+from api.serializers import AlertStoreSerializer
 
 
 # eventually need to deprecate this for a custom DB backend storing all of the overrides

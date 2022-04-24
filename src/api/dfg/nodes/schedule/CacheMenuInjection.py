@@ -1,4 +1,4 @@
-from api.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import Eatery, EateryID
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem

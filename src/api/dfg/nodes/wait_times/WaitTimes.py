@@ -2,7 +2,7 @@ from datetime import date, timedelta
 from django.db.models import Avg
 import pytz
 
-from api.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.datatype.WaitTime import WaitTime
 from api.datatype.WaitTimesDay import WaitTimesDay

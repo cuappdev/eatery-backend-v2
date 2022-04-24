@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Mapping, Optional
 
-from api.datatype.Eatery import EateryID
+from eatery.datatype.Eatery import EateryID
 
 
 class FieldType(Enum):
@@ -25,6 +25,10 @@ def verify_json_fields(
         elif field_type_map[field] is FieldType.EATERYID:
             if not isinstance(json[field], int) or EateryID(json[field]) == None:
                 return False
+
+    for field in json:
+        if field not in field_type_map and field not in nullable:
+            return False
 
     return True
 

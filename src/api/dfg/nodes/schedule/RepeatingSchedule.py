@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from api.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models import RepeatingEventSchedule

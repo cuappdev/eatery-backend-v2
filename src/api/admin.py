@@ -4,7 +4,6 @@ import api.models as models
 
 # Register your models here.
 
-admin.site.register(models.EateryStore)
 admin.site.register(models.MenuStore)
 admin.site.register(models.ItemStore)
 admin.site.register(models.SubItemStore)

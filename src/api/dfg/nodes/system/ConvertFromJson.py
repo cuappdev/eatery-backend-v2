@@ -1,7 +1,7 @@
 from typing import Union
 
 from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery
+from eatery.datatype.Eatery import Eatery
 from api.datatype.Event import Event
 
 class EateryFromJson(DfgNode):

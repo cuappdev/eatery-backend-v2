@@ -2,7 +2,7 @@ from typing import Union
 from api.datatype.Event import Event
 
 from api.dfg.nodes.DfgNode import DfgNode
-from api.datatype.Eatery import Eatery
+from eatery.datatype.Eatery import Eatery
 
 class ConvertToJson(DfgNode):
 
