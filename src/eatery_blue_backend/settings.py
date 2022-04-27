@@ -76,16 +76,9 @@ WSGI_APPLICATION = "eatery_blue_backend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-IS_LOCAL = os.getenv("LOCAL")
+IS_PROD = os.getenv("IS_PROD") == "True"
 
-if IS_LOCAL == "True":
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-elif IS_LOCAL == "False":
+if IS_PROD:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql_psycopg2",
@@ -94,6 +87,13 @@ elif IS_LOCAL == "False":
             "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
             "HOST": os.getenv("POSTGRES_HOST"),
             "PORT": os.getenv("POSTGRES_PORT"),
+        }
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
         }
     }
 
