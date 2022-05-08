@@ -8,7 +8,7 @@ from eatery.datatype.Eatery import EateryID
 from .controllers.update_eatery import UpdateEateryController
 
 
-class UpdateView(APIView):
+class EateryView(APIView):
     def post(self, request):
         text_params = request.POST
         if not verify_json_fields(
