@@ -3,11 +3,10 @@ from datetime import date, timedelta
 
 import pytz
 from django.http import JsonResponse
+from eatery.datatype.Eatery import EateryID
 from rest_framework.views import APIView
 
 from api.controllers.create_report import CreateReportController
-from api.controllers.update_eatery import UpdateEateryController
-from api.datatype.Eatery import EateryID
 from api.dfg.main import main_dfg
 from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
@@ -50,23 +49,3 @@ class ReportView(APIView):
             eatery_id=EateryID(id_provided) if id_provided else None,
         ).process()
         return JsonResponse(success_json("Reported"))
-
-
-class UpdateView(APIView):
-    def post(self, request):
-        text_params = request.POST
-        try:
-            image_param = request.FILES.get("image")
-        except:
-            image_param = None
-
-        try:
-            id = int(text_params.get("id"))
-        except:
-            return JsonResponse(error_json("ID must be castable to an int"))
-
-        try:
-            UpdateEateryController(EateryID(id), text_params, image_param).process()
-            return JsonResponse(success_json("Updated"))
-        except Exception as e:
-            return JsonResponse(error_json(str(e)))

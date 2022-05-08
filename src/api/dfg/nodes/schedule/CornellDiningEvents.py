@@ -1,13 +1,13 @@
 from datetime import date
 
 import requests
-from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
 from api.dfg.nodes.DfgNode import DfgNode
 from api.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
+from eatery.datatype.Eatery import Eatery, EateryID
 
 
 class CornellDiningEvents(DfgNode):

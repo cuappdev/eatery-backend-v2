@@ -3,12 +3,6 @@ from rest_framework import serializers
 import api.models as models
 
 
-class EateryStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.EateryStore
-        fields = "__all__"
-
-
 class AlertStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.AlertStore
@@ -49,6 +43,7 @@ class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.RepeatingEventSchedule
         fields = "__all__"
+
 
 class ScheduleExceptionSerializer(serializers.ModelSerializer):
     class Meta:

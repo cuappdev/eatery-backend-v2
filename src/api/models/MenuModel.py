@@ -1,5 +1,5 @@
-from api.models.EateryModel import EateryStore
 from django.db import models
+from eatery.models import EateryStore
 
 
 class MenuStore(models.Model):
