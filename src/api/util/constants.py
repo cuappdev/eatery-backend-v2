@@ -1,6 +1,6 @@
 from enum import Enum
 
-from api.datatype.Eatery import EateryID
+from eatery.datatype.Eatery import EateryID
 
 CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
 

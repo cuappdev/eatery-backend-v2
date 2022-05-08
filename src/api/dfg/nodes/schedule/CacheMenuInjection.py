@@ -1,4 +1,3 @@
-from api.datatype.Eatery import Eatery, EateryID
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
@@ -6,6 +5,7 @@ from api.datatype.MenuItemSection import MenuItemSection
 from api.datatype.MenuSubItem import MenuSubItem
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models import CategoryItemAssociation, SubItemStore
+from eatery.datatype.Eatery import Eatery, EateryID
 
 
 class CacheMenuInjection(DfgNode):

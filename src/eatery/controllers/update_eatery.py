@@ -1,9 +1,10 @@
-from django.http import QueryDict
-from api.datatype.Eatery import EateryID
-from api.models import EateryStore
 import base64
-import requests
 import os
+
+import requests
+from django.http import QueryDict
+from eatery.datatype.Eatery import EateryID
+from eatery.models import EateryStore
 
 
 class UpdateEateryController:
@@ -15,7 +16,6 @@ class UpdateEateryController:
         Requires: id is a valid id and all keys in update_map are valid fields
             in the EateryStore class (except username/password cannot be provided),
             as well as an optional image field containing an image file to be uploaded
-        Raises: Exception when invalid keys are provided
         """
         self.id = id
         self.update_data = {}
@@ -24,27 +24,12 @@ class UpdateEateryController:
             img_url = self.upload_image(image)
             self.update_data["image_url"] = img_url
 
-        allowed_fields = [
-            "id",
-            "name",
-            "menu_summary",
-            "location",
-            "campus_area",
-            "online_order_url",
-            "latitude",
-            "longitude",
-            "payment_accepts_meal_swipes",
-            "payment_accepts_brbs",
-            "payment_accepts_cash",
-        ]
-
+        # Query dict is immutable, so need to do this to remove id
+        to_remove = ["id"]
+        self.update_data = {}
         for key, val in update_map.items():
-            try:
-                if key not in allowed_fields:
-                    raise Exception
+            if key not in to_remove:
                 self.update_data[key] = val
-            except:
-                raise Exception("Invalid update field(s) provided")
 
     def upload_image(self, image):
         """
