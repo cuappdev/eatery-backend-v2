@@ -2,13 +2,6 @@ from rest_framework import serializers
 
 import api.models as models
 
-
-class AlertStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.AlertStore
-        fields = "__all__"
-
-
 class MenuStoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.MenuStore
@@ -38,14 +31,3 @@ class CategoryItemAssociationSerializer(serializers.ModelSerializer):
         model = models.CategoryItemAssociation
         fields = "__all__"
 
-
-class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RepeatingEventSchedule
-        fields = "__all__"
-
-
-class ScheduleExceptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ScheduleException
-        fields = "__all__"

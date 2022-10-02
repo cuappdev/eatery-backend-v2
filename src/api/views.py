@@ -6,12 +6,21 @@ from django.http import JsonResponse
 from eatery.datatype.Eatery import EateryID
 from rest_framework.views import APIView
 
-from api.controllers.create_report import CreateReportController
 from api.dfg.main import main_dfg
 from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
-# Create your views here.
+from api.models.MenuModel import MenuStore
 
+# Views for URL Paths are defined here.
+
+class MenuView(APIView):
+    model = MenuStore
+
+    def get(self, request):
+        queryset = MenuStore.all()
+        if queryset is None:
+            return JsonResponse(error_json("MenuStore is none"))
+        return JsonResponse(queryset)
 
 class MainDfgView(APIView):
     dfg = main_dfg
@@ -28,24 +37,3 @@ class MainDfgView(APIView):
         return JsonResponse(result)
 
 
-class ReportView(APIView):
-    def post(self, request):
-        json_body = json.loads(request.body)
-        if not verify_json_fields(
-            json_body,
-            {
-                "eatery_id": FieldType.INT or None,
-                "type": FieldType.STRING,
-                "content": FieldType.STRING,
-            },
-            ["eatery_id"],
-        ):
-            return JsonResponse(error_json("Malformed Request"))
-
-        id_provided = json_body.get("eatery_id")
-        CreateReportController(
-            type=json_body["type"],
-            content=json_body["content"],
-            eatery_id=EateryID(id_provided) if id_provided else None,
-        ).process()
-        return JsonResponse(success_json("Reported"))
