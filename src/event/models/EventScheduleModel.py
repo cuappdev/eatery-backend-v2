@@ -1,4 +1,4 @@
-from enum import Enum
+"""from enum import Enum
 
 from event.models.MenuModel import MenuStore
 from django.core.validators import validate_comma_separated_integer_list
@@ -51,3 +51,4 @@ class ScheduleException(EventSchedule):
     exception_type = models.CharField(max_length=10, choices=ExceptionType.choices)
     start_time = models.TimeField(blank=True, null=True)
     end_time = models.TimeField(blank=True, null=True)
+"""

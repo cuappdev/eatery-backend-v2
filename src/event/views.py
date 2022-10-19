@@ -5,13 +5,17 @@ import pytz
 from django.http import JsonResponse
 from eatery.datatype.Eatery import EateryID
 from rest_framework.views import APIView
+from rest_framework import generics
 
 from api.dfg.main import main_dfg
 from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
 from event.models.MenuModel import MenuStore
 
+class PopulateMenuView(generics.GenericAPIView):
+    def get(self, request):
 
+        return JsonResponse(success_json("Populated Menu Models"))
 
 class MenuView(APIView):
     model = MenuStore
