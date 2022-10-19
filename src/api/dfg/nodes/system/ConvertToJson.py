@@ -1,6 +1,6 @@
 from typing import Union
 
-from api.datatype.Event import Event
+from event.datatype.Event import Event
 from api.dfg.nodes.DfgNode import DfgNode
 from eatery.datatype.Eatery import Eatery
 

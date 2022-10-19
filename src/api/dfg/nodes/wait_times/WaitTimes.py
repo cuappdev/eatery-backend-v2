@@ -1,7 +1,7 @@
 from datetime import date, timedelta
 
 import pytz
-from api.datatype.Event import Event
+from event.datatype.Event import Event
 from api.datatype.WaitTime import WaitTime
 from api.datatype.WaitTimesDay import WaitTimesDay
 from api.dfg.nodes.DfgNode import DfgNode

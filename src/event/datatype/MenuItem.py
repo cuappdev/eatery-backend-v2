@@ -4,13 +4,6 @@ from api.datatype.MenuItemSection import MenuItemSection
 
 class MenuItem:
 
-    @staticmethod
-    def from_cornell_dining_json(json_item: dict):
-        return MenuItem(
-            healthy=json_item["healthy"],
-            name=json_item["item"]
-        )
-
     def __init__(
             self,
             name: str,

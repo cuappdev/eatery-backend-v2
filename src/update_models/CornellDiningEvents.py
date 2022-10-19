@@ -1,7 +1,7 @@
 from datetime import date
 
 import requests
-from api.datatype.Event import Event
+from event.datatype.Event import Event
 from api.datatype.Menu import Menu
 from api.datatype.MenuCategory import MenuCategory
 from api.datatype.MenuItem import MenuItem
@@ -48,8 +48,7 @@ class CornellDiningEvents(DfgNode):
 
     @staticmethod
     def eatery_events_from_json(
-        json_operating_hours: list, json_dining_items: list, is_cafe: bool
-    ) -> list[Event]:
+        json_operating_hours: list, json_dining_items: list, is_cafe: bool) -> list[Event]:
         json_operating_hours = sorted(
             json_operating_hours, key=lambda json_date_events: json_date_events["date"]
         )
@@ -103,7 +102,7 @@ class CornellDiningEvents(DfgNode):
 
         for json_menu_category in json_menu:
             items = [
-                MenuItem.from_cornell_dining_json(json_item)
+                CornellDiningEvents.from_cornell_dining_json(json_item)
                 for json_item in json_menu_category["items"]
             ]
 
@@ -112,6 +111,13 @@ class CornellDiningEvents(DfgNode):
             )
 
         return Menu(categories=menu_categories)
+
+    @staticmethod
+    def from_cornell_dining_json(json_item: dict):
+        return MenuItem(
+            healthy=json_item["healthy"],
+            name=json_item["item"]
+        )
 
     def description(self):
         return "CornellDiningEvents"

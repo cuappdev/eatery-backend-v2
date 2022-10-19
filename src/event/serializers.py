@@ -1,5 +1,23 @@
 from rest_framework import serializers
 
+
+class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.RepeatingEventSchedule
+        fields = "__all__"
+
+
+class ScheduleExceptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.ScheduleException
+        fields = "__all__"
+
+
+
+
+
+from rest_framework import serializers
+
 import api.models as models
 
 class MenuStoreSerializer(serializers.ModelSerializer):

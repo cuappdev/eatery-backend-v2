@@ -1,10 +1,7 @@
 from datetime import datetime
 
 from api.dfg.nodes.DfgNode import DfgNode
-from api.models import AlertStore
-from api.serializers import AlertStoreSerializer
 from eatery.datatype.Eatery import Eatery, EateryID
-from eatery.datatype.EateryAlert import EateryAlert
 from eatery.models import EateryStore
 from eatery.serializers import EateryStoreSerializer
 
@@ -16,20 +13,8 @@ class EateriesFromDB(DfgNode):
         eateries = EateryStore.objects.all()
         serialized_eateries = EateryStoreSerializer(data=eateries, many=True)
         serialized_eateries.is_valid()
-        alerts = AlertStore.objects.filter(
-            end_timestamp__gte=datetime.now().timestamp(),
-            start_timestamp__lte=datetime.now().timestamp(),
-        )
-        serialized_alerts = AlertStoreSerializer(data=alerts, many=True)
-        serialized_alerts.is_valid()
-        return list(
-            map(
-                lambda x: EateriesFromDB.eatery_from_serialized(
-                    x, serialized_alerts.data
-                ),
-                serialized_eateries.data,
-            )
-        )
+        return list(serialized_eateries.data)
+            
 
     @staticmethod
     def none_repr(str):
@@ -57,24 +42,7 @@ class EateriesFromDB(DfgNode):
             online_order_url=EateriesFromDB.none_repr(
                 serialized_eatery["online_order_url"]
             ),
-            alerts=EateriesFromDB.alerts(serialized_eatery["id"], serialized_alerts),
-        )
-
-    @staticmethod
-    def alerts(eatery_id: int, serialized_alerts: list[dict]):
-        return [
-            EateriesFromDB.alert_from_serialized(alert)
-            for alert in serialized_alerts
-            if alert["eatery"] == eatery_id
-        ]
-
-    @staticmethod
-    def alert_from_serialized(serialized_alert: dict):
-        return EateryAlert(
-            id=serialized_alert["id"],
-            description=serialized_alert["description"],
-            start_timestamp=serialized_alert["start_timestamp"],
-            end_timestamp=serialized_alert["end_timestamp"],
+            
         )
 
     def description(self):

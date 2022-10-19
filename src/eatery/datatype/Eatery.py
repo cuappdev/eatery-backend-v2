@@ -3,9 +3,9 @@ from enum import Enum
 from typing import Optional
 
 import pytz
-from api.datatype.Event import Event, filter_range
-from api.datatype.WaitTimesDay import WaitTimesDay
-from eatery.datatype.EateryAlert import EateryAlert
+#from event.datatype.Event import Event, filter_range
+#from api.datatype.WaitTimesDay import WaitTimesDay
+#from eatery.datatype.EateryAlert import EateryAlert
 
 
 class EateryID(Enum):
@@ -58,7 +58,6 @@ class Eatery:
         image_url: Optional[str] = None,
         menu_summary: Optional[str] = None,
         campus_area: Optional[str] = None,
-        events: Optional[list[Event]] = None,
         latitude: Optional[float] = None,
         longitude: Optional[float] = None,
         payment_accepts_cash: Optional[bool] = None,
@@ -66,8 +65,6 @@ class Eatery:
         payment_accepts_meal_swipes: Optional[bool] = None,
         location: Optional[str] = None,
         online_order_url: Optional[str] = None,
-        wait_times: Optional[list[WaitTimesDay]] = None,
-        alerts: Optional[list[EateryAlert]] = None,
     ):
         self.id = id
         self.name = name
@@ -82,16 +79,6 @@ class Eatery:
         self.payment_accepts_meal_swipes = payment_accepts_meal_swipes
         self.location = location
         self.online_order_url = online_order_url
-        self.wait_times = wait_times
-        self.alerts = alerts
-
-    def events(
-        self,
-        tzinfo: Optional[pytz.timezone] = None,
-        start: Optional[date] = None,
-        end: Optional[date] = None,
-    ):
-        return filter_range(self.known_events, tzinfo, start, end)
 
     def to_json(
         self,
@@ -114,13 +101,7 @@ class Eatery:
             "payment_accepts_brbs": self.payment_accepts_brbs,
             "payment_accepts_meal_swipes": self.payment_accepts_meal_swipes,
             "location": self.location,
-            "online_order_url": self.online_order_url,
-            "wait_times": None
-            if self.wait_times is None
-            else [wait_time.to_json() for wait_time in self.wait_times],
-            "alerts": None
-            if self.alerts is None
-            else [alert.to_json() for alert in self.alerts],
+            "online_order_url": self.online_order_url
         }
         return eatery
 
@@ -144,15 +125,6 @@ class Eatery:
             payment_accepts_meal_swipes=eatery_json.get("payment_accepts_meal_swipes"),
             location=eatery_json.get("location"),
             online_order_url=eatery_json.get("online_order_url"),
-            wait_times=None
-            if "wait_times" not in eatery_json or eatery_json["wait_times"] is None
-            else [
-                WaitTimesDay.from_json(day_wait_time)
-                for day_wait_time in eatery_json["wait_times"]
-            ],
-            alerts=None
-            if "alerts" not in eatery_json or eatery_json["alerts"] is None
-            else [EateryAlert.from_json(alert) for alert in eatery_json["alerts"]],
         )
 
     def clone(self):

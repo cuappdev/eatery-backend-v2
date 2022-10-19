@@ -9,20 +9,35 @@ from rest_framework.views import APIView
 from api.dfg.main import main_dfg
 from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
-from api.models.MenuModel import MenuStore
+from event.models.MenuModel import MenuStore
 
-# Views for URL Paths are defined here.
+
 
 class MenuView(APIView):
     model = MenuStore
 
     def get(self, request):
-        queryset = MenuStore.all()
+        tzinfo = pytz.timezone("US/Eastern") #??
+        reload = request.GET.get("reload")
+        eatery = request.GET.get("eatery")
+        start_date = request.GET.get("start_date")
+        end_date = request.GET.get("end_date")
+
+        if start_date is None or end_date is None:
+            start_date = date.today()
+            end_date = date.today() + timedelta(days=7)
+
+        if eatery is not None:
+            queryset = MenuStore.objects.filter(eatery = eatery)
+        else: 
+            queryset = MenuStore.objects.all()
+        
         if queryset is None:
             return JsonResponse(error_json("MenuStore is none"))
         return JsonResponse(queryset)
 
-class MainDfgView(APIView):
+
+"""class MainDfgView(APIView):
     dfg = main_dfg
 
     def get(self, request):
@@ -35,5 +50,5 @@ class MainDfgView(APIView):
             end=date.today() + timedelta(days=7),
         )
         return JsonResponse(result)
-
+"""
 

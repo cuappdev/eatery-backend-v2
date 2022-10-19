@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import MenuModel as models
+from event.models import MenuModel as models
 
 admin.site.register(models.MenuStore)
 admin.site.register(models.ItemStore)

@@ -2,7 +2,7 @@ from api.dfg.nodes.DfgNode import DfgNode
 from api.dfg.nodes.macros.LeftMergeRegularEvents import LeftMergeRegularEvents
 from api.dfg.nodes.macros.LeftMergeRepeatedEvents import LeftMergeRepeatedEvents
 from api.dfg.nodes.schedule.CacheMenuInjection import CacheMenuInjection
-from api.dfg.nodes.schedule.ClosedSchedule import ClosedSchedule
+from event.controllers.ClosedSchedule import ClosedSchedule
 from api.dfg.nodes.schedule.CornellDiningEvents import CornellDiningEvents
 from api.dfg.nodes.schedule.ModifiedSchedules import ModifiedSchedules
 from api.dfg.nodes.schedule.RepeatingSchedule import RepeatingSchedule

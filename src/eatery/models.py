@@ -17,7 +17,7 @@ class EateryStore(models.Model):
     campus_area = models.CharField(
         max_length=15, choices=CampusArea.choices, default=CampusArea.NONE, blank=True
     )
-    online_order_url = models.URLField(blank=True)
+    online_order_url = models.URLField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
     longitude = models.FloatField(null=True, blank=True)
     payment_accepts_meal_swipes = models.BooleanField(null=True, blank=True)

@@ -1,3 +1,4 @@
+from typing import Dict
 from api.dfg.nodes.CornellDiningNow import CornellDiningNow
 from api.dfg.nodes.EateriesFromDB import EateriesFromDB
 from api.dfg.nodes.EateryStubs import EateryStubs

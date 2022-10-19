@@ -1,5 +1,5 @@
 from api.dfg.nodes.DfgNode import DfgNode
-from api.models.EventScheduleModel import ExceptionType, ScheduleException
+from event.EventScheduleModel import ExceptionType, ScheduleException
 from eatery.datatype.Eatery import Eatery, EateryID
 
 

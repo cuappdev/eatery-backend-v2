@@ -1,6 +1,6 @@
 from datetime import timedelta
 
-from api.datatype.Event import Event
+from event.datatype.Event import Event
 from api.dfg.nodes.DfgNode import DfgNode
 from api.models import RepeatingEventSchedule
 from api.util.time import combined_timestamp

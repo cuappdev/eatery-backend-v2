@@ -1,4 +1,4 @@
-from api.dfg.nodes.DfgNode import DfgNode
+"""from api.dfg.nodes.DfgNode import DfgNode
 from api.dfg.nodes.system.ConvertFromJson import EventFromJson
 from api.dfg.nodes.system.ConvertToJson import ConvertToJson
 from api.dfg.nodes.system.LeftMerge import LeftMerge
@@ -26,3 +26,4 @@ class LeftMergeEvents(DfgNode):
 
     def description(self):
         return "LeftMergeEvents"
+"""

@@ -1,14 +1,27 @@
-from api.util.json import FieldType, error_json, success_json, verify_json_fields
+from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import render
 from rest_framework.views import APIView
+from rest_framework import generics
 
 from eatery.datatype.Eatery import EateryID
 
 from .controllers.update_eatery import UpdateEateryController
+from .controllers.populate_eatery import PopulateEateryController
+
+class PopulateEatery(generics.GenericAPIView):
+    def get(self, request):
+        """
+        Populate Eatery datatable with data from CornellDiningNow
+        """
+        try: 
+            PopulateEateryController().process()
+            return JsonResponse(success_json("Populated EateryStore"))
+        except Exception as e:
+            return JsonResponse(error_json(str(e)))
 
 
-class EateryView(APIView):
+class UpdateEatery(APIView):
     def post(self, request):
         text_params = request.POST
         if not verify_json_fields(
