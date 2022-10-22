@@ -1,4 +1,4 @@
 from django.contrib import admin
-import ReportModel
+from reports.models import ReportStore
 
-admin.site.register(ReportModel.ReportStore)
+admin.site.register(ReportStore)

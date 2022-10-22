@@ -17,8 +17,7 @@ from api.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 import requests
 
 
-class CornellDiningNow():
-
+class CornellDiningNowController():
     def __init__(self, cache):
         self.cache = cache
         
@@ -26,7 +25,10 @@ class CornellDiningNow():
         return
 
     @staticmethod
-    def get_json():
+    def process(self):
+        """
+        Populate 
+        """
         try:
             response = requests.get(CORNELL_DINING_URL).json()
         except Exception as e:

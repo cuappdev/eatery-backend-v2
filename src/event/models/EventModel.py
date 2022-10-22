@@ -9,6 +9,7 @@ class EventDescription(models.TextChoices):
     LUNCH = "Lunch"
     DINNER = "Dinner"
     GENERAL = "General"
+    CAFE = "Cafe"
 
 
 class EventStore(models.Model): 

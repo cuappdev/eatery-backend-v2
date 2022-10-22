@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from eatery.datatype.Eatery import EateryID
 from rest_framework.views import APIView
 
-from reports.create_report import CreateReportController
+from reports.controllers.create_report import CreateReportController
 from api.util.json import FieldType, error_json, success_json, verify_json_fields
 
 class ReportView(APIView):
