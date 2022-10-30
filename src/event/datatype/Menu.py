@@ -1,4 +1,4 @@
-from api.datatype.MenuCategory import MenuCategory
+from datatype.MenuCategory import MenuCategory
 
 class Menu:
 

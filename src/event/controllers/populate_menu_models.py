@@ -1,5 +1,5 @@
 import json
-from eatery.models import EateryStore
+from eatery.models import Eatery
 from event.models import EventModel, EventScheduleModel, MenuModel
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 

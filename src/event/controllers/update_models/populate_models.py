@@ -1,20 +1,19 @@
 """
 Populate the eatery models with CornellDiningNow() data.
 
-Basically functions the same way as a DFG main.py...
+Basically functions the same way as a DFG main.py.
+This is.... worse than the initial implementation (solely bc I am not technically skilled pfft)
+
+Implementing ViewSets will reduce the amount of code in here. 
 """
-from datetime import date 
+from datetime import date, datetime
 
-import json
-from eatery.datatype.Eatery import Eatery, EateryID
-
-from event.datatype.Event import Event
-from api.datatype.Menu import Menu
-from api.datatype.MenuCategory import MenuCategory
-from api.datatype.MenuItem import MenuItem
-
-from api.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 import requests
+
+from event.models import Event, Menu, Category, Item, SubItem, CategoryItemAssociation
+from event.serializers import EventSerializer, MenuSerializer, CategorySerializer
+
+from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
 
 class CornellDiningNowController():
@@ -24,152 +23,121 @@ class CornellDiningNowController():
     def __call__(self):
         return
 
-    @staticmethod
-    def process(self):
-        """
-        Populate 
-        """
+
+    """
+    return json of eateries from CDN
+    """
+    def get_json(self):
         try:
             response = requests.get(CORNELL_DINING_URL).json()
         except Exception as e:
             raise e
-        if response["status"] == "success":
+        if response["status_code"] <= 400:
             json_eateries = response["data"]["eateries"]
         return json_eateries
 
 
-    def revert_all_models():
-        json_eateries = CornellDiningNow.get_json()
+    # Populate events 
+    def generate_events(self, json_eatery):
+        is_cafe = "Cafe" in {
+            eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
+        }  
+        json_dates = json_eatery["operatingHours"]
 
-        for json_eatery in json_eateries:
-            generate_eatery(json_eatery)
+        for json_date in json_dates:
+            canon_date = date.fromisoformat(json_date["date"])
 
-            generate_event(json_eatery)
+            json_events = json_date["events"]
+            
+            for json_event in json_events:
+                start_time = datetime.fromtimestamp(json_event["startTimestamp"])
+                end_time = datetime.fromtimestamp(json_event["endTimestamp"])
 
+                start = datetime.combine(canon_date, start_time)
+                end = datetime.combine(canon_date, end_time)
 
+                # create event 
+                event = Event.objects.create(
+                    eatery = json_eatery["id"],
+                    event_description = json_event["descr"],
+                    start = start,
+                    end = end
+                )
+                event.save()
+                event = EventSerializer(event)
 
-            populate_event(json_eatery)
+                if is_cafe: 
+                    self.generate_cafe_menus(json_eatery, json_event, event)
+                else: 
+                    self.generate_dining_hall_menus(json_eatery, json_event, event)
 
-    def generate_event(json_eatery) -> Event: 
-
-        json_operating_hours=json_eatery["operatingHours"]
-        json_dining_items=json_eatery["diningItems"]
-        
-        for json_date_events in json_operating_hours:
-            canonical_date = date.fromisoformat(json_date_events["date"])
-
-
-    """
-    Add Eatery object to model.
-    """cc
-    @staticmethod
-    def generate_eatery(json_eatery) -> Eatery:
-        eatery = Eatery(
-            id=dining_id_to_internal_id(json_eatery["id"]),
-            name=json_eatery["name"],
-            campus_area=json_eatery["campusArea"]["descrshort"],
-            latitude=json_eatery["latitude"],
-            longitude=json_eatery["longitude"],
-            payment_accepts_cash=True,
-            payment_accepts_brbs=any(
-                [
-                    method["descrshort"] == "Meal Plan - Debit"
-                    for method in json_eatery["payMethods"]
-                ]
-            ),
-            payment_accepts_meal_swipes=any(
-                [
-                    method["descrshort"] == "Meal Plan - Swipe"
-                    for method in json_eatery["payMethods"]
-                ]
-            ),
-            location=json_eatery["location"],
-            online_order_url=json_eatery["onlineOrderUrl"],
+                
+    # these create functions should be in the serializers. ViewSets will probably take these out
+    def create_menu(event_id): 
+        menu = Menu.objects.create(
+            event = event_id
         )
-        eatery.save()
+        menu.save()
+        return menu
+                
+    def create_menu_item(json_eatery, json_item):
+        item = Item.objects.create(
+            eatery = json_eatery["id"], 
+            name = json_item["item"]   
+        )
+        item.save()
+        return item
 
-        return eatery
+    def create_category(json_menu_category, menu_id):
+        category = Category.objects.create(
+            menu = menu_id, 
+            category = json_menu_category["category"]
+        )
+        category.save()
+        return category
 
-    """
-    Add Event object to model
-    ((placeholder -- ))
-    """
 
+    # Populate menus
+    def generate_dining_hall_menus(self, json_eatery, json_event, event_serialized):
+        event_id = event_serialized['id']
 
-    """
-    Every menu is an Event type.
-    """
+        for json_menu in json_event:
+            json_menu = sorted(json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"])
+            
+            menu = self.create_menu(event_id)
+            menu = MenuSerializer(menu)
 
-    def populate_event(json, eatery):
-        json_eatery = json
-        pass
-
-        
-
-    def populate_cafe_menuitem():
-        pass
-
-    def populate_dininghall_menuitem():
-        pass
-
+            for json_menu_category in json_menu:
+                category = self.create_category(json_menu_category, menu['id'])
+                category = CategorySerializer(category)
+                
+                for json_item in json_menu_category["items"]:
+                    item = self.create_menu_item(json_eatery, json_item)
     
-    def cafe_menu_from_json(json_dining_items: list) -> Menu:
+    def generate_cafe_menus(self, json_eatery, json_event, event_serialized):
+        event = event_serialized
+        menu = self.create_menu(event['id']) 
+        menu = MenuSerializer(menu)
+
         category_map = {}
-        for item in json_dining_items:
+        dining_items = json_eatery["diningItems"]
+
+        for item in dining_items: 
             if item["category"] not in category_map:
                 category_map[item["category"]] = []
+
             category_map[item["category"]].append(
-                MenuItem(healthy=item["healthy"], name=item["item"])
-            )
-        categories = []
+                item = self.create_menu_item(json_eatery, item))
+
         for category_name in category_map:
-            categories.append(MenuCategory(category_name, category_map[category_name]))
-        
-        return Menu(categories=categories)
+            self.create_category(menu['id'], category_map[category_name])
 
 
-    def dining_hall_menu_from_json(json_menu: list) -> Menu:
-        json_menu = sorted(
-            json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"]
-        )
-        menu_categories = []
+    def process(self):
+        json_eateries = self.get_json()
 
-        for json_menu_category in json_menu:
-            items = [
-                from_cornell_dining_json(json_item)
-                for json_item in json_menu_category["items"]
-            ]
-
-            menu_categories.append(
-                MenuCategory(category=json_menu_category["category"], items=items)
-            )
-
-        return Menu(categories=menu_categories)
-
-    @staticmethod
-    def from_cornell_dining_json(json_item: dict):
-        return MenuItem(
-            healthy=json_item["healthy"],
-            name=json_item["item"]
-        )
-
-
-    # I don't see alerts anywhere in the json? is this a newly added thing for EateryChef?
-    def populate_alert_model(json, eatery):
-        pass 
-
-    def populate_report_model():
-        pass
-
-    """
-    Populates all models with menu information from CornellDiningNow()
-    (TODO: check with currently cached data)
-    """
-    
-
-
-
-
+        for json_eatery in json_eateries:
+            self.generate_events(json_eatery)
 
         
     

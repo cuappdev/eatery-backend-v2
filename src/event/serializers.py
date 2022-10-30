@@ -1,63 +1,42 @@
 from rest_framework import serializers
+from models import Event, Menu, Category, Item, SubItem, CategoryItemAssociation
 
+class EventSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    class Meta: 
+        model = Event 
+        fields = ['id', 'eatery', 'event_description', 'start', 'end']
 
-class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
+class MenuSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    categories = serializers.StringRelatedField(allow_null=True)
+
     class Meta:
-        model = models.RepeatingEventSchedule
+        model = Menu
+        fields = ['id', 'categories']
+
+
+class ItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
         fields = "__all__"
 
 
-class ScheduleExceptionSerializer(serializers.ModelSerializer):
+class SubItemSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.ScheduleException
+        model = SubItem
         fields = "__all__"
 
 
-
-
-
-from rest_framework import serializers
-
-import api.models as models
-
-class MenuStoreSerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.MenuStore
-        fields = "__all__"
-
-
-class ItemStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ItemStore
-        fields = "__all__"
-
-
-class SubItemStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.SubItemStore
-        fields = "__all__"
-
-
-class CategoryStoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.CategoryStore
+        model = Category
         fields = "__all__"
 
 
 class CategoryItemAssociationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.CategoryItemAssociation
-        fields = "__all__"
-
-class RepeatingEventScheduleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.RepeatingEventSchedule
-        fields = "__all__"
-
-
-class ScheduleExceptionSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.ScheduleException
+        model = CategoryItemAssociation
         fields = "__all__"
 
 
