@@ -67,6 +67,14 @@ class UpdateEateryController:
         except:
             raise Exception("Image uploading unsuccessful")
 
+    """
+    Pull new data from CornellDiningNow
+    >> left merge Eatery and CornellDiningNow
+    >> left merge Events and CornellDiningNow
+    """
+    def compare(self):
+        pass
+
     def process(self):
         """
         Selects DB entry we want to update and updates it using provided data

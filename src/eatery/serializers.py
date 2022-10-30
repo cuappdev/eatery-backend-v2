@@ -3,7 +3,7 @@ from rest_framework import serializers
 import eatery.models as models
 
 
-class EateryStoreSerializer(serializers.ModelSerializer):
+class EaterySerializer(serializers.ModelSerializer):
     class Meta:
-        model = models.EateryStore
+        model = models.Eatery
         fields = "__all__"

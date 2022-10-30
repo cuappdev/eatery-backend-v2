@@ -1,4 +1,4 @@
-from eatery.serializers import EateryStoreSerializer
+from eatery.serializers import EaterySerializer
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -7,7 +7,7 @@ from rest_framework import generics
 
 from eatery.datatype.Eatery import EateryID
 
-from eatery.models import EateryStore
+from eatery.models import Eatery
 
 from .controllers.update_eatery import UpdateEateryController
 from .controllers.populate_eatery import PopulateEateryController

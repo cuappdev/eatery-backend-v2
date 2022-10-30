@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class EateryStore(models.Model):
+class Eatery(models.Model):
     class CampusArea(models.TextChoices):
         WEST = "West"
         NORTH = "North"
@@ -10,7 +10,7 @@ class EateryStore(models.Model):
         NONE = ""
 
     id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=40, blank=True)
+    name = models.CharField(max_length=40)
     menu_summary = models.CharField(max_length=60, blank=True)
     image_url = models.URLField(blank=True)
     location = models.CharField(max_length=30, blank=True)

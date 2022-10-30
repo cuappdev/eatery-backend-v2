@@ -1,7 +1,7 @@
 import requests 
 
 from eatery.datatype.Eatery import Eatery, EateryID
-from eatery.models import EateryStore
+from eatery.models import Eatery
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
 
@@ -17,16 +17,18 @@ class PopulateEateryController:
             response = requests.get(CORNELL_DINING_URL).json()
         except Exception as e:
             raise e
-        if response["status"] == "success":
+            
+        if response["status_code"] <= 400 :
             json_eateries = response["data"]["eateries"]
+
         return json_eateries
 
 
     def generate_eatery(self, json_eatery) -> Eatery:
         """
-        Create Eatery object from json and add to EateryStore table
+        Create Eatery object from json and add to Eatery table
         """
-        eatery = EateryStore.objects.create(
+        eatery = Eatery.objects.create(
             id=json_eatery["id"],#dining_id_to_internal_id(json_eatery["id"]),
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
