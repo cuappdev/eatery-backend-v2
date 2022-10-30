@@ -62,7 +62,7 @@ class UpdateEatery(APIView):
 
 class GetEateries(APIView):
     def get(self, request):
-        eateries = EateryStoreSerializer(EateryStore.objects.all(), many=True)
+        eateries = EaterySerializer(Eatery.objects.all(), many=True)
         if not eateries.data:
             return JsonResponse(error_json("eateries is empty"))
 
