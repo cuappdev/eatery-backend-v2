@@ -1,4 +1,4 @@
 from django.contrib import admin
-from alert.models import AlertStore
+from models import Alert
 
-admin.site.register(AlertStore)
+admin.site.register(Alert)

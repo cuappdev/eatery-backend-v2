@@ -2,7 +2,7 @@ from django.db import models
 from eatery.models import EateryStore
 
 
-class AlertStore(models.Model):
+class Alert(models.Model):
     id = models.IntegerField(primary_key=True)
     eatery = models.ForeignKey(EateryStore, on_delete=models.DO_NOTHING)
     description = models.CharField(max_length = 250)
