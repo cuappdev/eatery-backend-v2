@@ -14,11 +14,11 @@ class PopulateEateryController:
         Get json from CornellDiningNow, separate by eatery
         """
         try:
-            response = requests.get(CORNELL_DINING_URL).json()
+            response = requests.get(CORNELL_DINING_URL)
         except Exception as e:
             raise e
-            
-        if response["status_code"] <= 400 :
+        if response.status_code <= 400 :
+            response = response.json()
             json_eateries = response["data"]["eateries"]
 
         return json_eateries

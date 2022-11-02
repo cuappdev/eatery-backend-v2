@@ -19,8 +19,6 @@ class Event(models.Model):
     start = models.DateTimeField() #combine canonical_date w/ start/end timestamp
     end = models.DateTimeField()
 
-    class Meta:
-        abstract = True
 
 
 class Menu(models.Model):
@@ -28,6 +26,8 @@ class Menu(models.Model):
     #eatery = models.ForeignKey(Eatery, on_delete=models.DO_NOTHING)
     event = models.ForeignKey(Event, on_delete = models.DO_NOTHING)
     #name = models.CharField(max_length=40)
+
+
 
     """class Meta:
         unique_together = ("eatery", "name")"""
@@ -38,8 +38,9 @@ class Category(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.DO_NOTHING)
     category = models.CharField(max_length=40)
 
-    class Meta:
-        unique_together = ("menu", "category")
+"""    class Meta:
+        abstract = True
+        unique_together = ("menu", "category")"""
 
 
 class Item(models.Model):
@@ -48,6 +49,9 @@ class Item(models.Model):
     name = models.CharField(max_length=40)
     #description = models.CharField(max_length=200, blank=True)
     base_price = models.FloatField(null=True, blank=True)
+    
+"""    class Meta:
+        abstract = True"""
 
 
 class SubItem(models.Model):
@@ -58,6 +62,8 @@ class SubItem(models.Model):
     name = models.CharField(max_length=40)
     item_subsection = models.CharField(max_length=40)
 
+"""    class Meta:
+        abstract = True"""
 
 class CategoryItemAssociation(models.Model):
     id = models.IntegerField(primary_key=True)
