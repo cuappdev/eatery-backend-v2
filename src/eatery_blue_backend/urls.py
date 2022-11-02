@@ -19,10 +19,8 @@ from django.urls import include, path
 urlpatterns = [
     #path("api/", include("api.urls")),
     path("admin/", admin.site.urls),
-    path("eatery/", include("eatery.urls"))
-    #path("eatery/", include("eatery.urls")),
-    #path("menu/", include("menu.urls")),
-    #path("event/", include("event.urls")),
+    path("eatery/", include("eatery.urls")),
+    path("event/", include("event.urls")),
     #path("alert/", include("alert.urls"))
     #path("wait_time/", include("wait_time.urls"))
 ]

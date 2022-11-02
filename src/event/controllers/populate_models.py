@@ -6,6 +6,7 @@ This is.... worse than the initial implementation (solely bc I am not technicall
 
 Implementing ViewSets will reduce the amount of code in here. 
 """
+
 from datetime import date, datetime
 
 import requests
@@ -19,10 +20,6 @@ from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 class CornellDiningNowController():
     def __init__(self, cache):
         self.cache = cache
-        
-    def __call__(self):
-        return
-
 
     """
     return json of eateries from CDN
@@ -50,27 +47,36 @@ class CornellDiningNowController():
             json_events = json_date["events"]
             
             for json_event in json_events:
-                start_time = datetime.fromtimestamp(json_event["startTimestamp"])
-                end_time = datetime.fromtimestamp(json_event["endTimestamp"])
-
-                start = datetime.combine(canon_date, start_time)
-                end = datetime.combine(canon_date, end_time)
-
-                # create event 
-                event = Event.objects.create(
-                    eatery = json_eatery["id"],
-                    event_description = json_event["descr"],
-                    start = start,
-                    end = end
-                )
-                event.save()
-                event = EventSerializer(event)
+                event = self.create_event(self, json_eatery, json_event, canon_date)
 
                 if is_cafe: 
                     self.generate_cafe_menus(json_eatery, json_event, event)
                 else: 
                     self.generate_dining_hall_menus(json_eatery, json_event, event)
 
+
+    """Helper function - merge date and timestamp for creating event"""
+    def create_event_datetime(json_event, date):
+        start_time = datetime.fromtimestamp(json_event["startTimestamp"])
+        end_time = datetime.fromtimestamp(json_event["endTimestamp"])
+
+        start = datetime.combine(date, start_time)
+        end = datetime.combine(date, end_time)
+
+        return {"start" : start, "end": end}
+
+    """
+    Create event object
+    """
+    def create_event(self, json_eatery, json_event, canon_date):
+        event = Event.objects.create(
+            eatery = json_eatery["id"],
+            event_description = json_event["descr"],
+            start = self.create_event_datetime(json_event, canon_date),
+            end = self.create_event_datetime(json_event, canon_date)
+        )
+        event.save()
+        return EventSerializer(event)
                 
     # these create functions should be in the serializers. ViewSets will probably take these out
     def create_menu(event_id): 
@@ -78,7 +84,7 @@ class CornellDiningNowController():
             event = event_id
         )
         menu.save()
-        return menu
+        return MenuSerializer(menu)
                 
     def create_menu_item(json_eatery, json_item):
         item = Item.objects.create(
@@ -94,7 +100,7 @@ class CornellDiningNowController():
             category = json_menu_category["category"]
         )
         category.save()
-        return category
+        return CategorySerializer(category)
 
 
     # Populate menus
@@ -105,15 +111,14 @@ class CornellDiningNowController():
             json_menu = sorted(json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"])
             
             menu = self.create_menu(event_id)
-            menu = MenuSerializer(menu)
 
             for json_menu_category in json_menu:
                 category = self.create_category(json_menu_category, menu['id'])
-                category = CategorySerializer(category)
                 
                 for json_item in json_menu_category["items"]:
                     item = self.create_menu_item(json_eatery, json_item)
     
+
     def generate_cafe_menus(self, json_eatery, json_event, event_serialized):
         event = event_serialized
         menu = self.create_menu(event['id']) 

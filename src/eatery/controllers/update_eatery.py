@@ -4,7 +4,7 @@ import requests
 from django.http import QueryDict
 
 from eatery.datatype.Eatery import EateryID
-from eatery.models import EateryStore
+from eatery.models import Eatery
 
 
 class UpdateEateryController:
@@ -80,4 +80,4 @@ class UpdateEateryController:
         Selects DB entry we want to update and updates it using provided data
         """
         # use double-splat to convert dict to kwargs
-        EateryStore.objects.filter(id=self.id.value).update(**self.update_data)
+        Eatery.objects.filter(id=self.id.value).update(**self.update_data)

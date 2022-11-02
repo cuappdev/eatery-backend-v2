@@ -1,12 +1,11 @@
 from django.contrib import admin
 
-from event.models import MenuModel as models
-
-admin.site.register(models.MenuStore)
-admin.site.register(models.ItemStore)
-admin.site.register(models.SubItemStore)
-admin.site.register(models.CategoryStore)
-admin.site.register(models.CategoryItemAssociation)
+from event.models import CategoryItemAssociation, Menu, Item, SubItem, Category
+admin.site.register(Menu)
+admin.site.register(Item)
+admin.site.register(SubItem)
+admin.site.register(Category)
+admin.site.register(CategoryItemAssociation)
 
 #admin.site.register(models.RepeatingEventSchedule)
 #admin.site.register(models.ScheduleException)

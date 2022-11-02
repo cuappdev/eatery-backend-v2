@@ -1,6 +1,6 @@
 from django.db import models 
 
-from src.eatery.models import Eatery
+from eatery.models import Eatery
 
 class EventDescription(models.TextChoices):
     BREAKFAST = "Breakfast"

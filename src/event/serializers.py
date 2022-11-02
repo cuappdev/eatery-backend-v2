@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from models import Event, Menu, Category, Item, SubItem, CategoryItemAssociation
+from event.models import Event, Menu, Category, Item, SubItem, CategoryItemAssociation
 
 class EventSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
