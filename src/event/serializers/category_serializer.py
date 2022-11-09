@@ -2,7 +2,7 @@ from rest_framework import serializers
 from event.models import Category
 
 class CategorySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only = True)
     menu = serializers.IntegerField()
     category = serializers.CharField(allow_null = True)
 

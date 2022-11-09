@@ -1,6 +1,7 @@
 import requests 
 
 from eatery.datatype.Eatery import Eatery, EateryID
+from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
@@ -28,7 +29,7 @@ class PopulateEateryController:
         """
         Create Eatery object from json and add to Eatery table
         """
-        eatery = Eatery.objects.create(
+        eatery = EaterySerializer(
             id=json_eatery["id"],#dining_id_to_internal_id(json_eatery["id"]),
             name=json_eatery["name"],
             campus_area=json_eatery["campusArea"]["descrshort"],
@@ -50,8 +51,11 @@ class PopulateEateryController:
             location=json_eatery["location"],
             online_order_url=json_eatery["onlineOrderUrl"],
         )
-        eatery.save()
-
+        if eatery.is_valid():
+            eatery.save()
+        else:
+            eatery.errors 
+            
         return eatery
 
     def process(self):
