@@ -1,6 +1,0 @@
-from event.serializers.category_serializer import CategorySerializer
-from event.serializers.event_serializer import EventSerializer
-from event.serializers.category_item_serializer import CategoryItemAssociation
-from event.serializers.item_serializer import ItemSerializer
-from event.serializers.subitem_serializer import SubItemSerializer
-from event.serializers.menu_serializer import MenuSerializer

@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     "alert",
     "event",
     "reports",
+    "menu",
+    "item",
+    "category",
     "rest_framework",
 ]
 
