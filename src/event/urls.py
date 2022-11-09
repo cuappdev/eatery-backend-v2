@@ -1,9 +1,8 @@
 from django.urls import path
 
-from event.views import PopulateEventView
+from event.views import PopulateEventView, EateryEventsViewSet
 
 urlpatterns = [
     path("populate/", PopulateEventView.as_view(), name="menu"),
-    #path("populate/", PopulateMenu.as_view(), name="populate"),
-    #path("<int:eatery_id>/" EateryEvents.as_view(), name="get_events"),
+    path("<int:eatery_id>/", EateryEventsViewSet.as_view(), name="get_events")
 ]

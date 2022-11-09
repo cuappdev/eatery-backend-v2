@@ -7,34 +7,30 @@ This is.... worse than the initial implementation (solely bc I am not technicall
 Implementing ViewSets will reduce the amount of code in here. 
 """
 
-from datetime import date, datetime
+from datetime import datetime
 
 import requests
 
-from event.models import Event, Menu, Category, Item, SubItem, CategoryItemAssociation
-from event.serializers import EventSerializer, MenuSerializer, CategorySerializer
+from event.serializers import *
+from event.models import *
 
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
-
 class CornellDiningNowController():
-    def __init__(self, cache):
-        self.cache = cache
+    def __init__(self):
+        self=self
 
-    """
-    return json of eateries from CDN
-    """
     def get_json(self):
         try:
-            response = requests.get(CORNELL_DINING_URL).json()
+            response = requests.get(CORNELL_DINING_URL)
         except Exception as e:
             raise e
-        if response["status_code"] <= 400:
+        if response.status_code <= 400:
+            response = response.json()
             json_eateries = response["data"]["eateries"]
         return json_eateries
 
 
-    # Populate events 
     def generate_events(self, json_eatery):
         is_cafe = "Cafe" in {
             eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
@@ -42,12 +38,11 @@ class CornellDiningNowController():
         json_dates = json_eatery["operatingHours"]
 
         for json_date in json_dates:
-            canon_date = date.fromisoformat(json_date["date"])
-
+            canon_date = datetime.fromisoformat(json_date["date"])
             json_events = json_date["events"]
             
             for json_event in json_events:
-                event = self.create_event(self, json_eatery, json_event, canon_date)
+                event = self.create_event(json_eatery, json_event, canon_date)
 
                 if is_cafe: 
                     self.generate_cafe_menus(json_eatery, json_event, event)
@@ -55,74 +50,66 @@ class CornellDiningNowController():
                     self.generate_dining_hall_menus(json_eatery, json_event, event)
 
 
-    """Helper function - merge date and timestamp for creating event"""
-    def create_event_datetime(json_event, date):
+    def create_event_datetime(self, json_event, date):
+        """
+        merge date and timestamp for creating event.
+        return {'start': start, 'end': end}
+        """
         start_time = datetime.fromtimestamp(json_event["startTimestamp"])
         end_time = datetime.fromtimestamp(json_event["endTimestamp"])
-
-        start = datetime.combine(date, start_time)
-        end = datetime.combine(date, end_time)
+        start = datetime.combine(date, start_time.time())
+        end = datetime.combine(date, end_time.time())
 
         return {"start" : start, "end": end}
 
-    """
-    Create event object
-    """
     def create_event(self, json_eatery, json_event, canon_date):
-        event = Event.objects.create(
-            eatery = json_eatery["id"],
-            event_description = json_event["descr"],
-            start = self.create_event_datetime(json_event, canon_date),
-            end = self.create_event_datetime(json_event, canon_date)
-        )
-        event.save()
-        return EventSerializer(event)
-                
-    # these create functions should be in the serializers. ViewSets will probably take these out
-    def create_menu(event_id): 
-        menu = Menu.objects.create(
-            event = event_id
-        )
-        menu.save()
-        return MenuSerializer(menu)
-                
-    def create_menu_item(json_eatery, json_item):
-        item = Item.objects.create(
-            eatery = json_eatery["id"], 
-            name = json_item["item"]   
-        )
-        item.save()
-        return item
+        dates = self.create_event_datetime(json_event, canon_date)
+        start = dates['start']
+        end = dates['end']
 
-    def create_category(json_menu_category, menu_id):
-        category = Category.objects.create(
-            menu = menu_id, 
-            category = json_menu_category["category"]
-        )
-        category.save()
-        return CategorySerializer(category)
+        data = {'eatery': int(json_eatery["id"]),
+                'event_description': json_event["descr"],
+                'start' : start,
+                'end' : end }
+
+        event = EventSerializer(data=data)
+        if event.is_valid():
+            event.save()
+        else:
+            return event.errors 
+        return event
 
 
-    # Populate menus
-    def generate_dining_hall_menus(self, json_eatery, json_event, event_serialized):
-        event_id = event_serialized['id']
+    def generate_dining_hall_menus(self, json_eatery, json_event, event):
+        """
+        Create menu >> category >> item objects. 
+        (this is messy but it's how i intuitively understand it)
+        """
 
         for json_menu in json_event:
-            json_menu = sorted(json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"])
-            
-            menu = self.create_menu(event_id)
+            #json_menu = sorted(json_menu, key=lambda json_menu_category: json_menu_category["sortIdx"])
+            if event.is_valid():
+                menu = MenuSerializer(data={"event": int(event.data['id'])})
+
+            if not menu.is_valid():
+                return menu.errors
 
             for json_menu_category in json_menu:
-                category = self.create_category(json_menu_category, menu['id'])
-                
+                if menu.is_valid():
+                    category = CategorySerializer(data={"menu": int(menu.data['id']), "category": json_menu_category["category"]})
+                if not category.is_valid():
+                    return category.errors 
+
                 for json_item in json_menu_category["items"]:
-                    item = self.create_menu_item(json_eatery, json_item)
+                    item = ItemSerializer(data={"eatery": int(json_eatery["id"]), "name" : json_item["item"] })
+                    if not item.is_valid():
+                        return item.errors
     
 
-    def generate_cafe_menus(self, json_eatery, json_event, event_serialized):
-        event = event_serialized
-        menu = self.create_menu(event['id']) 
-        menu = MenuSerializer(menu)
+    def generate_cafe_menus(self, json_eatery, json_event, event):
+        if event.is_valid():
+            event_id = int(event.data['id'])
+            menu = MenuSerializer(data={"event":event_id})
 
         category_map = {}
         dining_items = json_eatery["diningItems"]
@@ -131,20 +118,24 @@ class CornellDiningNowController():
             if item["category"] not in category_map:
                 category_map[item["category"]] = []
 
-            category_map[item["category"]].append(
-                item = self.create_menu_item(json_eatery, item))
+            ser_item = ItemSerializer(data={"eatery": int(json_eatery["id"]), "name" : item })
+            if ser_item.is_valid(): 
+                ser_item.save()
 
+            category_map[item["category"]] = item
+            
         for category_name in category_map:
-            self.create_category(menu['id'], category_map[category_name])
-
+            if menu.is_valid():
+                category = CategorySerializer(data={"menu": int(menu.data['id']), "category": category_map[category_name]})
+            
+                if category.is_valid():
+                    category.save()
 
     def process(self):
         json_eateries = self.get_json()
 
         for json_eatery in json_eateries:
+            #eatery = self.generate_eatery(json_eatery)
             self.generate_events(json_eatery)
 
-        
     
-
-        
