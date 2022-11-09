@@ -16,19 +16,9 @@ from event.models import *
 
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
 
-class CornellDiningNowController():
+class PopulateEventController():
     def __init__(self):
-        self=self
-
-    def get_json(self):
-        try:
-            response = requests.get(CORNELL_DINING_URL)
-        except Exception as e:
-            raise e
-        if response.status_code <= 400:
-            response = response.json()
-            json_eateries = response["data"]["eateries"]
-        return json_eateries
+        self = self
 
 
     def generate_events(self, json_eatery):
@@ -43,6 +33,8 @@ class CornellDiningNowController():
             
             for json_event in json_events:
                 event = self.create_event(json_eatery, json_event, canon_date)
+
+            
 
                 if is_cafe: 
                     self.generate_cafe_menus(json_eatery, json_event, event)
@@ -131,11 +123,9 @@ class CornellDiningNowController():
                 if category.is_valid():
                     category.save()
 
-    def process(self):
-        json_eateries = self.get_json()
-
+    def process(self, json_eateries):
+        
         for json_eatery in json_eateries:
-            #eatery = self.generate_eatery(json_eatery)
             self.generate_events(json_eatery)
 
     

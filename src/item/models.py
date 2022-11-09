@@ -7,6 +7,3 @@ class Item(models.Model):
     name = models.CharField(max_length=40, default = "Item")
     #description = models.CharField(max_length=200, blank=True)
     base_price = models.FloatField(null=True, blank=True)
-    
-"""    class Meta:
-        abstract = True"""

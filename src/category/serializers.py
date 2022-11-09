@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from event.models import Category
+from category.models import Category
+
 
 class CategorySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only = True)

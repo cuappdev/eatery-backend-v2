@@ -58,8 +58,6 @@ class PopulateEateryController:
             
         return eatery
 
-    def process(self):
-        json_eateries = self.get_json()
-
+    def process(self, json_eateries):
         for json_eatery in json_eateries: 
             self.generate_eatery(json_eatery)
