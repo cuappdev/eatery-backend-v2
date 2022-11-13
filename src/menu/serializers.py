@@ -3,6 +3,7 @@ from menu.models import Menu
 
 class MenuSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only = True)
+    #event = serializers.IntegerField(allow_null = True)
     categories = serializers.StringRelatedField(allow_null=True)
 
     def create(self, validated_data):
@@ -11,4 +12,4 @@ class MenuSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Menu
-        fields = ['id', 'categories']
+        fields = ['id', 'event', 'categories']

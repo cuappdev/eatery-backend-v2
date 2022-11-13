@@ -43,7 +43,10 @@ class PopulateCategoryController():
             
     def process(self, menus_dict, json_eateries):
         for json_eatery in json_eateries:
-            eatery_menus = menus_dict[int(json_eatery["id"])]; i=0
+            if int(json_eatery["id"]) in menus_dict:
+                eatery_menus = menus_dict[int(json_eatery["id"])]; i=0
+            else:
+                continue
             is_cafe = "Cafe" in {
                 eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
             }  
@@ -51,8 +54,10 @@ class PopulateCategoryController():
             for json_date in json_dates: 
                 json_events = json_date["events"]
                 for json_event in json_events: 
-                    menu = eatery_menus[i]; i += 1
-                    if is_cafe: 
-                        self.generate_cafe_categories(json_eatery, menu)
-                    else: 
-                        self.generate_dining_hall_categories(json_event, menu)
+                    if eatery_menus:  
+                        menu = eatery_menus[i]; i += 1
+                    
+                        if is_cafe: 
+                            self.generate_cafe_categories(json_eatery, menu)
+                        else: 
+                            self.generate_dining_hall_categories(json_event, menu)

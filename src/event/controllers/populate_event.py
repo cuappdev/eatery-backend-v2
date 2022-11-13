@@ -46,7 +46,8 @@ class PopulateEventController():
             for json_event in json_events:
                 # Create an event:
                 dates = self.create_event_datetime(json_event, canon_date)
-                data = {'eatery': int(json_eatery["id"]),
+                data = {
+                    'eatery': int(json_eatery["id"]),
                     'event_description': json_event["descr"],
                     'start' : dates['start'],
                     'end' : dates['end']}
@@ -57,7 +58,7 @@ class PopulateEventController():
                 else:
                     return event.errors
 
-                events.append(event) 
+                events.append(event.data["id"]) 
 
         """[ event, event, event ... ]"""
         return events

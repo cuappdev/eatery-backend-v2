@@ -21,7 +21,8 @@ class PopulateItemController():
     def generate_dining_hall_items(self, json_event, eatery_id):
         for json_menu in json_event:
             for json_menu_category in json_menu: 
-                for json_item in json_menu_category["items"]: 
+                json_items = json_menu_category["items"]
+                for json_item in json_items: 
                     data = {
                         "eatery" : eatery_id,
                         "name" : json_item["item"]

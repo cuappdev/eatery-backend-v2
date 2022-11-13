@@ -8,7 +8,7 @@ class PopulateMenuController():
     def generate_menu(self, json_event, event):
         menus = []
         data = {
-            "event" : int(event.data["id"])
+            "event" : event #int(event.data["id"])
         }
         menu = MenuSerializer(data=data)
         if menu.is_valid():
