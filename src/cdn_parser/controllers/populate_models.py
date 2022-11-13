@@ -44,17 +44,22 @@ class CornellDiningNowController():
         """
 
         json_eateries = self.get_json()
+        print("GOT DATA")
 
-        PopulateEateryController.process(json_eateries)
+        PopulateEateryController().process(json_eateries)
+        print("EATERY")
 
-        json_events = PopulateEventController.process(json_eateries)
-        
-        json_menu_categories = PopulateMenuController.process(json_events)
+        events_dict = PopulateEventController().process(json_eateries)    
+        print("EVENT")        
 
-        json_categories = PopulateCategoryController.process(json_menu_categories)
-        
-        PopulateItemController.process(json_categories)
+        menus_dict = PopulateMenuController().process(events_dict, json_eateries)
+        print("MENU")
 
+        PopulateCategoryController().process(menus_dict, json_eateries)
+        print("CATEGORY")
+
+        PopulateItemController().process(json_eateries)
+        print("ITEM")
 
 
         

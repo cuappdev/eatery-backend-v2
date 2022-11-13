@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "menu",
     "item",
     "category",
+    "cdn_parser",
     "rest_framework",
 ]
 

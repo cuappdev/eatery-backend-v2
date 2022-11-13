@@ -17,9 +17,6 @@ class EventSerializer(serializers.ModelSerializer):
         instance.end = validated_data.get('end', instance.end)
         instance.save()
         return instance
-    def get_validation_exclusions(self):
-        exclusions = super(EventSerializer, self).get_validation_exclusions()
-        return exclusions + ['id']
 
     class Meta: 
         model = Event 

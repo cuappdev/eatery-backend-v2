@@ -1,8 +1,8 @@
 from rest_framework import serializers
-from event.models import Menu
+from menu.models import Menu
 
 class MenuSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField()
+    id = serializers.IntegerField(read_only = True)
     categories = serializers.StringRelatedField(allow_null=True)
 
     def create(self, validated_data):

@@ -7,10 +7,6 @@ class CategorySerializer(serializers.ModelSerializer):
     menu = serializers.IntegerField()
     category = serializers.CharField(allow_null = True)
 
-    def get_validation_exclusions(self):
-        exclusions = super(CategorySerializer, self).get_validation_exclusions()
-        return exclusions + ['id', 'category']
-
     class Meta: 
         model = Category
         fields = "__all__"
