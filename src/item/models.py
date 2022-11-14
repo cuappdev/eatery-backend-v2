@@ -1,5 +1,6 @@
 from django.db import models
 from eatery.models import Eatery
+from category.models import Category
 
 class Item(models.Model):
     id = models.AutoField(primary_key=True)

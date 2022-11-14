@@ -3,10 +3,11 @@ from item.models import Item
 
 class ItemSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only = True)
-    eatery = serializers.IntegerField()
     name = serializers.CharField(default = "Item")
 
+    def create(self, validated_data):
+        return Item.objects.create(**validated_data)
 
     class Meta:
         model = Item
-        fields = "__all__"
+        fields = ['id', 'eatery', 'name']

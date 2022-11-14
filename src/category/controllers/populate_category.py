@@ -18,6 +18,7 @@ class PopulateCategoryController():
                 if category.is_valid():
                     category.save()
                 else:
+                    print('error')
                     return category.errors 
 
 
