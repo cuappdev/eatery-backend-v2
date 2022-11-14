@@ -10,19 +10,6 @@ from eatery.datatype.Eatery import EateryID
 from eatery.models import Eatery
 
 from .controllers.update_eatery import UpdateEateryController
-from .controllers.populate_eatery import PopulateEateryController
-
-class PopulateEatery(generics.GenericAPIView):
-    def get(self, request):
-        """
-        Populate Eatery datatable with data from CornellDiningNow
-        """
-        try: 
-            PopulateEateryController().process()
-            return JsonResponse(success_json("Populated EateryStore"))
-        except Exception as e:
-            return JsonResponse(error_json(str(e)))
-
 
 class UpdateEatery(APIView):
     def post(self, request):

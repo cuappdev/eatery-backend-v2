@@ -1,5 +1,6 @@
 from rest_framework import serializers
 import eatery.models as models
+from event.serializers import EventSerializer
 
 
 class EaterySerializer(serializers.ModelSerializer):
@@ -16,6 +17,8 @@ class EaterySerializer(serializers.ModelSerializer):
     payment_accepts_brbs = serializers.BooleanField(allow_null=True)
     payment_accepts_cash = serializers.BooleanField(allow_null=True)
 
+    events = EventSerializer(many=True, read_only=True)
+
     class Meta:
         model = models.Eatery
-        fields = "__all__"
+        fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
