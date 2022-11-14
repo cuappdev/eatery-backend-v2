@@ -9,6 +9,7 @@ class EventDescription(models.TextChoices):
     DINNER = "Dinner"
     GENERAL = "General"
     CAFE = "Cafe"
+    PANTS = "Pants"
 
 class Event(models.Model): 
     id = models.AutoField(primary_key=True)

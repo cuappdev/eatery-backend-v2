@@ -3,9 +3,7 @@ from event.models import Event
 
 class Menu(models.Model):
     id = models.AutoField(primary_key=True)
-    #eatery = models.ForeignKey(Eatery, on_delete=models.DO_NOTHING)
-    event = models.ForeignKey(Event, on_delete = models.DO_NOTHING)
-    #name = models.CharField(max_length=40)
+    event = models.ForeignKey(Event, related_name="menus", on_delete = models.DO_NOTHING)
 
     """class Meta:
         unique_together = ("eatery", "name")"""
