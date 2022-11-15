@@ -66,9 +66,6 @@ class PopulateItemController():
                         menu_id = iter[i]
                         menu = eatery_menus[menu_id]; i += 1
 
-                        print(menu_id)
-                        print(menu)
-
                     if is_cafe: 
                         self.generate_cafe_items(menu, json_eatery)
                     else: 

@@ -57,7 +57,6 @@ class PopulateCategoryController():
         return category_items
             
     def process(self, menus_dict, json_eateries):
-        
         """categories_dict = { eatery_id : 
                     { menu[i] : {"category_name" : id, "category_name" : id}, 
                       menu[i] : {"category_name" : id}
