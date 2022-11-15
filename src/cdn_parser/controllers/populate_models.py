@@ -51,9 +51,9 @@ class CornellDiningNowController():
 
         menus_dict = PopulateMenuController().process(events_dict, json_eateries)
 
-        PopulateCategoryController().process(menus_dict, json_eateries)
+        categories_dict = PopulateCategoryController().process(menus_dict, json_eateries)
 
-        #PopulateItemController().process(menus_dict, json_eateries)
+        PopulateItemController().process(categories_dict, json_eateries)
 
 
         

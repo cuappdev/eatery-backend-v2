@@ -14,7 +14,6 @@ class PopulateMenuController():
             menu.save()
         else: 
             print(menu.errors)
-        print(menu.data['id'])
         return menu
 
             
