@@ -11,7 +11,8 @@ class EventSerializer(serializers.ModelSerializer):
     menus = MenuSerializer(many=True, read_only=True)
         
     def create(self, validated_data):
-        return Event.objects.create(**validated_data)
+        event, _ = Event.objects.get_or_create(**validated_data)
+        return event
 
     class Meta: 
         model = Event 

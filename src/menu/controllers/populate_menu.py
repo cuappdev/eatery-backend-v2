@@ -6,7 +6,6 @@ class PopulateMenuController():
         menus = []
 
     def generate_menu(self, json_event, event):
-        menus = []
         data = {
             "event" : event #int(event.data["id"])
         }
@@ -14,8 +13,10 @@ class PopulateMenuController():
         if menu.is_valid():
             menu.save()
         else: 
-            return menu.errors 
-        menus.append(menu)
+            print(menu.errors)
+        print(menu.data['id'])
+        return menu
+
             
             
     def process(self, events_dict, json_eateries):
@@ -28,12 +29,14 @@ class PopulateMenuController():
             eatery_events = events_dict[int(json_eatery["id"])]; i=0
             json_dates = json_eatery["operatingHours"]
 
+            menus_dict[int(json_eatery["id"])] = []
+
             for json_date in json_dates: 
                 json_events = json_date["events"]
                 for json_event in json_events: 
                     event = eatery_events[i]; i+=1
                     menu = self.generate_menu(json_event, event)
-                    menus_dict[int(json_eatery["id"])] = menu
+                    menus_dict[int(json_eatery["id"])].append(menu)
         
         return menus_dict 
 

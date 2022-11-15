@@ -10,7 +10,9 @@ class MenuSerializer(serializers.ModelSerializer):
     #categories = serializers.StringRelatedField(allow_null=True)
 
     def create(self, validated_data):
-        return Menu.objects.get_or_create(**validated_data)
+        menu, _ = Menu.objects.get_or_create(**validated_data)
+        return menu
+
 
     class Meta:
         model = Menu

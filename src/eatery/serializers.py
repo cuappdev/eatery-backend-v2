@@ -20,7 +20,8 @@ class EaterySerializer(serializers.ModelSerializer):
     events = EventSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
-        return Eatery.objects.get_or_create(**validated_data)
+        eatery, _ = Eatery.objects.get_or_create(**validated_data)
+        return eatery
 
     class Meta:
         model = Eatery
