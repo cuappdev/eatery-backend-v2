@@ -17,26 +17,12 @@ class PopulateEventController():
 
         return {"start" : start, "end": end}
 
-    def create_event(self, json_eatery, json_event, canon_date):
-        dates = self.create_event_datetime(json_event, canon_date)
-        data = {'eatery': int(json_eatery["id"]),
-                'event_description': json_event["descr"],
-                'start' : dates['start'],
-                'end' : dates['end']}
-        event = EventSerializer(data=data)
-        if event.is_valid():
-            event.save()
-        else:
-            return event.errors 
-        return event
 
     def generate_events(self, json_eatery):
         events = []
-        
         is_cafe = "Cafe" in {
             eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
         }  
-
         json_dates = json_eatery["operatingHours"]
 
         for json_date in json_dates:
@@ -56,8 +42,9 @@ class PopulateEventController():
                 if event.is_valid():
                     event.save()
                 else:
+                    print(event.errors)
                     return event.errors
-
+                
                 events.append(event.data["id"]) 
 
         """[ event, event, event ... ]"""

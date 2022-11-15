@@ -41,7 +41,7 @@ class PopulateEateryController:
         if eatery.is_valid():
             eatery.save()
         else:
-            eatery.errors 
+            print(eatery.errors)
             
     def process(self, json_eateries):
         

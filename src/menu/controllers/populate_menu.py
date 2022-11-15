@@ -28,7 +28,6 @@ class PopulateMenuController():
             eatery_events = events_dict[int(json_eatery["id"])]; i=0
             json_dates = json_eatery["operatingHours"]
 
-            
             for json_date in json_dates: 
                 json_events = json_date["events"]
                 for json_event in json_events: 

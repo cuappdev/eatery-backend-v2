@@ -53,7 +53,7 @@ class CornellDiningNowController():
 
         PopulateCategoryController().process(menus_dict, json_eateries)
 
-        PopulateItemController().process(menus_dict, json_eateries)
+        #PopulateItemController().process(menus_dict, json_eateries)
 
 
         

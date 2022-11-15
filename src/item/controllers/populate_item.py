@@ -33,7 +33,7 @@ class PopulateItemController():
                 if item.is_valid():
                     item.save()
                 else: 
-                    return item.errors 
+                    print(item.errors) 
 
     def process(self, menus_dict, json_eateries):
         for json_eatery in json_eateries:

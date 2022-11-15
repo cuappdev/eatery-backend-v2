@@ -16,5 +16,5 @@ class Event(models.Model):
     eatery = models.ForeignKey(Eatery, related_name = "events", on_delete=models.DO_NOTHING)
     event_description = models.CharField(
         choices=EventDescription.choices, max_length=10, default = EventDescription.GENERAL, blank=True, null = True)
-    start = models.DateTimeField(auto_now_add=True) #combine canonical_date w/ start/end timestamp
-    end = models.DateTimeField(auto_now_add=True)
+    start = models.DateTimeField() #combine canonical_date w/ start/end timestamp
+    end = models.DateTimeField()

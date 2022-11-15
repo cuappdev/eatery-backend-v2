@@ -10,6 +10,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
     items = ItemSerializer(many=True, read_only=True)
 
+    def create(self, validated_data):
+        return Category.objects.get_or_create(**validated_data)
+
     class Meta: 
         model = Category
         fields = ['id', 'category', 'items']

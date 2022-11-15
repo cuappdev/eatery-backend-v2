@@ -6,7 +6,7 @@ class ItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(default = "Item")
 
     def create(self, validated_data):
-        return Item.objects.create(**validated_data)
+        return Item.objects.get_or_create(**validated_data)
 
     class Meta:
         model = Item
