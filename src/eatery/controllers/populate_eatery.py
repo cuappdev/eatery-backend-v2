@@ -1,6 +1,7 @@
 import requests 
 
-from eatery.datatype.Eatery import Eatery, EateryID
+from eatery.datatype.Eatery import EateryID
+from eatery.util.constants import dining_id_to_internal_id
 from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
 
@@ -13,9 +14,10 @@ class PopulateEateryController:
         """
         Create Eatery object from json and add to Eatery table
         """
+        eatery_id = dining_id_to_internal_id(json_eatery["id"]).value
 
         data = {
-            "id" : json_eatery["id"],
+            "id" : eatery_id,
             "name":json_eatery["name"],
             "campus_area":json_eatery["campusArea"]["descrshort"],
             "latitude":json_eatery["latitude"],

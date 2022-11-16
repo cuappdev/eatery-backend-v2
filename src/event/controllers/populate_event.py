@@ -1,5 +1,6 @@
 from datetime import datetime
 from event.serializers import EventSerializer
+from eatery.util.constants import dining_id_to_internal_id
 
 class PopulateEventController():
     def __init__(self):
@@ -20,11 +21,8 @@ class PopulateEventController():
 
     def generate_events(self, json_eatery):
         events = []
-        is_cafe = "Cafe" in {
-            eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
-        }  
-        json_dates = json_eatery["operatingHours"]
 
+        json_dates = json_eatery["operatingHours"]
         for json_date in json_dates:
             canon_date = datetime.fromisoformat(json_date["date"])
             json_events = json_date["events"]
@@ -32,8 +30,9 @@ class PopulateEventController():
             for json_event in json_events:
                 # Create an event:
                 dates = self.create_event_datetime(json_event, canon_date)
+                eatery_id = dining_id_to_internal_id(json_eatery["id"]).value
                 data = {
-                    'eatery': int(json_eatery["id"]),
+                    'eatery': eatery_id,
                     'event_description': json_event["descr"],
                     'start' : dates['start'],
                     'end' : dates['end']}

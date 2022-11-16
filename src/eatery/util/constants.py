@@ -38,8 +38,6 @@ def dining_id_to_internal_id(id: int):
         return EateryID.BUS_STOP_BAGELS
     elif id == 12:
         return EateryID.CAFE_JENNIE
-    elif id == 2:
-        return EateryID.CAROLS_CAFE
     elif id == 26:
         return EateryID.COOK_HOUSE
     elif id == 14:
@@ -88,6 +86,8 @@ def dining_id_to_internal_id(id: int):
         return EateryID.TRILLIUM
     elif id == 43:
         return EateryID.MORRISON_DINING
+    elif id == 44:
+        return EateryID.NOVICKS_CAFE
     else:
         return None
 
