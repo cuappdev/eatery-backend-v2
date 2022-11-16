@@ -1,9 +1,19 @@
 from django.urls import path
-from eatery.views import UpdateEatery, GetEateries
+from eatery.views import EateryViewSet
 
+eateries_list = EateryViewSet.as_view({
+    'get':'list',
+    'post': 'create'
+})
+
+eatery_list = EateryViewSet.as_view({
+    'get':'retrieve',
+    'put':'update',
+    'patch':'partial_update',
+    'delete':'destroy'
+})
 
 urlpatterns = [
-    path("update/", UpdateEatery.as_view(), name="update"),
-    path("eateries/", GetEateries.as_view(), name = "get_all"), # Get all eateries + their menu and event information
-    #path("eatery/<int:eatery_id>/", Eatery.as_view(), name="get_by"), # Get an eatery by its id. + event serializer
+    path("", eateries_list, name='eateries-list'),
+    path("<int:pk>/", eatery_list, name='eatery-list'),
 ]

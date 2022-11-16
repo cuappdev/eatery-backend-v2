@@ -1,15 +1,42 @@
 from eatery.serializers import EaterySerializer
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
-from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework import viewsets
 
 from eatery.datatype.Eatery import EateryID
 
 from eatery.models import Eatery
 
 from .controllers.update_eatery import UpdateEateryController
+
+class EateryViewSet(viewsets.ModelViewSet):
+    """
+    View and edit eateries (all, or specific)
+    """
+    queryset = Eatery.objects.all()
+    serializer_class = EaterySerializer
+
+    def get_object(self):
+        queryset = self.filter_queryset(self.get_queryset())
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+
+        assert lookup_url_kwarg in self.kwargs, (
+            'Expected view %s to be called with a URL keyword argument '
+            'named "%s". Fix your URL conf, or set the `.lookup_field` '
+            'attribute on the view correctly.' %
+            (self.__class__.__name__, lookup_url_kwarg)
+        )
+        # Uses the lookup_field attribute, which defaults to `pk`
+        filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
+        obj = get_object_or_404(queryset, **filter_kwargs)
+
+        # May raise a permission denied
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 
 class UpdateEatery(APIView):
     def post(self, request):
