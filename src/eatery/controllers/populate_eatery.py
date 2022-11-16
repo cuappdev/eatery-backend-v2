@@ -1,7 +1,7 @@
 import requests 
-
+import json
 from eatery.datatype.Eatery import EateryID
-from eatery.util.constants import dining_id_to_internal_id
+from eatery.util.constants import dining_id_to_internal_id, SnapshotFileName
 from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
 
@@ -45,7 +45,33 @@ class PopulateEateryController:
         else:
             print(eatery.errors)
             
+    def add_eatery_store(self): 
+        folder_path = "eatery/util/"
+        file_name = SnapshotFileName.EATERY_STORE
+
+        with open(f"{folder_path}{file_name.value}", "r") as file:
+            json_objs = []
+            for line in file:
+                if len(line) > 2:
+                    json_objs.append(json.loads(line))
+
+            for json_obj in json_objs:
+                object = Eatery.objects.get(id=int(json_obj["id"]))
+
+                if object.DoesNotExist: 
+                    serialized = EaterySerializer(data=json_obj)
+                else: 
+                    serialized = EaterySerializer(object, data=json_obj, partial=True)
+
+                if serialized.is_valid():
+                    serialized.save()
+                else:
+                    print(serialized.errors)
+
+            
+    
     def process(self, json_eateries):
-        
         for json_eatery in json_eateries: 
             self.generate_eatery(json_eatery)
+
+        self.add_eatery_store()
