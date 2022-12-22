@@ -38,8 +38,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "api",
     "eatery",
+    "alert",
+    "event",
+    "reports",
+    "menu",
+    "item",
+    "category",
+    "cdn_parser",
     "rest_framework",
 ]
 
@@ -94,7 +100,7 @@ else:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": str(os.path.join(BASE_DIR, "db.sqlite3")),
         }
     }
 
