@@ -1,10 +1,10 @@
 import base64
 import os
-
 import requests
 from django.http import QueryDict
+
 from eatery.datatype.Eatery import EateryID
-from eatery.models import EateryStore
+from eatery.models import Eatery
 
 
 class UpdateEateryController:
@@ -67,9 +67,17 @@ class UpdateEateryController:
         except:
             raise Exception("Image uploading unsuccessful")
 
+    """
+    Pull new data from CornellDiningNow
+    >> left merge Eatery and CornellDiningNow
+    >> left merge Events and CornellDiningNow
+    """
+    def compare(self):
+        pass
+
     def process(self):
         """
         Selects DB entry we want to update and updates it using provided data
         """
         # use double-splat to convert dict to kwargs
-        EateryStore.objects.filter(id=self.id.value).update(**self.update_data)
+        Eatery.objects.filter(id=self.id.value).update(**self.update_data)
