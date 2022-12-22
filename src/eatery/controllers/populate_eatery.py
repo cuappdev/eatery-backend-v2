@@ -12,7 +12,7 @@ class PopulateEateryController:
     
     def generate_eatery(self, json_eatery):
         """
-        Create Eatery object from json and add to Eatery table
+        Create Eatery object from an eatery json from CornellDiningNow, and add to Eatery table.
         """
         eatery_id = dining_id_to_internal_id(json_eatery["id"]).value
 
@@ -46,6 +46,9 @@ class PopulateEateryController:
             print(eatery.errors)
             
     def add_eatery_store(self): 
+        """
+        Create eatery objects from an eatery json from a eatery_db_snapshot, and add to Eatery table.
+        """
         folder_path = "eatery/util/"
         file_name = SnapshotFileName.EATERY_STORE
 
@@ -59,8 +62,14 @@ class PopulateEateryController:
                 object = Eatery.objects.get(id=int(json_obj["id"]))
 
                 if object.DoesNotExist: 
+                    """ 
+                    Create a new Eatery object
+                    """
                     serialized = EaterySerializer(data=json_obj)
                 else: 
+                    """
+                    Update already-existing Eatery object
+                    """
                     serialized = EaterySerializer(object, data=json_obj, partial=True)
 
                 if serialized.is_valid():

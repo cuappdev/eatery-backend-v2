@@ -2,13 +2,19 @@ from category.models import Category
 from category.serializers import CategorySerializer
 from item.models import Item 
 
+"""
+Add categories to Category Model from CornellDiningNow. 
+
+CornellDiningNow models cafe and dining hall categories differently, so they are parsed differently.
+"""
+
 class PopulateCategoryController():
     def __init__(self):
         self = self 
 
     def generate_dining_hall_categories(self, json_event, menu):
         """
-        categories = {"category_name" : id, ... }
+        category_items = {"category_name" : id, ... }
         """
         category_items = {}
         for json_menu in json_event['menu']: 
@@ -31,7 +37,7 @@ class PopulateCategoryController():
 
     def generate_cafe_categories(self, json_eatery, menu):
         """
-        categories = {"category_name" : id, ... }
+        category_items = {"category_name" : id, ... }
         """
         category_items = {}
         categories = []
@@ -62,14 +68,15 @@ class PopulateCategoryController():
                       menu[i] : {"category_name" : id}
                     }
                 }"""
-        
+
         categories_dict = {}
 
         for json_eatery in json_eateries:
-            categories_dict[int(json_eatery["id"])] = {}
+            eatery_id = int(json_eatery["id"])
+            categories_dict[eatery_id] = {}
 
-            if int(json_eatery["id"]) in menus_dict:
-                eatery_menus = menus_dict[int(json_eatery["id"])]; i=0
+            if eatery_id in menus_dict:
+                eatery_menus = menus_dict[eatery_id]; i=0
             else:
                 continue
 
@@ -77,6 +84,9 @@ class PopulateCategoryController():
                 eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
             }  
 
+            """
+            For every event in an eatery --> for every menu in an eatery --> get categories
+            """
             json_dates = json_eatery["operatingHours"]
             for json_date in json_dates: 
                 json_events = json_date["events"]
@@ -84,13 +94,13 @@ class PopulateCategoryController():
                     if i < len(eatery_menus):  
                         menu = eatery_menus[i]; i += 1
 
-                        categories_dict[int(json_eatery["id"])][menu.data['id']] = {}
+                        categories_dict[eatery_id][menu.data['id']] = {}
 
                         if is_cafe: 
                             categories = self.generate_cafe_categories(json_eatery, menu)
                         else: 
                             categories = self.generate_dining_hall_categories(json_event, menu)
                         
-                        categories_dict[int(json_eatery["id"])][menu.data['id']] = categories
+                        categories_dict[eatery_id][menu.data['id']] = categories
 
         return categories_dict

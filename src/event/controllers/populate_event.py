@@ -20,6 +20,11 @@ class PopulateEventController():
 
 
     def generate_events(self, json_eatery):
+        """
+        From an eatery json from CDN, create events for that eatery and add to event model.
+        """
+
+        #events = [ event obj, event, event ... ] for an eatery.
         events = []
 
         json_dates = json_eatery["operatingHours"]
@@ -38,6 +43,7 @@ class PopulateEventController():
                     'end' : dates['end']}
 
                 event = EventSerializer(data=data)
+                
                 if event.is_valid():
                     event.save()
                 else:
@@ -46,13 +52,11 @@ class PopulateEventController():
                 
                 events.append(event.data["id"]) 
 
-        """[ event, event, event ... ]"""
+        
         return events
 
     def process(self, json_eateries):
-        """
-        events_dict { eatery_id : [event, event, event...], eate }
-        """
+        #events_dict { eatery_id : [event, event, event...], eatery_id : ... }
         events_dict = {}
 
         for json_eatery in json_eateries:

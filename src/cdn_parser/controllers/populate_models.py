@@ -6,6 +6,9 @@ from event.controllers.populate_event import PopulateEventController
 from menu.controllers.populate_menu import PopulateMenuController
 from item.controllers.populate_item import PopulateItemController
 from category.controllers.populate_category import PopulateCategoryController
+"""
+Parse through CornellDiningNow json to populate our eatery models.
+"""
 
 class CornellDiningNowController():
     def __init__(self):
@@ -23,24 +26,26 @@ class CornellDiningNowController():
 
     def process(self):
         """
-        Get JSON from API 
-        create eateries 
+        1. Get JSON from API 
+        
+        2. create eateries (fron CDN json)
 
-        >> json_date in json_dates
-        >> json_event in json_events 
+        3. create events (from CDN json)
+            return events_dict = { eatery_id : [event, event, event...], eatery_id : ... }
 
-        create events
+        4. create menus for every eatery's events 
+            return menus_dict = { eatery_id : [menu, menu, menu...] }
 
-        >> json_menu in json_event
+        5. create categories in each menu 
+            return categories_dict = 
+                { eatery_id : 
+                    { menu[i] : {"category_name" : id, "category_name" : id...}, 
+                      menu[i] : {"category_name" : id...}
+                    }
+                }
 
-        create menus 
+        6. create items for each category
 
-        >> json_menu_category in json_menu
-        +>> json_item in json_menu_category
-
-        create items 
-
-        create categories 
         """
 
         json_eateries = self.get_json()

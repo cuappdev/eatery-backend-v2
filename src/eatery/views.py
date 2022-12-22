@@ -37,6 +37,14 @@ class EateryViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
+class GetEateries(APIView):
+    def get(self, request):
+        """
+        Update models with CDN data
+        Update models with image information 
+        Update models with 
+        """
+        return 
 
 class UpdateEatery(APIView):
     def post(self, request):
@@ -73,6 +81,7 @@ class UpdateEatery(APIView):
             return JsonResponse(success_json("Updated"))
         except Exception as e:
             return JsonResponse(error_json(str(e)))
+
 
 class GetEateries(APIView):
     def get(self, request):
