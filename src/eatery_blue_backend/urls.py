@@ -21,6 +21,7 @@ urlpatterns = [
     path("eatery/", include("eatery.urls")),
     path("event/", include("event.urls")),
     path("cdn/", include("cdn_parser.urls"))
-    #path("alert/", include("alert.urls"))
-    #path("wait_time/", include("wait_time.urls"))
+    # path("alert/", include("alert.urls"))
+    # path("reports/", include("reports.urls"))
+    # path("wait_time/", include("wait_time.urls"))
 ]

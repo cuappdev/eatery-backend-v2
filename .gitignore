@@ -15,7 +15,8 @@ __pycache__/
 # More Python stuff
 .DS_Store
 .vscode/
-env/ 
+env/
+venv/ 
 .Python
 build/
 develop-eggs/
