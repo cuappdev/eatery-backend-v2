@@ -16,6 +16,7 @@ __pycache__/
 .DS_Store
 .vscode/
 env/ 
+venv/
 .Python
 build/
 develop-eggs/
