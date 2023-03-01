@@ -1,10 +1,10 @@
-from django.urls import path 
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from alert import views
 
-from alert.views import Alerts
+router = DefaultRouter()
+router.register(r'', views.AlertViewSet)
 
 urlpatterns = [
-    path("", Alerts.as_view(), name="get_all_alerts"),
-    path("<int:eatery_id>/", Alerts.as_view(), name="get_eatery_alerts"),
-    path("<int:eatery_id>/edit/", Alerts.as_view(), name="edit_eatery_alerts"),
-    path("<int:eatery_id>/edit/<int:alert_id>/", Alerts.as_view(), name="delete_eatery_alert")
+    path('', include(router.urls))
 ]
