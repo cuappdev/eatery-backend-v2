@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     "eatery",
     "alert",
     "event",
-    "reports",
+    "report",
     "menu",
     "item",
     "category",
