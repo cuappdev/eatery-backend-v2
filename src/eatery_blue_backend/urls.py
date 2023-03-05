@@ -20,8 +20,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("eatery/", include("eatery.urls")),
     path("event/", include("event.urls")),
-    path("cdn/", include("cdn_parser.urls"))
-    # path("alert/", include("alert.urls"))
-    # path("reports/", include("reports.urls"))
-    # path("wait_time/", include("wait_time.urls"))
+    path("cdn/", include("cdn_parser.urls")),
+    path("report/", include("report.urls")),
+    path("alert/", include("alert.urls"))
+    #path("wait_time/", include("wait_time.urls"))
 ]

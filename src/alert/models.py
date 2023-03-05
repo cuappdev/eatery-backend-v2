@@ -8,3 +8,7 @@ class Alert(models.Model):
     description = models.CharField(max_length = 250)
     start_timestamp = models.IntegerField()
     end_timestamp = models.IntegerField()
+
+
+def __str__(self):
+      return self.description
