@@ -1,8 +1,9 @@
 from django.db import models
 from eatery.models import Eatery
-from menu.models import Menu
+from event.models import Event
+
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
-    menu = models.ForeignKey(Menu, related_name = 'categories', on_delete=models.DO_NOTHING)
+    event = models.ForeignKey(Event, related_name="menu", on_delete=models.DO_NOTHING)
     category = models.CharField(max_length=40, default="General")
