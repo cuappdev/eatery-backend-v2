@@ -4,14 +4,14 @@ from item.serializers import ItemSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(read_only = True)
-    category = serializers.CharField(allow_null = True)
+    id = serializers.IntegerField(read_only=True)
+    category = serializers.CharField(allow_null=True)
     items = ItemSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         category, _ = Category.objects.get_or_create(**validated_data)
         return category
 
-    class Meta: 
+    class Meta:
         model = Category
-        fields = ['id', 'category', 'menu', 'items']
+        fields = ["id", "category", "event", "items"]
