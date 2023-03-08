@@ -22,6 +22,7 @@ urlpatterns = [
     path("event/", include("event.urls")),
     path("cdn/", include("cdn_parser.urls")),
     path("report/", include("report.urls")),
-    path("alert/", include("alert.urls"))
+    path("alert/", include("alert.urls")),
+    path("user/", include("user.urls"))
     #path("wait_time/", include("wait_time.urls"))
 ]
