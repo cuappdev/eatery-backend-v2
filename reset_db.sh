@@ -1,4 +1,4 @@
 source venv/bin/activate
-source .env
+source .envrc
 python3 src/manage.py makemigrations
 python3 src/manage.py migrate
