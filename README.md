@@ -2,6 +2,15 @@
 
 This is the backend for eatery-blue-backend.
 
+# Postgres Setup
+---------------
+* Install PostgresSQL here at https://www.postgresql.org/download/
+* Login to postgres via command line by entering ``psql postgres``
+* Create the eatery database via ``create database eatery-dev;``
+* Quit psql via ``\q``
+* To set up the tables, make sure current working directory is the src folder and run ``bash reset_db.sh``
+* To set up eatery data, run ``bash start.sh`` and hit the ``/cdn/populate/`` endpoint to populate the tables
+
 SP23 Members
 ---------------
 - Mateo Weiner
