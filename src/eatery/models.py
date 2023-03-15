@@ -11,9 +11,9 @@ class Eatery(models.Model):
 
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40)
-    menu_summary = models.CharField(max_length=60, blank=True, null=True, default="")
+    menu_summary = models.TextField(blank=True, null=True, default="")
     image_url = models.URLField(blank=True)
-    location = models.CharField(max_length=30, blank=True)
+    location = models.TextField(blank=True)
     campus_area = models.CharField(
         max_length=15, choices=CampusArea.choices, default=CampusArea.NONE, blank=True
     )

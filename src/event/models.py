@@ -14,7 +14,7 @@ class EventDescription(models.TextChoices):
 class Event(models.Model): 
     id = models.AutoField(primary_key=True)
     eatery = models.ForeignKey(Eatery, related_name = "events", on_delete=models.DO_NOTHING)
-    event_description = models.CharField(
-        choices=EventDescription.choices, max_length=10, default = EventDescription.GENERAL, blank=True, null = True)
+    event_description = models.TextField(
+        choices=EventDescription.choices, default = EventDescription.GENERAL, blank=True, null = True)
     start = models.DateTimeField() 
     end = models.DateTimeField()

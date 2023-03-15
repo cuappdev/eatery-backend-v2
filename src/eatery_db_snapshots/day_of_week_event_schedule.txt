@@ -1,0 +1,2 @@
+{"id": 1, "event_description": "Breakfast", "day_of_week": "Monday", "start": "12:00:00", "end": "04:00:00", "eatery": 33, "menu": 1}
+{"id": 2, "event_description": "General", "day_of_week": "Monday", "start": "16:00:00", "end": "03:00:00", "eatery": 33, "menu": 2}
