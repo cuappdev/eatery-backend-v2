@@ -49,7 +49,8 @@ class PopulateEateryController:
         """
         Create eatery objects from an eatery json from a eatery_db_snapshot, and add to Eatery table.
         """
-        folder_path = "./src/eatery/util/"
+
+        folder_path = "./eatery/util/"
         file_name = SnapshotFileName.EATERY_STORE
 
         with open(f"{folder_path}{file_name.value}", "r") as file:
