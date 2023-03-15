@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "category",
     "cdn_parser",
     "rest_framework",
+    "user",
 ]
 
 MIDDLEWARE = [
