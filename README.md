@@ -8,6 +8,7 @@ This is the backend for eatery-blue-backend.
 * Login to postgres via command line by entering ``psql postgres``
 * Create the eatery database via ``create database eatery-dev;``
 * Quit psql via ``\q``
+* Create an .envrc file and fill out the environment variables from the .envrctemplate file corresponding to your local postgres database
 * To set up the tables, make sure current working directory is the src folder and run ``bash reset_db.sh``
 * To set up eatery data, run ``bash start.sh`` and hit the ``/cdn/populate/`` endpoint to populate the tables
 
