@@ -42,8 +42,8 @@ class PopulateEateryController:
         eatery = EaterySerializer(data=data)
         if eatery.is_valid():
             eatery.save()
-        else:
-            print(eatery.errors)
+        #else:
+            #print(eatery.errors)
 
     def add_eatery_store(self):
         """
@@ -75,8 +75,8 @@ class PopulateEateryController:
 
                 if serialized.is_valid():
                     serialized.save()
-                else:
-                    print(serialized.errors)
+                #else:
+                    #print(serialized.errors)
 
     def process(self, json_eateries):
         for json_eatery in json_eateries:
