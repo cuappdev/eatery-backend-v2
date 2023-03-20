@@ -6,7 +6,7 @@ services:
     env_file: .env
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    command: sh -c "python manage.py migrate && python manage.py populate_models && python manage.py runserver 0.0.0.0:8000 & python scheduler.py"
+    command: sh -c "python manage.py migrate && { python scheduler.py & python manage.py runserver 0.0.0.0:80; }"
     ports:
       - "8000:8000"
     restart: always
