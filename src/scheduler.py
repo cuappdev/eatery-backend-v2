@@ -14,7 +14,7 @@ print("Scheduler started")
 def populate_models():
     management.call_command('populate_models')
 
-schedule.every(12).hours.do(populate_models)
+schedule.every().day.do(populate_models)
 
 populate_models()
 while True:
