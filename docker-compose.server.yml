@@ -1,10 +1,12 @@
-version: '3'
+version: "3"
 
 services:
   app:
     image: cornellappdev/eatery-blue-backend:${IMAGE_TAG}
     env_file: .env
-    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    command: sh -c "python manage.py migrate && python manage.py populate_models && python manage.py runserver 0.0.0.0:8000 & python scheduler.py"
     ports:
       - "8000:8000"
     restart: always

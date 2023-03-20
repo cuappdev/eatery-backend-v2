@@ -11,9 +11,12 @@ except:
     django.setup()
 
 print("Scheduler started")
-schedule.every(2).minutes.do(management.call_command('populate_models')
-)
+def populate_models():
+    management.call_command('populate_models')
 
+schedule.every(12).hours.do(populate_models)
+
+populate_models()
 while True:
     schedule.run_pending()
     time.sleep(1)
