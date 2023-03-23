@@ -6,7 +6,7 @@ services:
     env_file: .env
     stdin_open: true # docker run -i
     tty: true # docker run -t
-    command: sh -c "python manage.py migrate && printenv > /etc/environment && { cron -f & python manage.py runserver 0.0.0.0:8; }"
+    command: sh -c "python manage.py migrate && printenv > /etc/environment && { cron -f & python manage.py runserver 0.0.0.0:80; }"
     ports:
       - "80:80"
     restart: always
