@@ -20,3 +20,8 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ["id", "eatery", "event_description", "start", "end", "menu"]
+
+class EventSerializerSimple(serializers.ModelSerializer):
+    class Meta:
+        model = Event
+        fields = ["id", "eatery", "event_description", "start", "end"]

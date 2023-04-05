@@ -1,5 +1,5 @@
 from django.urls import path
-from eatery.views import EateryViewSet
+from eatery.views import EateryViewSet, EateryViewSetSimple
 
 eateries_list = EateryViewSet.as_view({
     'get':'list',
@@ -16,4 +16,5 @@ eatery_list = EateryViewSet.as_view({
 urlpatterns = [
     path("", eateries_list, name='eateries-list'),
     path("<int:pk>/", eatery_list, name='eatery-list'),
+    path("simple/", EateryViewSetSimple.as_view({'get':'list'}), name='eateries-simple'),
 ]
