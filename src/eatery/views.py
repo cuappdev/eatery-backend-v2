@@ -1,4 +1,4 @@
-from eatery.serializers import EaterySerializer
+from eatery.serializers import EaterySerializer, EaterySerializerSimple
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -90,3 +90,10 @@ class GetEateries(APIView):
             return JsonResponse(error_json("eateries is empty"))
 
         return JsonResponse(success_json(eateries.data))
+
+class EateryViewSetSimple(viewsets.ModelViewSet):
+    """
+    View all eateries with less information
+    """
+    queryset = Eatery.objects.all()
+    serializer_class = EaterySerializerSimple
