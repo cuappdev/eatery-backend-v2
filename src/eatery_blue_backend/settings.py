@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     "alert",
     "event",
     "report",
-    "menu",
     "item",
     "category",
     "cdn_parser",
