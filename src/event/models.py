@@ -16,5 +16,5 @@ class Event(models.Model):
     eatery = models.ForeignKey(Eatery, related_name = "events", on_delete=models.DO_NOTHING)
     event_description = models.TextField(
         choices=EventDescription.choices, default = EventDescription.GENERAL, blank=True, null = True)
-    start = models.DateTimeField() 
-    end = models.DateTimeField()
+    start = models.IntegerField(default = 0) 
+    end = models.IntegerField(default = 0)
