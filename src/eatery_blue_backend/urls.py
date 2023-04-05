@@ -23,6 +23,6 @@ urlpatterns = [
     path("cdn/", include("cdn_parser.urls")),
     path("report/", include("report.urls")),
     path("alert/", include("alert.urls")),
-    path("user/", include("user.urls")),
+    path("person/", include("person.urls")),
     #path("wait_time/", include("wait_time.urls"))
 ]
