@@ -8,8 +8,8 @@ class EventSerializer(serializers.ModelSerializer):
     event_description = serializers.CharField(
         allow_null=True, allow_blank=True, default=None
     )
-    start = serializers.DateTimeField()
-    end = serializers.DateTimeField()
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
 
     menu = CategorySerializer(many=True, read_only=True)
 
@@ -20,9 +20,4 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ["id", "eatery", "event_description", "start", "end", "menu"]
-        
-    def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret['start'] =round(datetime.strptime(ret['start'],'%Y-%m-%dT%H:%M:%S%z').timestamp())
-        ret['end'] = round(datetime.strptime(ret['end'],'%Y-%m-%dT%H:%M:%S%z').timestamp())
-        return ret
+    
