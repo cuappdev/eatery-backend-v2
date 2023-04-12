@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Student(models.Model):
-    netid = models.TextField()
+    net_id = models.TextField()
     favorite_eateries = models.ManyToManyField('eatery.Eatery', related_name='student')
     favorite_items = models.ManyToManyField('item.Item', related_name='student')
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True, default=None)
