@@ -1,4 +1,5 @@
 from django.db import models
+from django.db import connection
 
 
 class Eatery(models.Model):
@@ -23,3 +24,8 @@ class Eatery(models.Model):
     payment_accepts_meal_swipes = models.BooleanField(null=True, blank=True)
     payment_accepts_brbs = models.BooleanField(null=True, blank=True)
     payment_accepts_cash = models.BooleanField(null=True, blank=True)
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {} CASCADE'.format(cls._meta.db_table))
