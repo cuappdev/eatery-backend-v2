@@ -42,8 +42,8 @@ class PopulateEateryController:
         eatery = EaterySerializer(data=data)
         if eatery.is_valid():
             eatery.save()
-        #else:
-            #print(eatery.errors)
+        else:
+            print(eatery.errors)
 
     def add_eatery_store(self):
         """
@@ -58,7 +58,7 @@ class PopulateEateryController:
             for line in file:
                 if len(line) > 2:
                     json_objs.append(json.loads(line))
-
+            
             for json_obj in json_objs:
                 try:
                     object = Eatery.objects.get(id=int(json_obj["id"]))
@@ -75,6 +75,8 @@ class PopulateEateryController:
 
                 if serialized.is_valid():
                     serialized.save()
+                else:
+                    print(serialized.errors)
 
     def process(self, json_eateries):
         for json_eatery in json_eateries:
