@@ -1,3 +1,4 @@
+
 {"id": 1, "menu_summary": "Halal food", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/104-West.jpg"}
 {"id": 2, "menu_summary": "Limes, corona, sandwiches", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Amit-Bhatia-Libe-Cafe.jpg"}
 {"id": 3, "menu_summary": "Food, drink", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Atrium-Cafe.jpg"}
