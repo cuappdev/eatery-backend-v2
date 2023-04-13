@@ -1,7 +1,7 @@
 from django.db import models
 
 # Create your models here.
-class Swipe(models.model):
+class Swipe(models.Model):
 
     id = models.AutoField(primary_key=True)
     end_time = models.IntegerField()
