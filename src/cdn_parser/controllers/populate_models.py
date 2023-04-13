@@ -1,9 +1,10 @@
 import requests 
 from eatery.util.constants import CORNELL_DINING_URL, dining_id_to_internal_id
-
+from django.core import management
+from eatery.models import Eatery
 from eatery.controllers.populate_eatery import PopulateEateryController
 from event.controllers.populate_event import PopulateEventController
-from menu.controllers.populate_menu import PopulateMenuController
+#from menu.controllers.populate_menu import PopulateMenuController
 from item.controllers.populate_item import PopulateItemController
 from category.controllers.populate_category import PopulateCategoryController
 """
@@ -49,20 +50,20 @@ class CornellDiningNowController():
         """
 
         json_eateries = self.get_json()
+        
+        Eatery.truncate()
         print("Populating eateries")
         PopulateEateryController().process(json_eateries)
 
         print("Populating events")
         events_dict = PopulateEventController().process(json_eateries)    
 
-        print("Populating menus")
-        menus_dict = PopulateMenuController().process(events_dict, json_eateries)
-
         print("Populating categories")
-        categories_dict = PopulateCategoryController().process(menus_dict, json_eateries)
+        categories_dict = PopulateCategoryController().process(events_dict, json_eateries)
 
         print("Populating items")
         PopulateItemController().process(categories_dict, json_eateries)
+
         print("Done populating")
 
 
