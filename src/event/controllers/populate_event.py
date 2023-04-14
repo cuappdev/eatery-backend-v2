@@ -25,8 +25,8 @@ class PopulateEventController():
                 data = {
                     'eatery': eatery_id,
                     'event_description': json_event["descr"],
-                    'start' : json_event["startTimestamp"],
-                    'end' : json_event["endTimestamp"]}
+                    'start' : int(json_event["startTimestamp"]),
+                    'end' : int(json_event["endTimestamp"])}
 
                 event = EventSerializer(data=data)
                 
