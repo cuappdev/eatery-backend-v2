@@ -3,6 +3,7 @@ from enum import Enum
 from eatery.datatype.Eatery import EateryID
 
 CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
+CORNELL_VENDOR_URL = "https://vendor-api-extra.scl.cornell.edu/api/external/location-count"
 
 
 class SnapshotFileName(Enum):

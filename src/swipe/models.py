@@ -1,13 +1,24 @@
 from django.db import models
 from eatery.models import Eatery
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
-class Swipe(models.Model):
 
+class Day(models.TextChoices):
+    SUN = "Sunday"
+    MON = "Monday"
+    TUES = "Tuesday"
+    WED = "Wednesday"
+    THURS = "Thursday"
+    FRI = "Friday"
+    SAT = "Saturday"
+
+class WaitTime(models.Model):
     id = models.AutoField(primary_key=True)
-    eatery = models.ForeignKey(Eatery, related_name = "swipe_data", on_delete=models.DO_NOTHING)
-    end_time = models.IntegerField()
-    session_type = models.CharField(max_length=40)
-    start_time = models.IntegerField()
-    swipe_density = models.FloatField()
+    canonical_date = models.IntegerField()
+    eatery = models.ForeignKey(Eatery, related_name = "wait_time", on_delete=models.DO_NOTHING)
     wait_time_high = models.IntegerField()
+    wait_time_expected = models.IntegerField()
     wait_time_low = models.IntegerField()
+    day = models.TextField(
+        choices=Day.choices, blank=True, null = True)
+    hour = models.IntegerField()

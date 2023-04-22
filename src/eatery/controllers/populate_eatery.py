@@ -38,12 +38,23 @@ class PopulateEateryController:
             "location": json_eatery["location"],
             "online_order_url": json_eatery["onlineOrderUrl"],
         }
-
-        eatery = EaterySerializer(data=data)
-        if eatery.is_valid():
-            eatery.save()
+        try:
+            object = Eatery.objects.get(id=int(eatery_id))
+        except object.DoesNotExist:
+            """
+            Create a new Eatery object
+            """
+            serialized = EaterySerializer(data=data)
         else:
-            print(eatery.errors)
+            """
+            Update already-existing Eatery object
+            """
+            serialized = EaterySerializer(object, data=data, partial=True)
+
+        if serialized.is_valid():
+            serialized.save()
+        else:
+            print(serialized.errors)
 
     def add_eatery_store(self):
         """

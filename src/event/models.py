@@ -1,4 +1,5 @@
 from django.db import models 
+from django.db import connection
 
 from eatery.models import Eatery
 
@@ -18,3 +19,8 @@ class Event(models.Model):
         choices=EventDescription.choices, default = EventDescription.GENERAL, blank=True, null = True)
     start = models.IntegerField(default = 0) 
     end = models.IntegerField(default = 0)
+
+    @classmethod
+    def truncate(cls):
+        with connection.cursor() as cursor:
+            cursor.execute('TRUNCATE TABLE {} CASCADE'.format(cls._meta.db_table))
