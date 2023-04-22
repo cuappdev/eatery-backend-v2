@@ -1,7 +1,9 @@
 from datetime import datetime
-from swipe.serializers import SwipeSerializer
+from swipe.serializers import WaitTimeSerializer
+from swipe.models import WaitTime
 from eatery.datatype.Eatery import EateryID
-from eatery.util.constants import vendor_name_to_internal_id, CORNELL_VENDOR_URL
+from eatery.util.constants import vendor_name_to_internal_id, dining_id_to_internal_id, CORNELL_VENDOR_URL
+from django.core.exceptions import ObjectDoesNotExist
 import requests
 import os
 
@@ -12,12 +14,12 @@ class PopulateWaitTimeController():
 
     def get_json(self):
         try:
-            self.headers = {
+            headers = {
                 'Content-type': 'application/json', 
                 'x-api-key': os.environ['VENDOR_API_KEY'],
                 'Authorization': os.environ['VENDOR_BEARER_TOKEN']
             }
-            response = requests.get(CORNELL_VENDOR_URL)
+            response = requests.get(CORNELL_VENDOR_URL, headers=headers)
         except Exception as e:
             raise e
         if response.status_code <= 400:
@@ -48,52 +50,81 @@ class PopulateWaitTimeController():
         elif eatery_id == EateryID.MATTINS_CAFE:
             return [150, 210, 270]
         elif eatery_id == EateryID.TERRACE:
-            return [180, 300, 420]
+            return [60, 90, 120]
         elif eatery_id == EateryID.OKENSHIELDS:
-            return [80, 120, 180]
+            return [90, 120, 180]
         else:
             return [180, 240, 300]
 
-    def generate_wait_times(self, json_swipe):
+    def process(self, json_eateries):
         """
         From an swipe json from CDN, create wait_times for that eatery and add to event model.
         """
-
-        wait_times= []
+        int_to_day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        if not WaitTime.objects.all():
+            for json_eatery in json_eateries:
+                eatery_id = int(json_eatery["id"])
+                for i in range(7):
+                    for j in range(24):
+                        data = {
+                            'eatery': dining_id_to_internal_id(eatery_id).value,
+                            'day': int_to_day[i],
+                            'hour': j,
+                            'wait_time_low': 0,
+                            'wait_time_expected': 0,
+                            'wait_time_high': 0,
+                            'trials': 0,
+                        }
+                        wait_time = WaitTimeSerializer(data=data)
+                        if wait_time.is_valid():
+                            wait_time.save()
+                        else:
+                            print(wait_time.errors)
+                            print(json_eatery["name"])
+            return
+        json_swipe = self.get_json()
         json_swipe_units = json_swipe["UNITS"]
-        for json_unit in json_swipe_units:
-            data={
-                    'canonical_date': json_swipe["TIMESTAMP"],
-                    'eatery_id': vendor_name_to_internal_id(json_unit['UNIT_NAME']),
-                    'time_stamp': json_swipe["TIMESTAMP"],
-                    'wait_time_low': 0,
-                    'wait_time_expected': 0,
-                    'wait_time_high': 0
-                }
-            
-        wait_time = SwipeSerializer(data=data)
-                
-        if wait_time.is_valid():
-            wait_time.save()
-        else:
-            print(wait_time.errors)
-            return wait_time.errors
-        
-        wait_times.append(wait_time.data["id"]) 
-
-        
-        return wait_times
-
-    def process(self, json_eateries):
-        #events_dict { eatery_id : [event, event, event...], eatery_id : ... }
-        events_dict = {}
-
+        unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
             eatery_id = int(json_eatery["id"])
+            formatted_datetime = datetime.strptime(json_swipe["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
+            day = int_to_day[formatted_datetime.weekday()]
+            hour = formatted_datetime.hour
+            count = unit_info.get(eatery_id, 0)
+            get_food_time = self.base_time_to_get_food(eatery_id) if count > 0 else [0, 0, 0]
+            low_time = count*self.line_decrease_by_one_time(eatery_id)[0] + get_food_time[0]
+            expected_time = count*self.line_decrease_by_one_time(eatery_id)[1] + get_food_time[1]
+            high_time = count*self.line_decrease_by_one_time(eatery_id)[2] + get_food_time[2]
+            try:
+                wait_time = WaitTime.objects.get(eatery=eatery_id, day=day, hour=hour)
+                trials = wait_time.trials
+                data = {
+                        'eatery': eatery_id,
+                        'wait_time_low': (wait_time.wait_time_low*trials + low_time)/(trials+1),
+                        'wait_time_expected': (wait_time.wait_time_expected*trials + expected_time)/(trials+1),
+                        'wait_time_high': (wait_time.wait_time_high*trials + high_time)/(trials+1),
+                        'day': day,
+                        'hour': hour,
+                        'trials': wait_time.trials+1
+                    }
+                serialized = WaitTimeSerializer(wait_time, data=data, partial=True)
+            except ObjectDoesNotExist:
+                data = {
+                        'eatery': eatery_id,
+                        'wait_time_low': low_time,
+                        'wait_time_expected': expected_time,
+                        'wait_time_high': high_time,
+                        'day': day,
+                        'hour': hour,
+                        'trials': 1
+                    }
+                serialized = WaitTimeSerializer(data=data)
 
-            events = self.generate_events(json_eatery)
-            events_dict[eatery_id] = events 
-
-        return events_dict 
+        if serialized.is_valid():
+            serialized.save()
+        else:
+            print(serialized.errors)
+            print(serialized)
+            return serialized.errors
 
     

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from eatery.models import Eatery
 from event.serializers import EventSerializer, EventSerializerSimple
-from swipe.serializers import SwipeSerializer
+from swipe.serializers import WaitTimeSerializer
 
 
 
@@ -19,7 +19,7 @@ class EaterySerializer(serializers.ModelSerializer):
     payment_accepts_brbs = serializers.BooleanField(allow_null=True)
     payment_accepts_cash = serializers.BooleanField(allow_null=True)
 
-    swipe_data = SwipeSerializer(many=True, read_only=True)
+    wait_time = WaitTimeSerializer(many=True, read_only=True)
     events = EventSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
@@ -28,7 +28,7 @@ class EaterySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Eatery
-        fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'swipe_data', 'events']
+        fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'wait_time', 'events']
 
 
 class EaterySerializerSimple(serializers.ModelSerializer):

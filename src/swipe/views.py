@@ -1,3 +1,7 @@
-from django.shortcuts import render
+from rest_framework import viewsets
+from swipe.models import WaitTime
+from swipe.serializers import WaitTimeSerializer
 
-# Create your views here.
+class WaitTimeViewSet(viewsets.ModelViewSet):
+    queryset = WaitTime.objects.all()
+    serializer_class = WaitTimeSerializer

@@ -1,10 +1,8 @@
-import requests
 import json
-from eatery.datatype.Eatery import EateryID
 from eatery.util.constants import dining_id_to_internal_id, SnapshotFileName
 from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class PopulateEateryController:
     def __init__(self):
@@ -40,7 +38,7 @@ class PopulateEateryController:
         }
         try:
             object = Eatery.objects.get(id=int(eatery_id))
-        except object.DoesNotExist:
+        except ObjectDoesNotExist:
             """
             Create a new Eatery object
             """
