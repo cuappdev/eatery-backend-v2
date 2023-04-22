@@ -14,8 +14,8 @@ class PopulateWaitTimeController():
         try:
             self.headers = {
                 'Content-type': 'application/json', 
-                'x-api-key': os.environ['APIKEY'],
-                'Authorization': os.environ['BEARER']
+                'x-api-key': os.environ['VENDOR_API_KEY'],
+                'Authorization': os.environ['VENDOR_BEARER_TOKEN']
             }
             response = requests.get(CORNELL_VENDOR_URL)
         except Exception as e:

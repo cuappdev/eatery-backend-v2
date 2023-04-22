@@ -7,5 +7,5 @@ export POSTGRES_USER=
 export POSTGRES_PASSWORD=
 export POSTGRES_HOST=
 export POSTGRES_PORT=
-export API_KEY=
-export BEARER=
+export VENDOR_API_KEY=
+export VENDOR_BEARER_TOKEN=
