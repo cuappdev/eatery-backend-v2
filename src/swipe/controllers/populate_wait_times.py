@@ -60,7 +60,7 @@ class PopulateWaitTimeController():
         """
         From an swipe json from CDN, create wait_times for that eatery and add to event model.
         """
-        int_to_day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+        # If are populating for the first time, create wait_times for all eateries with no values
         if not WaitTime.objects.all():
             for json_eatery in json_eateries:
                 eatery_id = int(json_eatery["id"])
@@ -68,7 +68,7 @@ class PopulateWaitTimeController():
                     for j in range(24):
                         data = {
                             'eatery': dining_id_to_internal_id(eatery_id).value,
-                            'day': int_to_day[i],
+                            'day': WaitTime.int_to_day(i),
                             'hour': j,
                             'wait_time_low': 0,
                             'wait_time_expected': 0,
@@ -82,19 +82,25 @@ class PopulateWaitTimeController():
                             print(wait_time.errors)
                             print(json_eatery["name"])
             return
+        
+        # Iterate through all eateries in the json and add waittimes as they appear from the dining swipe json
         json_swipe = self.get_json()
         json_swipe_units = json_swipe["UNITS"]
         unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
             eatery_id = int(json_eatery["id"])
             formatted_datetime = datetime.strptime(json_swipe["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
-            day = int_to_day[formatted_datetime.weekday()]
+            day = WaitTime.int_to_day(formatted_datetime.weekday())
             hour = formatted_datetime.hour
             count = unit_info.get(eatery_id, 0)
+
+            # Calculate the expected wait time for the eatery at the given time
             get_food_time = self.base_time_to_get_food(eatery_id) if count > 0 else [0, 0, 0]
             low_time = count*self.line_decrease_by_one_time(eatery_id)[0] + get_food_time[0]
             expected_time = count*self.line_decrease_by_one_time(eatery_id)[1] + get_food_time[1]
             high_time = count*self.line_decrease_by_one_time(eatery_id)[2] + get_food_time[2]
+
+            # Update the wait time for the eatery at the given time or create a new wait time if it doesn't exist
             try:
                 wait_time = WaitTime.objects.get(eatery=eatery_id, day=day, hour=hour)
                 trials = wait_time.trials
