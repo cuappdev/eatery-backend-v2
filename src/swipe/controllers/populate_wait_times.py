@@ -125,12 +125,11 @@ class PopulateWaitTimeController():
                         'trials': 1
                     }
                 serialized = WaitTimeSerializer(data=data)
-
-        if serialized.is_valid():
-            serialized.save()
-        else:
-            print(serialized.errors)
-            print(serialized)
-            return serialized.errors
+            if serialized.is_valid():
+                serialized.save()
+            else:
+                print(serialized.errors)
+                print(serialized)
+                return serialized.errors
 
     
