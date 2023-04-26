@@ -78,6 +78,7 @@ class PopulateWaitTimeController():
         """
         From an swipe json from CDN, create wait_times for that eatery and add to event model.
         """
+        # If are populating for the first time, create wait_times for all eateries with no values
         if not WaitTime.objects.all():
             for json_eatery in json_eateries:
                 eatery_id = int(json_eatery["id"])
@@ -91,6 +92,8 @@ class PopulateWaitTimeController():
                             print(wait_time.errors)
                             print(json_eatery["name"])
             return
+        
+        # Iterate through all eateries in the json and add waittimes as they appear from the dining swipe json
         json_swipe = self.get_json()
         json_swipe_units = json_swipe["UNITS"]
         unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
@@ -100,10 +103,14 @@ class PopulateWaitTimeController():
             day = DAY_OF_WEEK_LIST[formatted_datetime.weekday()]
             hour = formatted_datetime.hour
             count = unit_info.get(eatery_id, 0)
+
+            # Calculate the expected wait time for the eatery at the given time
             get_food_time = self.base_time_to_get_food(eatery_id) if count > 0 else [0, 0, 0]
             low_time = count*self.line_decrease_by_one_time(eatery_id)[0] + get_food_time[0]
             expected_time = count*self.line_decrease_by_one_time(eatery_id)[1] + get_food_time[1]
             high_time = count*self.line_decrease_by_one_time(eatery_id)[2] + get_food_time[2]
+
+            # Update the wait time for the eatery at the given time or create a new wait time if it doesn't exist
             try:
                 wait_time = WaitTime.objects.get(eatery=eatery_id, day=day, hour=hour)
                 trials = wait_time.trials
@@ -116,12 +123,11 @@ class PopulateWaitTimeController():
             except ObjectDoesNotExist:
                 data = self.construct_wait_time(eatery_id,low_time,expected_time,high_time, day, hour, 1)
                 serialized = WaitTimeSerializer(data=data)
-
-        if serialized.is_valid():
-            serialized.save()
-        else:
-            print(serialized.errors)
-            print(serialized)
-            return serialized.errors
+            if serialized.is_valid():
+                serialized.save()
+            else:
+                print(serialized.errors)
+                print(serialized)
+                return serialized.errors
 
     

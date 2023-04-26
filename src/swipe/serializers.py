@@ -5,15 +5,14 @@ from datetime import datetime
 class DayWaitTimeSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
-        int_to_day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        day = int_to_day[datetime.now().weekday()]
+        day = WaitTime.int_to_day(datetime.now().weekday())
         data = data.filter(day=day)
         return super().to_representation(data)
 
 class WaitTimeSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, read_only=True)
     wait_time_high = serializers.IntegerField()
-    wait_time_expected= serializers.IntegerField()
+    wait_time_expected = serializers.IntegerField()
     wait_time_low = serializers.IntegerField()
     day = serializers.CharField(
         allow_null=True, allow_blank=True, default=None
