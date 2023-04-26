@@ -2,7 +2,7 @@ from datetime import datetime
 from swipe.serializers import WaitTimeSerializer
 from swipe.models import WaitTime
 from eatery.datatype.Eatery import EateryID
-from eatery.util.constants import vendor_name_to_internal_id, dining_id_to_internal_id, CORNELL_VENDOR_URL
+from eatery.util.constants import vendor_name_to_internal_id, dining_id_to_internal_id, CORNELL_VENDOR_URL, DAY_OF_WEEK_LIST
 from django.core.exceptions import ObjectDoesNotExist
 import requests
 import os
@@ -24,7 +24,25 @@ class PopulateWaitTimeController():
             raise e
         if response.status_code <= 400:
             return response.json()
-        
+
+    # A serializable wait_time object
+    @staticmethod
+    def construct_wait_time(eatery_id, low_time, expected_time, high_time, day, hour, trials):
+        return {
+                'eatery': eatery_id,
+                'wait_time_low': low_time,
+                'wait_time_expected': expected_time,
+                'wait_time_high': high_time,
+                'day': day,
+                'hour': hour,
+                'trials': trials
+            }
+
+    # Running average of with new_value being incorporated into the old_avg, where
+    # old_avg had trials amount of values
+    @staticmethod
+    def running_average(old_avg, new_value, trials):
+        return (old_avg*trials + new_value)/(trials+1)
 
     # Expected amount of time (in seconds) for the length of the line to decrease by 1 person
     # Returns [lower, expected, upper]
@@ -60,21 +78,12 @@ class PopulateWaitTimeController():
         """
         From an swipe json from CDN, create wait_times for that eatery and add to event model.
         """
-        int_to_day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
         if not WaitTime.objects.all():
             for json_eatery in json_eateries:
                 eatery_id = int(json_eatery["id"])
                 for i in range(7):
                     for j in range(24):
-                        data = {
-                            'eatery': dining_id_to_internal_id(eatery_id).value,
-                            'day': int_to_day[i],
-                            'hour': j,
-                            'wait_time_low': 0,
-                            'wait_time_expected': 0,
-                            'wait_time_high': 0,
-                            'trials': 0,
-                        }
+                        data = self.construct_wait_time(dining_id_to_internal_id(eatery_id).value,0,0,0,DAY_OF_WEEK_LIST[i], j,0)
                         wait_time = WaitTimeSerializer(data=data)
                         if wait_time.is_valid():
                             wait_time.save()
@@ -88,7 +97,7 @@ class PopulateWaitTimeController():
         for json_eatery in json_eateries:
             eatery_id = int(json_eatery["id"])
             formatted_datetime = datetime.strptime(json_swipe["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
-            day = int_to_day[formatted_datetime.weekday()]
+            day = DAY_OF_WEEK_LIST[formatted_datetime.weekday()]
             hour = formatted_datetime.hour
             count = unit_info.get(eatery_id, 0)
             get_food_time = self.base_time_to_get_food(eatery_id) if count > 0 else [0, 0, 0]
@@ -98,26 +107,14 @@ class PopulateWaitTimeController():
             try:
                 wait_time = WaitTime.objects.get(eatery=eatery_id, day=day, hour=hour)
                 trials = wait_time.trials
-                data = {
-                        'eatery': eatery_id,
-                        'wait_time_low': (wait_time.wait_time_low*trials + low_time)/(trials+1),
-                        'wait_time_expected': (wait_time.wait_time_expected*trials + expected_time)/(trials+1),
-                        'wait_time_high': (wait_time.wait_time_high*trials + high_time)/(trials+1),
-                        'day': day,
-                        'hour': hour,
-                        'trials': wait_time.trials+1
-                    }
+                new_low = self.running_average(wait_time.wait_time_low, low_time, trials)
+                new_expected = self.running_average(wait_time.wait_time_expected, expected_time, trials)
+                new_high = self.running_average(wait_time.wait_time_high, high_time, trials)
+
+                data = self.construct_wait_time(eatery_id,new_low,new_expected,new_high, day, hour, wait_time.trials+1)
                 serialized = WaitTimeSerializer(wait_time, data=data, partial=True)
             except ObjectDoesNotExist:
-                data = {
-                        'eatery': eatery_id,
-                        'wait_time_low': low_time,
-                        'wait_time_expected': expected_time,
-                        'wait_time_high': high_time,
-                        'day': day,
-                        'hour': hour,
-                        'trials': 1
-                    }
+                data = self.construct_wait_time(eatery_id,low_time,expected_time,high_time, day, hour, 1)
                 serialized = WaitTimeSerializer(data=data)
 
         if serialized.is_valid():
