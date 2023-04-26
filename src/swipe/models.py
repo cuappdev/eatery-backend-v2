@@ -12,6 +12,3 @@ class WaitTime(models.Model):
     hour = models.IntegerField(default=0)
     trials = models.IntegerField(default = 1)
 
-    def int_to_day(self, i):
-        int_to_day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-        return int_to_day[i]
