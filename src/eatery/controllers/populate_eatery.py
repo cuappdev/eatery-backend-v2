@@ -1,10 +1,8 @@
-import requests
 import json
-from eatery.datatype.Eatery import EateryID
 from eatery.util.constants import dining_id_to_internal_id, SnapshotFileName
 from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
-
+from django.core.exceptions import ObjectDoesNotExist
 
 class PopulateEateryController:
     def __init__(self):
@@ -38,12 +36,23 @@ class PopulateEateryController:
             "location": json_eatery["location"],
             "online_order_url": json_eatery["onlineOrderUrl"],
         }
-
-        eatery = EaterySerializer(data=data)
-        if eatery.is_valid():
-            eatery.save()
+        try:
+            object = Eatery.objects.get(id=int(eatery_id))
+        except ObjectDoesNotExist:
+            """
+            Create a new Eatery object
+            """
+            serialized = EaterySerializer(data=data)
         else:
-            print(eatery.errors)
+            """
+            Update already-existing Eatery object
+            """
+            serialized = EaterySerializer(object, data=data, partial=True)
+
+        if serialized.is_valid():
+            serialized.save()
+        else:
+            print(serialized.errors)
 
     def add_eatery_store(self):
         """

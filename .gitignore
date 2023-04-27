@@ -2,6 +2,8 @@
 .env
 eatery-dev.pem
 .envrc
+.envlocal
+.envremote
 
 # Hardcoded stuff
 db_snapshots/
