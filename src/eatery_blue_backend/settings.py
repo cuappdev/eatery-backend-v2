@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "report",
     "item",
     "category",
+    "swipe",
     "cdn_parser",
     "rest_framework",
     "person",

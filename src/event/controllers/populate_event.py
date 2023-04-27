@@ -16,7 +16,6 @@ class PopulateEventController():
 
         json_dates = json_eatery["operatingHours"]
         for json_date in json_dates:
-            canon_date = datetime.fromisoformat(json_date["date"])
             json_events = json_date["events"]
             
             for json_event in json_events:

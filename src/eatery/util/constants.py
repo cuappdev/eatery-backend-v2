@@ -3,7 +3,9 @@ from enum import Enum
 from eatery.datatype.Eatery import EateryID
 
 CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
+CORNELL_VENDOR_URL = "https://vendor-api-extra.scl.cornell.edu/api/external/location-count"
 
+DAY_OF_WEEK_LIST = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 class SnapshotFileName(Enum):
     EATERY_STORE = "eatery_store.txt"
@@ -161,6 +163,11 @@ def vendor_name_to_internal_id(vendor_eatery_name):
         return EateryID.MANN_CAFE
     elif vendor_eatery_name == "statlermacs":
         return EateryID.MACS_CAFE
+    elif vendor_eatery_name == "morrisondining":
+        return EateryID.MORRISON_DINING
+    elif vendor_eatery_name == "novickscafe":
+        return EateryID.NOVICKS_CAFE
+    
     else:
         # TODO: Add a slack notif / flag that a wait time location was not recognized
         return None
