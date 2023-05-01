@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from swipe.models import WaitTime
 from datetime import datetime
+from eatery.util.constants import DAY_OF_WEEK_LIST
 
 class DayWaitTimeSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
-        day = WaitTime.int_to_day(datetime.now().weekday())
+        day = DAY_OF_WEEK_LIST[datetime.now().weekday()]
         data = data.filter(day=day)
         return super().to_representation(data)
 
