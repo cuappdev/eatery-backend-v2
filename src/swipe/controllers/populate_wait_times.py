@@ -81,10 +81,10 @@ class PopulateWaitTimeController():
         # If are populating for the first time, create wait_times for all eateries with no values
         if not WaitTime.objects.all():
             for json_eatery in json_eateries:
-                eatery_id = int(json_eatery["id"])
+                eatery_id = dining_id_to_internal_id(int(json_eatery["id"])).value
                 for i in range(7):
                     for j in range(24):
-                        data = self.construct_wait_time(dining_id_to_internal_id(eatery_id).value,0,0,0,DAY_OF_WEEK_LIST[i], j,0)
+                        data = self.construct_wait_time(eatery_id,0,0,0,DAY_OF_WEEK_LIST[i], j,0)
                         wait_time = WaitTimeSerializer(data=data)
                         if wait_time.is_valid():
                             wait_time.save()
@@ -98,7 +98,7 @@ class PopulateWaitTimeController():
         json_swipe_units = json_swipe["UNITS"]
         unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
-            eatery_id = int(json_eatery["id"])
+            eatery_id = dining_id_to_internal_id(int(json_eatery["id"])).value
             formatted_datetime = datetime.strptime(json_swipe["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
             day = DAY_OF_WEEK_LIST[formatted_datetime.weekday()]
             hour = formatted_datetime.hour
