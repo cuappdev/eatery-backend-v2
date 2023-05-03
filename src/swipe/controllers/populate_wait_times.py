@@ -98,7 +98,8 @@ class PopulateWaitTimeController():
         json_swipe_units = json_swipe.get("UNITS")
         if json_swipe_units is None:
             # Error in requesting vendor data
-            raise json_swipe
+            print(json_swipe)
+            return None
         unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
             eatery_id = dining_id_to_internal_id(int(json_eatery["id"])).value
