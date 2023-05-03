@@ -95,7 +95,11 @@ class PopulateWaitTimeController():
         
         # Iterate through all eateries in the json and add waittimes as they appear from the dining swipe json
         json_swipe = self.get_json()
-        json_swipe_units = json_swipe["UNITS"]
+
+        json_swipe_units = json_swipe.get("UNITS")
+        if json_swipe_units is None:
+            # There was an error in the request to vendor
+            return json_swipe
         unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
             eatery_id = int(json_eatery["id"])
