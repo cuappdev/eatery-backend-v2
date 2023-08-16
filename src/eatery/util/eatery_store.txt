@@ -39,4 +39,4 @@
 {"id": 38, "name": "Anabel's Grocery", "menu_summary": "Groceries, quick bites", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Anabels-Grocery.jpg", "location": "Anabel Taylor Hall", "campus_area": "Central",  "latitude": 42.445061, "longitude": -76.485826, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": true, "online_order_url": null}
 {"id": 39, "menu_summary": "Pizza, pasta, wok, halal and kosher stations", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Morrison-Dining.jpg"}
 {"id": 40, "menu_summary": "Cornell Eatery"}
-{"id": 45, "menu_summary": "Freshly prepared meals, grab-and-go offerings, and coffee", "image_url": "", "location": "College of Veterinary Medicine East Campus"}
+{"id": 45, "menu_summary": "Freshly prepared meals, grab-and-go offerings, and coffee", "image_url": ""}
