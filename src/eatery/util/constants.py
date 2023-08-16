@@ -88,7 +88,10 @@ def dining_id_to_internal_id(id: int):
         return EateryID.MORRISON_DINING
     elif id == 44:
         return EateryID.NOVICKS_CAFE
+    elif id == 45:
+        return EateryID.VET_CAFE
     else:
+        print(f"Missing eatery_id {id}")
         return None
 
 
@@ -161,6 +164,8 @@ def vendor_name_to_internal_id(vendor_eatery_name):
         return EateryID.MANN_CAFE
     elif vendor_eatery_name == "statlermacs":
         return EateryID.MACS_CAFE
+    elif vendor_eatery_name == "Vet College Cafe":
+        return EateryID.VET_CAFE
     else:
         # TODO: Add a slack notif / flag that a wait time location was not recognized
         return None
