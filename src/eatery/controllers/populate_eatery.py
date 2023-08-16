@@ -13,7 +13,6 @@ class PopulateEateryController:
         Create Eatery object from an eatery json from CornellDiningNow, and add to Eatery table.
         """
         eatery_id = dining_id_to_internal_id(json_eatery["id"]).value
-
         data = {
             "id": eatery_id,
             "name": json_eatery["name"],
