@@ -48,4 +48,5 @@ class EateryID(Enum):
     ANABELS_GROCERY = 38
     MORRISON_DINING = 39
     NOVICKS_CAFE = 40
+    VET_CAFE = 41
 
