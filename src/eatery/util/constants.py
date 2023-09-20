@@ -166,7 +166,7 @@ def vendor_name_to_internal_id(vendor_eatery_name):
         return EateryID.MANN_CAFE
     elif vendor_eatery_name == "statlermacs":
         return EateryID.MACS_CAFE
-    elif vendor_eatery_name == "morrisondining":
+    elif vendor_eatery_name == "morrisondining" or vendor_eatery_name == "morrison":
         return EateryID.MORRISON_DINING
     elif vendor_eatery_name == "novickscafe":
         return EateryID.NOVICKS_CAFE
