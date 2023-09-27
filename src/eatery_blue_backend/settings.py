@@ -136,8 +136,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-# Authentication Controller
-AUTH_PASSWORD_SALT = os.getenv("AUTH_PASSWORD_SALT")
-ACCESS_TOKEN_AGE = 60 * 15  # 15 minutes
-LOCAL_AUTH = os.getenv("LOCAL") == "True"
