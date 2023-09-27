@@ -1,42 +1,42 @@
 
-{"id": 1, "menu_summary": "Halal food", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/104-West.jpg"}
-{"id": 2, "menu_summary": "Limes, corona, sandwiches", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Amit-Bhatia-Libe-Cafe.jpg"}
-{"id": 3, "menu_summary": "Food, drink", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Atrium-Cafe.jpg"}
-{"id": 4, "menu_summary": "Quick bites and convenient food", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Bear-Necessities.jpg"}
-{"id": 5, "menu_summary": "Cleanest dining hall on campus", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Becker-House-Dining.jpg"}
+{"id": 1, "menu_summary": "Kosher food", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/104-West.jpg"}
+{"id": 2, "menu_summary": "Noodles, sandwiches, coffee", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Amit-Bhatia-Libe-Cafe.jpg"}
+{"id": 3, "menu_summary": "Build your own bowl", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Atrium-Cafe.jpg"}
+{"id": 4, "menu_summary": "Quick and convenient food and snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Bear-Necessities.jpg"}
+{"id": 5, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Becker-House-Dining.jpg"}
 {"id": 6, "menu_summary": "Sandwiches, salads, hay", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Big-Red-Barn.jpg"}
 {"id": 7, "menu_summary": "Bagels, bagels, bagels", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Bug-Stop-Bagels.jpg"}
-{"id": 8, "menu_summary": "Sandwiches, salads, potatoes", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cafe-Jennie.jpg"}
+{"id": 8, "menu_summary": "Sandwiches, salads, drinks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cafe-Jennie.jpg"}
 {"id": 9, "name": "Carol's Caf\u00e9", "menu_summary": "Carols, wine, christmas", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Carols-Cafe.jpg", "location": "Balch Hall", "campus_area": "North", "latitude": 42.4533011, "longitude": -76.4791678, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": false, "online_order_url": null}
-{"id": 10, "menu_summary": "Well cooked food", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cook-House-Dining.jpg"}
-{"id": 11, "menu_summary": "Wraps, pizza, cookies", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cornell-Dairy-Bar.jpg"}
-{"id": 12, "menu_summary": "Tea, pizza, wine", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Crossings-Cafe.jpg"}
-{"id": 13, "menu_summary": "Fries, burgers, and shakes", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/frannys.jpg"}
+{"id": 10, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cook-House-Dining.jpg"}
+{"id": 11, "menu_summary": "Ice cream and more ice cream", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cornell-Dairy-Bar.jpg"}
+{"id": 12, "menu_summary": "Smoothies, quesadillas, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Crossings-Cafe.jpg"}
+{"id": 13, "menu_summary": "Fries, burgers, and wraps", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/frannys.jpg"}
 {"id": 14, "menu_summary": "Sandwiches, salads, goldfish", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Goldies-Cafe.jpg"}
 {"id": 15, "menu_summary": "Fire, scales, green dragons", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Green-Dragon.jpg"}
-{"id": 16, "menu_summary": "Burgers, burritos, quesadillas", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Hot-Dog-Cart.jpg"}
+{"id": 16, "menu_summary": "Hotdogs, hotdogs, and hotdogs", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Hot-Dog-Cart.jpg"}
 {"id": 17, "menu_summary": "Ice cream, slushies, and fried dough", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/icecreamcart.jpg"}
-{"id": 18, "menu_summary": "Cookies, cereal, chicken pot pie", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Jansens-Dining.jpg"}
-{"id": 19, "menu_summary": "Convenience items, milk", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Jansens-Market.jpg"}
-{"id": 20, "menu_summary": "Meat, salads, ice cream", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Keeton-House-Dining.jpg"}
-{"id": 21, "menu_summary": "Sandwiches, soups, croissants", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Mann-Cafe.jpg"}
-{"id": 22, "menu_summary": "Pollack specials, chicken", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Marthas-Cafe.jpg"}
+{"id": 18, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Jansens-Dining.jpg"}
+{"id": 19, "menu_summary": "Hot Sandwiches and convenience items", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Jansens-Market.jpg"}
+{"id": 20, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Keeton-House-Dining.jpg"}
+{"id": 21, "menu_summary": "Sandwiches, soups, coffee", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Mann-Cafe.jpg"}
+{"id": 22, "menu_summary": "Salads, wraps, coffee", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Marthas-Cafe.jpg"}
 {"id": 23, "menu_summary": "Sandwiches, soups, sushi", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Mattins-Cafe.jpg"}
-{"id": 24, "menu_summary": "Corn, vegetables, bread", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/mccormicks.jpg"}
-{"id": 25, "menu_summary": "A historic dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/North-Star.jpg"}
+{"id": 24, "menu_summary": "Sandwiches, salads, wraps", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/mccormicks.jpg"}
+{"id": 25, "menu_summary": "Freshly remodeled dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/North-Star.jpg"}
 {"id": 26, "menu_summary": "The only central campus dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Okenshields.jpg"}
-{"id": 27, "menu_summary": "Vegan dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Risley-Dining.jpg"}
+{"id": 27, "menu_summary": "Gluten free dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Risley-Dining.jpg"}
 {"id": 28, "menu_summary": "Sushi Fridays, freshly made pho", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/RPCC-Marketplace.jpg"}
-{"id": 29, "menu_summary": "Taco tuesday, pizza, noodles", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Rose-House-Dining.jpg"}
+{"id": 29, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Rose-House-Dining.jpg"}
 {"id": 30, "menu_summary": "Coffee, tea, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Rustys.jpg"}
-{"id": 31, "menu_summary": "Falafel, rice, beans", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/StraightMarket.jpg"}
-{"id": 32, "menu_summary": "Fries, salads, fried chicken", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Trillium.jpg"}
+{"id": 31, "menu_summary": "Soups, salads, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/StraightMarket.jpg"}
+{"id": 32, "menu_summary": "Burgers, pasta, quesadillas", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Trillium.jpg"}
 {"id": 33, "name": "Terrace", "menu_summary": "Burrito and rice bowls, pho", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Terrace.jpg", "location": "Statler Hall", "campus_area": "Central",  "latitude": 42.446267, "longitude": -76.482314, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": true, "payment_accepts_cash": true, "online_order_url": null}
-{"id": 34, "name": "Mac's Caf\u00e9", "menu_summary": "Flatbreads, salads, pasta", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/macs", "location": "Statler Hotel", "campus_area": "Central",  "latitude": 42.445921, "longitude": -76.481984, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": true, "payment_accepts_cash": true, "online_order_url": null}
+{"id": 34, "name": "Mac's Caf\u00e9", "menu_summary": "Flatbreads, pasta, sandwiches", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/macs", "location": "Statler Hotel", "campus_area": "Central",  "latitude": 42.445921, "longitude": -76.481984, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": true, "payment_accepts_cash": true, "online_order_url": null}
 {"id": 35, "name": "Temple of Zeus", "menu_summary": "Coffee, pastries, sandwiches", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Zeus.jpg", "location": "Goldwin Smith Hall", "campus_area": "Central",  "latitude": 42.449091, "longitude": -76.483414, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": true, "online_order_url": null}
 {"id": 36, "name": "Gimme Coffee", "menu_summary": "Coffee, pastries, tea", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Gimme-Coffee.jpg", "location": "Gates Hall", "campus_area": "Central",  "latitude": 42.444958, "longitude": -76.481169, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": true, "online_order_url": null}
 {"id": 37, "name": "Louie's Lunch", "menu_summary": "Burgers, fries, shakes", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Louies-Lunch.jpg", "location": "Across from Risley", "campus_area": "Central",  "latitude": 42.45336, "longitude": -76.481225, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": true, "online_order_url": null}
 {"id": 38, "name": "Anabel's Grocery", "menu_summary": "Groceries, quick bites", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Anabels-Grocery.jpg", "location": "Anabel Taylor Hall", "campus_area": "Central",  "latitude": 42.445061, "longitude": -76.485826, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": true, "online_order_url": null}
-{"id": 39, "menu_summary": "Pizza, pasta, wok, halal and kosher stations", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Morrison-Dining.jpg"}
-{"id": 40, "menu_summary": "Cornell Eatery"}
-{"id": 41, "menu_summary": "Freshly prepared meals, grab-and-go offerings, and coffee"}
+{"id": 39, "menu_summary": "Pizza, pasta, wok, halal, kosher", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Morrison-Dining.jpg"}
+{"id": 40, "menu_summary": "Baked Goods, Coffee, Sandwiches", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/novicks-cafe.jpg"}
+{"id": 41, "menu_summary": "Grab-n-Go, American, kosher", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/vets-cafe.jpg"}
