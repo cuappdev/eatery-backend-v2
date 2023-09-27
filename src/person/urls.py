@@ -8,5 +8,4 @@ router.register(r'chef', views.ChefViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path("authenticate/", views.AuthenticateView.as_view(), name="authenticate"),
 ]
