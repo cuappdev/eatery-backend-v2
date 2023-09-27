@@ -17,12 +17,12 @@ class PopulateWaitTimeController():
             headers = {
                 'Content-type': 'application/json', 
                 'x-api-key': os.environ['VENDOR_API_KEY'],
-                'Authorization': 'Bearer '+ os.environ['VENDOR_BEARER_TOKEN']
+                'Authorization': os.environ['VENDOR_BEARER_TOKEN']
             }
             response = requests.get(CORNELL_VENDOR_URL, headers=headers)
         except Exception as e:
             raise e
-        if response.status_code <= 400:
+        if response.status_code < 400:
             return response.json()
 
     # A serializable wait_time object
@@ -42,7 +42,7 @@ class PopulateWaitTimeController():
     # old_avg had trials amount of values
     @staticmethod
     def running_average(old_avg, new_value, trials):
-        return (old_avg*trials + new_value)/(trials+1)
+        return int((old_avg*trials + new_value)/(trials+1))
 
     # Expected amount of time (in seconds) for the length of the line to decrease by 1 person
     # Returns [lower, expected, upper]
@@ -95,18 +95,20 @@ class PopulateWaitTimeController():
         
         # Iterate through all eateries in the json and add waittimes as they appear from the dining swipe json
         json_swipe = self.get_json()
+        if not json_swipe:
+            return
         json_swipe_units = json_swipe.get("UNITS")
         if json_swipe_units is None:
             # Error in requesting vendor data
             print(json_swipe)
             return json_swipe
-        unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]): x["CROWD_COUNT"] for x in json_swipe_units}
+        unit_info = {vendor_name_to_internal_id(x["UNIT_NAME"]).value: x["CROWD_COUNT"] for x in json_swipe_units}
         for json_eatery in json_eateries:
             eatery_id = dining_id_to_internal_id(int(json_eatery["id"])).value
             formatted_datetime = datetime.strptime(json_swipe["TIMESTAMP"], '%Y-%m-%d %I:%M:%S %p')
             day = DAY_OF_WEEK_LIST[formatted_datetime.weekday()]
             hour = formatted_datetime.hour
-            count = unit_info.get(eatery_id, 0)
+            count = int(unit_info.get(eatery_id, 0))
 
             # Calculate the expected wait time for the eatery at the given time
             get_food_time = self.base_time_to_get_food(eatery_id) if count > 0 else [0, 0, 0]
