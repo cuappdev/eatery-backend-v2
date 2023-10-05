@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
+from .permissions import EateryPermission
 
 from eatery.datatype.Eatery import EateryID
 
@@ -18,6 +19,7 @@ class EateryViewSet(viewsets.ModelViewSet):
     """
     queryset = Eatery.objects.all()
     serializer_class = EaterySerializer
+    permission_classes = [EateryPermission]
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
@@ -37,17 +39,7 @@ class EateryViewSet(viewsets.ModelViewSet):
         self.check_object_permissions(self.request, obj)
         return obj
 
-class GetEateries(APIView):
-    def get(self, request):
-        """
-        Update models with CDN data
-        Update models with image information 
-        Update models with 
-        """
-        return 
-
-class UpdateEatery(APIView):
-    def post(self, request):
+    def update(self, request, *args, **kwargs):
         text_params = request.POST
         if not verify_json_fields(
             text_params,
@@ -82,18 +74,10 @@ class UpdateEatery(APIView):
         except Exception as e:
             return JsonResponse(error_json(str(e)))
 
-
-class GetEateries(APIView):
-    def get(self, request):
-        eateries = EaterySerializer(Eatery.objects.all(), many=True)
-        if not eateries.data:
-            return JsonResponse(error_json("eateries is empty"))
-
-        return JsonResponse(success_json(eateries.data))
-
-class EateryViewSetSimple(viewsets.ModelViewSet):
+class GetEateriesSimple(APIView):
     """
     View all eateries with less information
     """
-    queryset = Eatery.objects.all()
-    serializer_class = EaterySerializerSimple
+    def get(self, request):
+        eateries = EaterySerializerSimple(Eatery.objects.all(), many=True)
+        return Response(eateries.data)
