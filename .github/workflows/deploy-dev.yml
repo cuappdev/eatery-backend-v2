@@ -38,6 +38,8 @@ jobs:
           key: ${{ secrets.DEV_SERVER_KEY }}
           script: |
             export IMAGE_TAG=${{ steps.vars.outputs.sha_short }}
+            echo $IMAGE_TAG
+            echo "debugging"
             cd docker-compose
             docker stack rm the-stack
             sleep 20s
