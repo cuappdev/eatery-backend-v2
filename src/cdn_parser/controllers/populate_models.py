@@ -54,12 +54,8 @@ class CornellDiningNowController():
         Event.truncate()
         Eatery.truncate()
 
-        print(Eatery.objects.filter(id=16))
-
         print("Populating eateries")
         PopulateEateryController().process(json_eateries)
-
-        print(Eatery.objects.filter(id=16))
 
         print("Populating events")
         events_dict = PopulateEventController().process(json_eateries)    
