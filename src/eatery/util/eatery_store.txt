@@ -7,7 +7,6 @@
 {"id": 6, "menu_summary": "Sandwiches, salads, hay", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Big-Red-Barn.jpg"}
 {"id": 7, "menu_summary": "Bagels, bagels, bagels", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Bug-Stop-Bagels.jpg"}
 {"id": 8, "menu_summary": "Sandwiches, salads, drinks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cafe-Jennie.jpg"}
-{"id": 9, "name": "Carol's Caf\u00e9", "menu_summary": "Carols, wine, christmas", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Carols-Cafe.jpg", "location": "Balch Hall", "campus_area": "North", "latitude": 42.4533011, "longitude": -76.4791678, "payment_accepts_meal_swipes": false, "payment_accepts_brbs": false, "payment_accepts_cash": false, "online_order_url": null}
 {"id": 10, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cook-House-Dining.jpg"}
 {"id": 11, "menu_summary": "Ice cream and more ice cream", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Cornell-Dairy-Bar.jpg"}
 {"id": 12, "menu_summary": "Smoothies, quesadillas, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Crossings-Cafe.jpg"}
@@ -26,7 +25,6 @@
 {"id": 25, "menu_summary": "Freshly remodeled dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/North-Star.jpg"}
 {"id": 26, "menu_summary": "The only central campus dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Okenshields.jpg"}
 {"id": 27, "menu_summary": "Gluten free dining hall", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Risley-Dining.jpg"}
-{"id": 28, "menu_summary": "Sushi Fridays, freshly made pho", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/RPCC-Marketplace.jpg"}
 {"id": 29, "menu_summary": "A west dining classic", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Rose-House-Dining.jpg"}
 {"id": 30, "menu_summary": "Coffee, tea, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/Rustys.jpg"}
 {"id": 31, "menu_summary": "Soups, salads, snacks", "image_url": "https://raw.githubusercontent.com/cuappdev/assets/master/eatery/eatery-images/StraightMarket.jpg"}
