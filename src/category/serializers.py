@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from category.models import Category
-from item.serializers import ItemSerializer
+from item.serializers import ItemSerializer, ItemReadSerializer
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -15,3 +15,10 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["id", "category", "event", "items"]
+
+class CategoryReadSerializer(serializers.ModelSerializer):
+    items = ItemReadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Category
+        fields = ["category", "items"]
