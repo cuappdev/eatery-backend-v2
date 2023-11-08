@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from eatery.models import Eatery
-from event.serializers import EventSerializer, EventSerializerSimple
+from event.serializers import EventSerializer, EventReadSerializer, EventSerializerSimple
 
 class EaterySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -21,6 +21,21 @@ class EaterySerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         eatery, _ = Eatery.objects.get_or_create(**validated_data)
         return eatery
+    
+class EateryReadSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+    menu_summary = serializers.CharField(allow_null=True,default="Cornell Eatery")
+    image_url = serializers.URLField(allow_null=True,default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg")
+    location = serializers.CharField(allow_null=True)
+    campus_area = serializers.CharField(allow_null=True)
+    online_order_url = serializers.URLField(allow_null=True)
+    latitude = serializers.FloatField(allow_null=True)
+    longitude = serializers.FloatField(allow_null=True)
+    payment_accepts_meal_swipes = serializers.BooleanField(allow_null=True)
+    payment_accepts_brbs = serializers.BooleanField(allow_null=True)
+    payment_accepts_cash = serializers.BooleanField(allow_null=True)
+    events = EventReadSerializer(many=True, read_only=True)
 
     class Meta:
         model = Eatery
