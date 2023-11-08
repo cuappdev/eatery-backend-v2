@@ -9,3 +9,4 @@ export POSTGRES_HOST=
 export POSTGRES_PORT=
 export VENDOR_API_KEY=
 export VENDOR_BEARER_TOKEN=
+export REPORT_KEY=
