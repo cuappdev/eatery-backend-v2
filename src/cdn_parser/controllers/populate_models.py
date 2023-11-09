@@ -67,9 +67,3 @@ class CornellDiningNowController():
         PopulateItemController().process(categories_dict, json_eateries)
 
         print("Done populating")
-
-
-        
-
-
-    
