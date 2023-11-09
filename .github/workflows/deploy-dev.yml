@@ -1,4 +1,4 @@
-name: Docker Build & Push and Deploy for eatery-blue-backend
+name: Docker Build & Push and Deploy to eatery-blue-backend
 
 on:
   push:
