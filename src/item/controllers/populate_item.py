@@ -54,9 +54,9 @@ class PopulateItemController():
             iter = list(eatery_menus.keys())
             i = 0
 
-            is_cafe = "Cafe" in {
-                eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
-            }  
+            desired_descriptions = {"Cafe", "Cart", "Coffee Shop", "Food Court"}
+            eatery_descriptions = {eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]}
+            is_cafe = bool(desired_descriptions.intersection(eatery_descriptions))
 
             json_dates = json_eatery["operatingHours"]
             for json_date in json_dates: 
