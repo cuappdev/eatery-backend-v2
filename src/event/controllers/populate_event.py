@@ -1,6 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from event.serializers import EventSerializer
 from eatery.util.constants import dining_id_to_internal_id
+import json
 
 class PopulateEventController():
     def __init__(self):
@@ -36,8 +37,39 @@ class PopulateEventController():
                     return event.errors
                 
                 events.append(event.data["id"]) 
-
+        return events
+    
+    def generate_external_events(self, json_eatery):
+        json_dates = json_eatery["operatingHours"]
+        events = []
+        for json_date in json_dates:
+            json_event = json_date["events"][0]
+            date = datetime.now()
+            while date.strftime("%A").lower() != json_date["weekday"].lower():
+                date += timedelta(days=1)
+            start_string = json_event['start']
+            start_timestamp = datetime(date.year, date.month, date.day, int(start_string[:2]), int(start_string[3:])).timestamp()
+            end_string = json_event['end']
+            if int(end_string[:2]) < int(start_string[:2]):
+                date += timedelta(days=1)
+            end_timestamp = datetime(date.year, date.month, date.day, int(end_string[:2]), int(end_string[3:])).timestamp()
         
+            eatery_id = json_eatery["id"]
+            data = {
+                'eatery': eatery_id,
+                'event_description': json_event["descr"],
+                'start' : start_timestamp,
+                'end' : end_timestamp}
+
+            event = EventSerializer(data=data)
+            
+            if event.is_valid():
+                event.save()
+            else:
+                print(event.errors)
+                return event.errors
+            
+            events.append(event.data["id"]) 
         return events
 
     def process(self, json_eateries):
@@ -50,6 +82,10 @@ class PopulateEventController():
             events = self.generate_events(json_eatery)
             events_dict[eatery_id] = events 
 
-        return events_dict 
+        # create custom events for external eateries
+        with open("../static_sources/external_eateries.json", "r") as file:
+            json_obj = json.load(file)
+            for eatery in json_obj['eateries']:
+                events_dict[eatery['id']] = self.generate_external_events(eatery)
 
-    
+        return events_dict 
