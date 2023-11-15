@@ -98,5 +98,5 @@ class GetEateriesByDay(APIView):
     Get all eatery information by day
     """
     def get(self, request, day):
-        eateries = EaterySerializerByDay(Eatery.objects.all(), many=True, context={"day": day})
+        eateries = EaterySerializerByDay(Eatery.objects.exclude(events__event_description="Open"), many=True, context={"day": day})
         return Response(eateries.data)

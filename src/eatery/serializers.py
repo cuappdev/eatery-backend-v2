@@ -25,6 +25,10 @@ class EaterySerializer(serializers.ModelSerializer):
         eatery, _ = Eatery.objects.get_or_create(**validated_data)
         return eatery
     
+    class Meta:
+        model = Eatery
+        fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
+    
 class EateryReadSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
@@ -57,7 +61,7 @@ class EaterySerializerSimple(serializers.ModelSerializer):
 class EaterySerializerByDay(serializers.ModelSerializer):
     menu_summary = serializers.CharField(allow_null=True,default="Cornell Eatery")
     image_url = serializers.URLField(allow_null=True,default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg")
-    events = serializers.SerializerMethodField(many=True)
+    events = serializers.SerializerMethodField()
 
     def get_events(self, obj):
         day = self.context.get("day")
@@ -66,7 +70,7 @@ class EaterySerializerByDay(serializers.ModelSerializer):
         end_today = today + timedelta(days=1)
         today_unix = mktime(today.timetuple()) + 18000
         end_today_unix = mktime(end_today.timetuple()) + 18000
-        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, end__lte=end_today_unix)
+        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, start__lte=end_today_unix)
         serializer = EventReadSerializer(instance=events, many=True)
         return serializer.data
 
