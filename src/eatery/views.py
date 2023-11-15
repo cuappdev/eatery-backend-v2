@@ -1,4 +1,4 @@
-from eatery.serializers import EaterySerializer, EateryReadSerializer, EaterySerializerSimple, EateryByDaySerializer
+from eatery.serializers import EaterySerializer, EateryReadSerializer, EaterySerializerSimple, EaterySerializerByDay
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -95,8 +95,8 @@ class GetEateriesSimple(APIView):
     
 class GetEateriesByDay(APIView):
     """
-    View all eateries with events on a specific day
+    Get all eatery information by day
     """
-    def get(self, request, date):
-        eateries = EateryByDaySerializer(Eatery.objects.all(), many=True)
+    def get(self, request, day):
+        eateries = EaterySerializerByDay(Eatery.objects.all(), many=True, context={"day": day})
         return Response(eateries.data)
