@@ -76,10 +76,10 @@ class PopulateCategoryController:
             else:
                 continue
 
-            desired_descriptions = {"Cafe", "Cart", "Coffee Shop", "Food Court"}
-            eatery_descriptions = {eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]}
-            is_cafe = bool(desired_descriptions.intersection(eatery_descriptions))
-
+            is_cafe = "Cafe" in {
+                eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
+            }
+            
             """
             For every event in an eatery --> for every menu in an eatery --> get categories
             """
