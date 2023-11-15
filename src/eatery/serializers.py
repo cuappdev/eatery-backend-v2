@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from eatery.models import Eatery
-from event.serializers import EventSerializer, EventReadSerializer, EventSerializerSimple
+from event.models import Event
+from event.serializers import EventSerializer, EventSerializerSimple, EventReadSerializer
+from datetime import date, timedelta
+from time import mktime
 
 class EaterySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -51,15 +54,23 @@ class EaterySerializerSimple(serializers.ModelSerializer):
         model = Eatery
         fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
 
-class EateryByDaySerializer(serializers.ModelSerializer):
+class EaterySerializerByDay(serializers.ModelSerializer):
     menu_summary = serializers.CharField(allow_null=True,default="Cornell Eatery")
     image_url = serializers.URLField(allow_null=True,default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg")
-    events = serializers.SerializerMethodField(many=True, read_only=True)
+    events = serializers.SerializerMethodField(many=True)
+
+    def get_events(self, obj):
+        day = self.context.get("day")
+        today = date.today()
+        today = today + timedelta(days=day)
+        end_today = today + timedelta(days=1)
+        today_unix = mktime(today.timetuple()) + 18000
+        end_today_unix = mktime(end_today.timetuple()) + 18000
+        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, end__lte=end_today_unix)
+        serializer = EventReadSerializer(instance=events, many=True)
+        return serializer.data
 
     class Meta:
         model = Eatery
         fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
 
-    def get_events(self, obj):
-        events = obj.events.filter(start__lte=self.context['date'], end__gte=self.context['date'])
-        return EventReadSerializer(events, many=True).data
