@@ -83,7 +83,7 @@ class PopulateEventController():
             events_dict[eatery_id] = events 
 
         # create custom events for external eateries
-        with open("../static_sources/external_eateries.json", "r") as file:
+        with open("./static_sources/external_eateries.json", "r") as file:
             json_obj = json.load(file)
             for eatery in json_obj['eateries']:
                 events_dict[eatery['id']] = self.generate_external_events(eatery)
