@@ -79,7 +79,7 @@ class PopulateCategoryController:
             is_cafe = "Cafe" in {
                 eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
             }
-
+            
             """
             For every event in an eatery --> for every menu in an eatery --> get categories
             """

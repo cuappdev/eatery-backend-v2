@@ -1,4 +1,4 @@
-from eatery.serializers import EaterySerializer, EaterySerializerSimple
+from eatery.serializers import EaterySerializer, EateryReadSerializer, EaterySerializerSimple, EaterySerializerByDay
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -20,6 +20,17 @@ class EateryViewSet(viewsets.ModelViewSet):
     queryset = Eatery.objects.all()
     serializer_class = EaterySerializer
     permission_classes = [EateryPermission]
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = EateryReadSerializer(instance)
+        return Response(serializer.data)
+    
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = EateryReadSerializer(queryset, many=True)
+        return Response(serializer.data)
+
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
@@ -80,4 +91,12 @@ class GetEateriesSimple(APIView):
     """
     def get(self, request):
         eateries = EaterySerializerSimple(Eatery.objects.all(), many=True)
+        return Response(eateries.data)
+    
+class GetEateriesByDay(APIView):
+    """
+    Get all eatery information by day
+    """
+    def get(self, request, day):
+        eateries = EaterySerializerByDay(Eatery.objects.exclude(events__event_description="Open"), many=True, context={"day": day})
         return Response(eateries.data)
