@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from event.models import Event
-from category.serializers import CategorySerializer
+from category.serializers import CategorySerializer, CategoryReadSerializer
 from datetime import datetime
 
 class EventSerializer(serializers.ModelSerializer):
@@ -21,7 +21,17 @@ class EventSerializer(serializers.ModelSerializer):
         model = Event
         fields = ["id", "eatery", "event_description", "start", "end", "menu"]
 
+class EventReadSerializer(serializers.ModelSerializer):
+    event_description = serializers.CharField(allow_null=True, allow_blank=True, default=None)
+    start = serializers.IntegerField()
+    end = serializers.IntegerField()
+    menu = CategoryReadSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Event
+        fields = ["event_description", "start", "end", "menu"]
+
 class EventSerializerSimple(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ["id", "eatery", "event_description", "start", "end"]
+        fields = ["id", "event_description", "start", "end"]
