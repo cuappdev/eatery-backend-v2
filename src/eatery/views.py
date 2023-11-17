@@ -23,12 +23,12 @@ class EateryViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = EateryReadSerializer(instance)
+        serializer = EaterySerializer(instance)
         return Response(serializer.data)
     
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = EateryReadSerializer(queryset, many=True)
+        serializer = EaterySerializer(queryset, many=True)
         return Response(serializer.data)
 
 
