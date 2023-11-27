@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from event.serializers import EventSerializer
 from eatery.util.constants import dining_id_to_internal_id
 import json
+import pytz
 
 class PopulateEventController():
     def __init__(self):
@@ -48,12 +49,14 @@ class PopulateEventController():
             while date.strftime("%A").lower() != json_date["weekday"].lower():
                 date += timedelta(days=1)
             start_string = json_event['start']
-            start_timestamp = datetime(date.year, date.month, date.day, int(start_string[:2]), int(start_string[3:])).timestamp()
+            timezone = pytz.timezone('US/Eastern')
+            start_time = datetime(date.year, date.month, date.day, int(start_string[:2]), int(start_string[3:]))
+            start_timestamp = timezone.localize(start_time).timestamp()
             end_string = json_event['end']
             if int(end_string[:2]) < int(start_string[:2]):
                 date += timedelta(days=1)
-            end_timestamp = datetime(date.year, date.month, date.day, int(end_string[:2]), int(end_string[3:])).timestamp()
-        
+            end_time = datetime(date.year, date.month, date.day, int(end_string[:2]), int(end_string[3:]))
+            end_timestamp = timezone.localize(end_time).timestamp()
             eatery_id = json_eatery["id"]
             data = {
                 'eatery': eatery_id,
