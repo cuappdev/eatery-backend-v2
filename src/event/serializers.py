@@ -22,6 +22,7 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ["id", "eatery", "event_description", "start", "end", "menu"]
 
 class EventReadSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False, read_only=True)
     event_description = serializers.CharField(allow_null=True, allow_blank=True, default=None)
     start = serializers.IntegerField()
     end = serializers.IntegerField()
@@ -29,7 +30,7 @@ class EventReadSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ["event_description", "start", "end", "menu"]
+        fields = ["id", "event_description", "start", "end", "menu"]
 
 class EventSerializerSimple(serializers.ModelSerializer):
     class Meta:
