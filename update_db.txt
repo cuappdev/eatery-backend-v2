@@ -1,1 +1,1 @@
-0 8-21 * * * cd /usr/app; /usr/local/bin/python /usr/app/manage.py populate_models > /proc/1/fd/1 2>/proc/1/fd/2
+0 8-21 * * * cd /usr/app; /usr/local/bin/python /usr/app/manage.py populate_models > /usr/app/cron_log.txt 2>&1;
