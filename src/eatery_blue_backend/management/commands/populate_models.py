@@ -14,7 +14,7 @@ class Command(BaseCommand):
     self.stdout.write(f"Populating models at {datetime.now()} UTC")
     start = int(datetime.now().timestamp())
     self.process()
-    self.stdout.write(f"Populated models ({int(datetime.now().timestamp()) - start}s)")
+    self.stdout.write(f"Finished populating models at {datetime.now()} UTC ({int(datetime.now().timestamp()) - start}s)")
 
   def get_json(self):
     try:
@@ -25,6 +25,13 @@ class Command(BaseCommand):
       response = response.json()
       json_eateries = response["data"]["eateries"]
     return json_eateries
+  
+  def logger_wrapper(self, command_obj, log_title, args):
+    pre = int(datetime.now().timestamp())
+    print(f"{datetime.now()} UTC: {log_title}")
+    output = command_obj.process(*args)
+    print(f"Done ({int(datetime.now().timestamp()) - pre}s) ")
+    return output
 
   def process(self):
     """
@@ -51,19 +58,15 @@ class Command(BaseCommand):
     """
 
     json_eateries = self.get_json()
-    
+  
     Event.truncate()
 
-    print("Populating eateries")
-    PopulateEateryController().process(json_eateries)
+    self.logger_wrapper(PopulateEateryController(), "Populating eateries", [json_eateries])
 
-    print("Populating events")
-    events_dict = PopulateEventController().process(json_eateries)    
+    events_dict = self.logger_wrapper(PopulateEventController(), "Populating events", [json_eateries])
 
-    print("Populating categories")
-    categories_dict = PopulateCategoryController().process(events_dict, json_eateries)
+    categories_dict = self.logger_wrapper(PopulateCategoryController(), "Populating categories", [events_dict, json_eateries])
 
-    print("Populating items")
-    PopulateItemController().process(categories_dict, json_eateries)
+    self.logger_wrapper(PopulateItemController(), "Populating items", [categories_dict, json_eateries])
 
     print("Done populating")
