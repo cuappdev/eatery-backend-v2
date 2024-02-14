@@ -14,6 +14,16 @@ This is the backend for eatery-blue-backend.
 - To set up the tables and data, make sure current working directory is the `src` folder and run `bash reset_db.sh`
 - To run the backend, run `bash start.sh`
 
+## SP24 Members
+
+- Thomas Vignos
+- Aayush Agnihotri
+
+## FA23 Members
+
+- Mateo Weiner
+- Thomas Vignos
+
 ## SP23 Members
 
 - Mateo Weiner
