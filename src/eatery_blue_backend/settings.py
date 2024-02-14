@@ -25,7 +25,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 # IS_PROD can be None
-DEBUG = False if os.environ.get("IS_PROD") else True
+DEBUG = False if os.environ.get("IS_PROD") is True else True
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
