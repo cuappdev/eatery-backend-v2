@@ -2,15 +2,14 @@ from eatery.serializers import EaterySerializer, EateryReadSerializer, EaterySer
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import viewsets
 from .permissions import EateryPermission
-
 from eatery.datatype.Eatery import EateryID
-
 from eatery.models import Eatery
-
 from .controllers.update_eatery import UpdateEateryController
 
 class EateryViewSet(viewsets.ModelViewSet):
@@ -25,12 +24,12 @@ class EateryViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = EaterySerializer(instance)
         return Response(serializer.data)
-    
+
+    @method_decorator(cache_page(60*60*2)) # cache for 2 hours
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = EaterySerializer(queryset, many=True)
         return Response(serializer.data)
-
 
     def get_object(self):
         queryset = self.filter_queryset(self.get_queryset())
@@ -97,6 +96,7 @@ class GetEateriesByDay(APIView):
     """
     Get all eatery information by day
     """
+    @method_decorator(cache_page(60*60*2)) # cache for 2 hours
     def get(self, request, day):
         eateries = EaterySerializerByDay(Eatery.objects.exclude(events__event_description="Open"), many=True, context={"day": day})
         return Response(eateries.data)
