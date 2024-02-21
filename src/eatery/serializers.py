@@ -66,12 +66,9 @@ class EaterySerializerByDay(serializers.ModelSerializer):
 
     def get_events(self, obj):
         day = self.context.get("day")
-        today = timezone.now().date()
-        today = today + timedelta(days=day)
-        end_today = today + timedelta(days=1)
-        today_unix = mktime(today.timetuple())
-        end_today_unix = mktime(end_today.timetuple())
-        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, start__lte=end_today_unix)
+        today = (timezone.now() - timedelta(hours=5)).date() + timedelta(days=day)
+        today_unix = mktime(today.timetuple()) + timedelta(hours=5).seconds
+        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, start__lte=today_unix + timedelta(days=1).seconds)
         serializer = EventReadSerializer(instance=events, many=True)
         return serializer.data
 
