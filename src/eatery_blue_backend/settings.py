@@ -43,7 +43,6 @@ INSTALLED_APPS = [
     "rest_framework",
     "eatery_blue_backend",
     "eatery",
-    "alert",
     "event",
     "report",
     "item",
