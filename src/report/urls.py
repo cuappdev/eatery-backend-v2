@@ -1,19 +1,10 @@
-from django.urls import path
+from django.urls import path, include
 from report.views import ReportViewSet
+from rest_framework.routers import DefaultRouter
 
-reports_list = ReportViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
-
-report_list = ReportViewSet.as_view({
-    'get':'retrieve',
-    'put':'update',
-    'patch':'partial_update',
-    'delete':'destroy'
-})
+router = DefaultRouter()
+router.register("", ReportViewSet)
 
 urlpatterns = [
-    path("", reports_list, name='report-list'),
-    path("<int:pk>/", report_list, name='report-list'),
+    path("", include(router.urls)),
 ]
