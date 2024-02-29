@@ -1,6 +1,7 @@
 from django.db import models
 from eatery.models import Eatery
 
+
 class Report(models.Model):
     eatery = models.ForeignKey(Eatery, on_delete=models.CASCADE, null=True, blank=True)
     netid = models.CharField(max_length=10, null=True, blank=True)
