@@ -21,6 +21,7 @@ This is the backend for eatery-blue-backend.
 
 - Thomas Vignos
 - Aayush Agnihotri
+- Daniel Weiner
 
 ## FA23 Members
 
