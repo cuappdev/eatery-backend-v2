@@ -18,6 +18,9 @@ class Event(models.Model):
         choices=EventDescription.choices, default = EventDescription.GENERAL, blank=True, null = True)
     start = models.IntegerField(default = 0) 
     end = models.IntegerField(default = 0)
+    
+    def __str__(self):
+        return f"{self.eatery.name}: {self.event_description} from {self.start} to {self.end}"
 
     @classmethod
     def truncate(cls):

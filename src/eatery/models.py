@@ -23,3 +23,6 @@ class Eatery(models.Model):
     payment_accepts_meal_swipes = models.BooleanField(null=True, blank=True)
     payment_accepts_brbs = models.BooleanField(null=True, blank=True)
     payment_accepts_cash = models.BooleanField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
