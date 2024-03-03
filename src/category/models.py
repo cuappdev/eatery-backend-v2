@@ -1,5 +1,4 @@
 from django.db import models
-from eatery.models import Eatery
 from event.models import Event
 
 

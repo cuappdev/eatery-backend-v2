@@ -1,4 +1,4 @@
 from django.contrib import admin
-import eatery.models as models
+from eatery.models import Eatery
 
-admin.site.register(models.Eatery)
+admin.site.register(Eatery)

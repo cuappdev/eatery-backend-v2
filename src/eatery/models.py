@@ -10,7 +10,6 @@ class Eatery(models.Model):
         COLLEGETOWN = "Collegetown"
         NONE = ""
 
-    id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=40)
     menu_summary = models.TextField(blank=True, null=True, default="")
     image_url = models.URLField(blank=True)
