@@ -13,7 +13,7 @@ class ItemSerializer(serializers.ModelSerializer):
         model = Item
         fields = ['id', 'category', 'name']
 
-class ItemReadSerializer(serializers.ModelSerializer):
+class ItemSerializerOptimized(serializers.ModelSerializer):
     name = serializers.CharField(default = "Item")
 
     class Meta:

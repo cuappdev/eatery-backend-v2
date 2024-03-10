@@ -1,4 +1,4 @@
-from eatery.serializers import EaterySerializer, EateryReadSerializer, EaterySerializerSimple, EaterySerializerByDay
+from eatery.serializers import EaterySerializer, EaterySerializerSimple, EaterySerializerByDay, EaterySerializerOptimized
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -22,13 +22,13 @@ class EateryViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
-        serializer = EaterySerializer(instance)
+        serializer = EaterySerializerOptimized(instance)
         return Response(serializer.data)
 
     @method_decorator(cache_page(60*60*2)) # cache for 2 hours
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = EaterySerializer(queryset, many=True)
+        serializer = EaterySerializerOptimized(queryset, many=True)
         return Response(serializer.data)
 
     def get_object(self):
