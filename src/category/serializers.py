@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from category.models import Category
-from item.serializers import ItemSerializer, ItemReadSerializer
+from item.serializers import ItemSerializer, ItemSerializerOptimized
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -16,8 +16,8 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ["id", "category", "event", "items"]
 
-class CategoryReadSerializer(serializers.ModelSerializer):
-    items = ItemReadSerializer(many=True, read_only=True)
+class CategorySerializerOptimized(serializers.ModelSerializer):
+    items = ItemSerializerOptimized(many=True, read_only=True)
 
     class Meta:
         model = Category

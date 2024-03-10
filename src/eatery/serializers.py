@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from eatery.models import Eatery
 from event.models import Event
-from event.serializers import EventSerializer, EventSerializerSimple, EventReadSerializer
+from event.serializers import EventSerializer, EventSerializerSimple, EventSerializerOptimized
 from django.utils import timezone
 from datetime import date, timedelta
 from time import mktime
@@ -30,7 +30,7 @@ class EaterySerializer(serializers.ModelSerializer):
         model = Eatery
         fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
     
-class EateryReadSerializer(serializers.ModelSerializer):
+class EaterySerializerOptimized(serializers.ModelSerializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
     menu_summary = serializers.CharField(allow_null=True,default="Cornell Eatery")
@@ -43,7 +43,8 @@ class EateryReadSerializer(serializers.ModelSerializer):
     payment_accepts_meal_swipes = serializers.BooleanField(allow_null=True)
     payment_accepts_brbs = serializers.BooleanField(allow_null=True)
     payment_accepts_cash = serializers.BooleanField(allow_null=True)
-    events = EventReadSerializer(many=True, read_only=True)
+
+    events = EventSerializerOptimized(many=True, read_only=True)
 
     class Meta:
         model = Eatery
@@ -69,7 +70,7 @@ class EaterySerializerByDay(serializers.ModelSerializer):
         today = (timezone.now() - timedelta(hours=5)).date() + timedelta(days=day)
         today_unix = mktime(today.timetuple()) + timedelta(hours=5).seconds
         events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, start__lte=today_unix + timedelta(days=1).total_seconds())
-        serializer = EventReadSerializer(instance=events, many=True)
+        serializer = EventSerializerOptimized(instance=events, many=True)
         return serializer.data
 
     class Meta:

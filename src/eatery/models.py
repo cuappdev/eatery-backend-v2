@@ -12,7 +12,7 @@ class Eatery(models.Model):
 
     name = models.CharField(max_length=40)
     menu_summary = models.TextField(blank=True, null=True, default="")
-    image_url = models.URLField(blank=True)
+    image_url = models.URLField(blank=True, default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg")
     location = models.TextField(blank=True)
     campus_area = models.CharField(
         max_length=15, choices=CampusArea.choices, default=CampusArea.NONE, blank=True
