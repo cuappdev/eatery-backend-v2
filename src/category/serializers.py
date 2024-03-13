@@ -21,4 +21,4 @@ class CategorySerializerOptimized(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ["category", "items"]
+        fields = ["id", "category", "items"]

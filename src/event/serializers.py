@@ -5,9 +5,7 @@ from datetime import datetime
 
 class EventSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False, read_only=True)
-    event_description = serializers.CharField(
-        allow_null=True, allow_blank=True, default=None
-    )
+    event_description = serializers.CharField(allow_null=True, allow_blank=True, default=None)
     start = serializers.IntegerField()
     end = serializers.IntegerField()
     menu = CategorySerializer(many=True, read_only=True)
@@ -21,10 +19,6 @@ class EventSerializer(serializers.ModelSerializer):
         fields = ["id", "eatery", "event_description", "start", "end", "menu"]
 
 class EventSerializerOptimized(serializers.ModelSerializer):
-    id = serializers.IntegerField(required=False, read_only=True)
-    event_description = serializers.CharField(allow_null=True, allow_blank=True, default=None)
-    start = serializers.IntegerField()
-    end = serializers.IntegerField()
     menu = CategorySerializerOptimized(many=True, read_only=True)
 
     class Meta:
