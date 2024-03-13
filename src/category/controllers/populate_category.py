@@ -24,7 +24,7 @@ class PopulateCategoryController:
          "Halal", "Kosher Station", "Flat Top Grill"]
         
         def sort_menu(menu):
-            return category_order.index(menu["category"].strip()) if menu["category"].strip() in category_order else 1000
+            return category_order.index(menu["category"].strip()) if menu["category"].strip() in category_order else len(category_order)
 
         for json_menu in sorted(json_event["menu"], key=sort_menu):
             data = {"event": event, "category": json_menu["category"]}
