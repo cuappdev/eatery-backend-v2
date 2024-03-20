@@ -1,6 +1,6 @@
 # Security
 .env
-eatery-dev.pem
+*.pem
 .envrc
 .envlocal
 .envremote
