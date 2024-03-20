@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework.authtoken",
-    
     # Apps
     "eatery_blue_backend",
     "eatery",
@@ -48,8 +47,6 @@ INSTALLED_APPS = [
     "report",
     "item",
     "category",
-    "person",
-    
     # Third party
     "rest_framework",
 ]
