@@ -2,9 +2,8 @@ from rest_framework import serializers
 from eatery.models import Eatery
 from event.models import Event
 from event.serializers import EventSerializer, EventSerializerSimple, EventReadSerializer
-from django.utils import timezone
-from datetime import date, timedelta
-from time import mktime
+from datetime import timedelta, datetime
+from zoneinfo import ZoneInfo
 
 class EaterySerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -65,10 +64,12 @@ class EaterySerializerByDay(serializers.ModelSerializer):
     events = serializers.SerializerMethodField()
 
     def get_events(self, obj):
-        day = self.context.get("day")
-        today = (timezone.now() - timedelta(hours=5)).date() + timedelta(days=day)
-        today_unix = mktime(today.timetuple()) + timedelta(hours=5).seconds
-        events = Event.objects.filter(eatery=obj.id, start__gte=today_unix, start__lte=today_unix + timedelta(days=1).total_seconds())
+        day_offset = self.context.get("day")
+        now = datetime.now(ZoneInfo("America/New_York"))
+        day = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=day_offset)
+        day_unix = int(day.timestamp())
+        day_end_unix = int((day + timedelta(days=1)).timestamp())
+        events = Event.objects.filter(eatery=obj.id, start__gte=day_unix, start__lt=day_end_unix)
         serializer = EventReadSerializer(instance=events, many=True)
         return serializer.data
 
