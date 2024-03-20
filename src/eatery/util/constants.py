@@ -7,6 +7,8 @@ CORNELL_VENDOR_URL = "https://vendor-api-extra.scl.cornell.edu/api/external/loca
 
 DAY_OF_WEEK_LIST = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
+DEFAULT_IMAGE_URL = "https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg"
+
 class SnapshotFileName(Enum):
     EATERY_STORE = "eatery_store.txt"
     ALERT_STORE = "alert_store.txt"

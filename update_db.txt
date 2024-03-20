@@ -1,1 +1,0 @@
-0 11-23 * * * cd /usr/app; /usr/local/bin/python /usr/app/manage.py populate_models > /usr/app/cron_log.txt 2>&1;
