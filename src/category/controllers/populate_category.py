@@ -18,7 +18,18 @@ class PopulateCategoryController:
         category_items = {"category_name" : id, ... }
         """
         category_items = {}
-        for json_menu in json_event["menu"]:
+
+        category_order = ["Chef's Table", "Chef's Table - Sides", "Grill", "Wok", 
+         "Wok/Asian Station", "Iron Grill", "Mexican Station", "Global",
+         "Halal", "Kosher Station", "Flat Top Grill"]
+        
+        def sort_menu(menu):
+            try:
+                return category_order.index(menu["category"].strip())
+            except ValueError:
+                return len(category_order)
+
+        for json_menu in sorted(json_event["menu"], key=sort_menu):
             data = {"event": event, "category": json_menu["category"]}
             category = CategorySerializer(data=data)
 
