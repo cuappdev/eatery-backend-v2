@@ -1,3 +1,0 @@
-{"id": 1, "name": "Mac's Weekday Morning Lunch Menu", "eatery": 33}
-{"id": 2, "name": "Mac's Weekday Afternoon Menu", "eatery": 33}
-{"id": 3, "name": "Mac's Saturday Menu", "eatery": 33}

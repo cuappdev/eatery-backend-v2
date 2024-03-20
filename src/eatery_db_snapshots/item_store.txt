@@ -1,8 +1,0 @@
-{"id": 1, "name": "Enchilada", "description": "A tortilla-wrapped enchilada with your choice of toppings", "base_price": 6.35, "eatery": 33}
-{"id": 2, "name": "Veggie Goddess", "description": "Spinach, cucumber, cornflakes, carrots", "base_price": 5.0, "eatery": 33}
-{"id": 3, "name": "Cookie", "description": "", "base_price": 1.8, "eatery": 33}
-{"id": 4, "name": "Brownie", "description": "", "base_price": 1.8, "eatery": 33}
-{"id": 5, "name": "Candy Bar", "description": "", "base_price": 1.8, "eatery": 33}
-{"id": 6, "name": "Vegan Cookie", "description": "", "base_price": 3.65, "eatery": 33}
-{"id": 7, "name": "Hawaiian Sunrise", "description": "Orange, mango, strawberries, coconut", "base_price": 5.0, "eatery": 33}
-{"id": 8, "name": "Frightful Frenzy", "description": "Chocolate, oreo, peanut butter, marshmellow", "base_price": 5.0, "eatery": 33}

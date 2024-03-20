@@ -1,7 +1,0 @@
-{"id": 1, "category": "Smoothies", "menu": 1}
-{"id": 2, "category": "Enchiladas", "menu": 1}
-{"id": 3, "category": "Smoothies", "menu": 2}
-{"id": 4, "category": "Enchiladas", "menu": 2}
-{"id": 5, "category": "Desserts", "menu": 2}
-{"id": 6, "category": "Smoothies", "menu": 3}
-{"id": 7, "category": "Desserts", "menu": 3}
