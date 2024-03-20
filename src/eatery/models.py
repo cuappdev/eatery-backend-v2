@@ -1,6 +1,6 @@
 from django.db import models
 from django.db import connection
-
+from util.constants import DEFAULT_IMAGE_URL
 
 class Eatery(models.Model):
     class CampusArea(models.TextChoices):
@@ -12,7 +12,7 @@ class Eatery(models.Model):
 
     name = models.CharField(max_length=40)
     menu_summary = models.TextField(blank=True, null=True, default="")
-    image_url = models.URLField(blank=True, default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg")
+    image_url = models.URLField(blank=True, default=DEFAULT_IMAGE_URL)
     location = models.TextField(blank=True)
     campus_area = models.CharField(
         max_length=15, choices=CampusArea.choices, default=CampusArea.NONE, blank=True
