@@ -1,6 +1,6 @@
 from django.db import models
 from django.db import connection
-from util.constants import DEFAULT_IMAGE_URL
+from eatery.util.constants import DEFAULT_IMAGE_URL
 
 class Eatery(models.Model):
     class CampusArea(models.TextChoices):
