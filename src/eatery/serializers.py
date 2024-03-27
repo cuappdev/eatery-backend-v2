@@ -57,6 +57,11 @@ class EaterySerializerByDay(serializers.ModelSerializer):
         day = now.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=day_offset)
         day_unix = int(day.timestamp())
         day_end_unix = int((day + timedelta(days=1)).timestamp())
+        print(f"Now: {now}")
+        print(f"Day: {day}")
+        print(f"Day Unix: {day_unix}")
+        print(f"Day End Unix: {day_end_unix}")
+        print()
         events = Event.objects.filter(eatery=obj.id, start__gte=day_unix, start__lt=day_end_unix)
         serializer = EventSerializerOptimized(instance=events, many=True)
         return serializer.data
@@ -64,4 +69,3 @@ class EaterySerializerByDay(serializers.ModelSerializer):
     class Meta:
         model = Eatery
         fields = ['id', 'name', 'menu_summary', 'image_url', 'location', 'campus_area', 'online_order_url', 'latitude', 'longitude', 'payment_accepts_meal_swipes', 'payment_accepts_brbs', 'payment_accepts_cash', 'events']
-
