@@ -72,7 +72,7 @@ class PopulateEventController():
                 print(event.errors)
                 return event.errors
             
-            events.append(event.data["id"]) 
+            events.append(event.data["id"])
         return events
 
     def process(self, json_eateries):

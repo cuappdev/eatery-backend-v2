@@ -3,6 +3,7 @@ from item.serializers import ItemSerializer
 from eatery.models import Eatery
 from eatery.serializers import EaterySerializer
 import string
+import json
 
 class PopulateItemController():
     def __init__(self):
@@ -45,6 +46,10 @@ class PopulateItemController():
                     print(item.errors) 
 
     def process(self, categories_dict, json_eateries):
+        with open("./static_sources/external_eateries.json", "r") as file:
+            json_obj = json.load(file)
+            json_eateries += json_obj["eateries"]
+
         for json_eatery in json_eateries:
             if int(json_eatery["id"]) in categories_dict:
                 eatery_menus = categories_dict[int(json_eatery["id"])]
@@ -54,9 +59,7 @@ class PopulateItemController():
             iter = list(eatery_menus.keys())
             i = 0
 
-            is_cafe = "Cafe" in {
-                eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
-            }
+            is_cafe = not "Dining Room" in {eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]}
 
             json_dates = json_eatery["operatingHours"]
             for json_date in json_dates: 
