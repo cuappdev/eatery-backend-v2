@@ -4,7 +4,7 @@
 .envrc
 .envlocal
 .envremote
-secrets/*
+secrets/eatery-blue-f810e-firebase-adminsdk-ds3co-7902015462.json
 
 # Hardcoded stuff
 db_snapshots/
