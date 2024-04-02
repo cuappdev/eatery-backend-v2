@@ -1,10 +1,11 @@
 from django.db import models
 
 
-# Create your models here.
 class User(models.Model):
+    userId = models.AutoField(primary_key=True)
+    token = models.CharField(max_length=40)
+    refresh_token = models.CharField(max_length=40)
     netid = models.CharField(max_length=40, default="User")
-    token = models.CharField(max_length=40, default="User")
     name = models.CharField(max_length=40, default="User")
     favorite_items = models.ManyToManyField(
         "item.Item", related_name="favorited_by", blank=True
