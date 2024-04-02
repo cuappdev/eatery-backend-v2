@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "report",
     "item",
     "category",
+    "user",
     # Third party
     "rest_framework",
 ]

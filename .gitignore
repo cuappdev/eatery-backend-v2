@@ -4,6 +4,7 @@
 .envrc
 .envlocal
 .envremote
+secrets/*
 
 # Hardcoded stuff
 db_snapshots/
