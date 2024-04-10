@@ -51,8 +51,8 @@ class PopulateItemController():
             json_eateries += json_obj["eateries"]
 
         for json_eatery in json_eateries:
-            if int(json_eatery["id"]) in categories_dict:
-                eatery_menus = categories_dict[int(json_eatery["id"])]
+            if (eatery_id := int(json_eatery["id"])) in categories_dict:
+                eatery_menus = categories_dict[eatery_id]
             else:
                 continue
 
