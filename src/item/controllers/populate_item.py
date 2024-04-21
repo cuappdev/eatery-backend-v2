@@ -4,6 +4,7 @@ from eatery.models import Eatery
 from eatery.serializers import EaterySerializer
 import string
 import json
+from util.constants import eatery_is_cafe
 
 class PopulateItemController():
     def __init__(self):
@@ -13,6 +14,7 @@ class PopulateItemController():
 
         for json_item in json_eatery["diningItems"]: 
 
+            print(json_item)
             category_name = json_item['category'].strip()
             category_id = menu[category_name]
 
@@ -46,9 +48,9 @@ class PopulateItemController():
                     print(item.errors) 
 
     def process(self, categories_dict, json_eateries):
-        with open("./static_sources/external_eateries.json", "r") as file:
-            json_obj = json.load(file)
-            json_eateries += json_obj["eateries"]
+        with open("./static_sources/external_eateries.json", "r") as external_eateries_file:
+            external_eateries_json = json.load(external_eateries_file)
+            json_eateries.extend(external_eateries_json["eateries"])
 
         for json_eatery in json_eateries:
             if (eatery_id := int(json_eatery["id"])) in categories_dict:
@@ -59,7 +61,7 @@ class PopulateItemController():
             iter = list(eatery_menus.keys())
             i = 0
 
-            is_cafe = not "Dining Room" in {eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]}
+            is_cafe = eatery_is_cafe(json_eatery)
 
             json_dates = json_eatery["operatingHours"]
             for json_date in json_dates: 
