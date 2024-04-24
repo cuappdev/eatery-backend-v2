@@ -13,10 +13,11 @@ class PopulateItemController():
     def generate_cafe_items(self, menu, json_eatery):
 
         for json_item in json_eatery["diningItems"]: 
-
-            print(json_item)
             category_name = json_item['category'].strip()
-            category_id = menu[category_name]
+            try:
+                category_id = menu[category_name]
+            except KeyError:
+                continue
 
             data = {
                 "category" : category_id,
