@@ -1,6 +1,8 @@
 from category.models import Category
 from category.serializers import CategorySerializer
 from item.models import Item
+import json
+from util.constants import eatery_is_cafe
 
 """
 Add categories to Category Model from CornellDiningNow. 
@@ -77,6 +79,10 @@ class PopulateCategoryController:
 
         categories_dict = {}
 
+        with open("./static_sources/external_eateries.json", "r") as external_eateries_file:
+            external_eateries_json = json.load(external_eateries_file)
+            json_eateries.extend(external_eateries_json["eateries"])
+
         for json_eatery in json_eateries:
             eatery_id = int(json_eatery["id"])
             categories_dict[eatery_id] = {}
@@ -87,9 +93,7 @@ class PopulateCategoryController:
             else:
                 continue
 
-            is_cafe = "Cafe" in {
-                eatery_type["descr"] for eatery_type in json_eatery["eateryTypes"]
-            }
+            is_cafe = eatery_is_cafe(json_eatery)
             
             """
             For every event in an eatery --> for every menu in an eatery --> get categories
