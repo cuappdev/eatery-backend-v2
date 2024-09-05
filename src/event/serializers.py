@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from event.models import Event
 from category.serializers import CategorySerializer, CategorySerializerOptimized
-from datetime import datetime
 
 
 class EventSerializer(serializers.ModelSerializer):

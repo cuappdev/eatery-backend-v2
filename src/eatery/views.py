@@ -82,7 +82,7 @@ class EateryViewSet(viewsets.ModelViewSet):
         id = int(text_params.get("id"))
         try:
             image_param = request.FILES.get("image")
-        except:
+        except Exception:
             image_param = None
 
         try:

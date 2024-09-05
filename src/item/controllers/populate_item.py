@@ -1,8 +1,4 @@
-from item.models import Item
 from item.serializers import ItemSerializer
-from eatery.models import Eatery
-from eatery.serializers import EaterySerializer
-import string
 import json
 from util.constants import eatery_is_cafe
 

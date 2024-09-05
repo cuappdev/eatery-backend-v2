@@ -1,6 +1,4 @@
-from category.models import Category
 from category.serializers import CategorySerializer
-from item.models import Item
 import json
 from util.constants import eatery_is_cafe
 
