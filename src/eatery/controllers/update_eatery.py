@@ -64,7 +64,7 @@ class UpdateEateryController:
 
         try:
             return response.json()["data"]
-        except:
+        except Exception:
             raise Exception("Image uploading unsuccessful")
 
     """

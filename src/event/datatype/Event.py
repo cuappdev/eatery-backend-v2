@@ -4,7 +4,7 @@ from typing import Optional
 import pytz
 from datatype.Menu import Menu
 
-# from api.util.time import combined_timestamp
+from api.util.time import combined_timestamp
 
 
 class Event:

@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import connection
 from eatery.util.constants import DEFAULT_IMAGE_URL
 
 
