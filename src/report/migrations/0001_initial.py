@@ -9,17 +9,33 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('eatery', '0001_initial'),
+        ("eatery", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Report',
+            name="Report",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content', models.TextField()),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('eatery', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='eatery.eatery')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("content", models.TextField()),
+                ("created", models.DateTimeField(auto_now_add=True)),
+                (
+                    "eatery",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="eatery.eatery",
+                    ),
+                ),
             ],
         ),
     ]
