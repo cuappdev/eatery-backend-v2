@@ -72,6 +72,7 @@ class UpdateEateryController:
     >> left merge Eatery and CornellDiningNow
     >> left merge Events and CornellDiningNow
     """
+
     def compare(self):
         pass
 

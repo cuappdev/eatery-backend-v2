@@ -3,11 +3,22 @@ from enum import Enum
 from eatery.datatype.Eatery import EateryID
 
 CORNELL_DINING_URL = "https://now.dining.cornell.edu/api/1.0/dining/eateries.json"
-CORNELL_VENDOR_URL = "https://vendor-api-extra.scl.cornell.edu/api/external/location-count"
+CORNELL_VENDOR_URL = (
+    "https://vendor-api-extra.scl.cornell.edu/api/external/location-count"
+)
 
-DAY_OF_WEEK_LIST = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+DAY_OF_WEEK_LIST = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+]
 
 DEFAULT_IMAGE_URL = "https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg"
+
 
 class SnapshotFileName(Enum):
     EATERY_STORE = "eatery_store.txt"

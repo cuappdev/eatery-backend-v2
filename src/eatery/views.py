@@ -1,4 +1,9 @@
-from eatery.serializers import EaterySerializer, EaterySerializerSimple, EaterySerializerByDay, EaterySerializerOptimized
+from eatery.serializers import (
+    EaterySerializer,
+    EaterySerializerSimple,
+    EaterySerializerByDay,
+    EaterySerializerOptimized,
+)
 from eatery.util.json import FieldType, error_json, success_json, verify_json_fields
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -12,10 +17,12 @@ from eatery.datatype.Eatery import EateryID
 from eatery.models import Eatery
 from .controllers.update_eatery import UpdateEateryController
 
+
 class EateryViewSet(viewsets.ModelViewSet):
     """
     View and edit eateries (all, or specific)
     """
+
     queryset = Eatery.objects.all()
     serializer_class = EaterySerializer
     permission_classes = [EateryPermission]
@@ -25,7 +32,7 @@ class EateryViewSet(viewsets.ModelViewSet):
         serializer = EaterySerializerOptimized(instance)
         return Response(serializer.data)
 
-    @method_decorator(cache_page(60*60*2)) # cache for 2 hours
+    @method_decorator(cache_page(60 * 60 * 2))  # cache for 2 hours
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = EaterySerializerOptimized(queryset, many=True)
@@ -36,10 +43,10 @@ class EateryViewSet(viewsets.ModelViewSet):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
 
         assert lookup_url_kwarg in self.kwargs, (
-            'Expected view %s to be called with a URL keyword argument '
+            "Expected view %s to be called with a URL keyword argument "
             'named "%s". Fix your URL conf, or set the `.lookup_field` '
-            'attribute on the view correctly.' %
-            (self.__class__.__name__, lookup_url_kwarg)
+            "attribute on the view correctly."
+            % (self.__class__.__name__, lookup_url_kwarg)
         )
         # Uses the lookup_field attribute, which defaults to `pk`
         filter_kwargs = {self.lookup_field: self.kwargs[lookup_url_kwarg]}
@@ -84,19 +91,27 @@ class EateryViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return JsonResponse(error_json(str(e)))
 
+
 class GetEateriesSimple(APIView):
     """
     View all eateries with less information
     """
+
     def get(self, request):
         eateries = EaterySerializerSimple(Eatery.objects.all(), many=True)
         return Response(eateries.data)
-    
+
+
 class GetEateriesByDay(APIView):
     """
     Get all eatery information by day
     """
-    @method_decorator(cache_page(60*60*2)) # cache for 2 hours
+
+    @method_decorator(cache_page(60 * 60 * 2))  # cache for 2 hours
     def get(self, request, day):
-        eateries = EaterySerializerByDay(Eatery.objects.exclude(events__event_description="Open"), many=True, context={"day": day})
+        eateries = EaterySerializerByDay(
+            Eatery.objects.exclude(events__event_description="Open"),
+            many=True,
+            context={"day": day},
+        )
         return Response(eateries.data)

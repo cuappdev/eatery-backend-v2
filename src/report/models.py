@@ -7,8 +7,6 @@ class Report(models.Model):
     netid = models.CharField(max_length=10, null=True, blank=True)
     content = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    
+
     def __str__(self):
-        return f'{self.content} - {self.created}'
-        
-        
+        return f"{self.content} - {self.created}"
