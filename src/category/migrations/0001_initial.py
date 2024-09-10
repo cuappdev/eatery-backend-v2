@@ -9,16 +9,23 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('event', '0001_initial'),
+        ("event", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Category',
+            name="Category",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('category', models.CharField(default='General', max_length=40)),
-                ('event', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='menu', to='event.event')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("category", models.CharField(default="General", max_length=40)),
+                (
+                    "event",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="menu",
+                        to="event.event",
+                    ),
+                ),
             ],
         ),
     ]

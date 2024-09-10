@@ -1,6 +1,4 @@
-from category.models import Category
 from category.serializers import CategorySerializer
-from item.models import Item
 import json
 from util.constants import eatery_is_cafe
 
@@ -21,10 +19,20 @@ class PopulateCategoryController:
         """
         category_items = {}
 
-        category_order = ["Chef's Table", "Chef's Table - Sides", "Grill", "Wok", 
-         "Wok/Asian Station", "Iron Grill", "Mexican Station", "Global",
-         "Halal", "Kosher Station", "Flat Top Grill"]
-        
+        category_order = [
+            "Chef's Table",
+            "Chef's Table - Sides",
+            "Grill",
+            "Wok",
+            "Wok/Asian Station",
+            "Iron Grill",
+            "Mexican Station",
+            "Global",
+            "Halal",
+            "Kosher Station",
+            "Flat Top Grill",
+        ]
+
         def sort_menu(menu):
             try:
                 return category_order.index(menu["category"].strip())
@@ -79,7 +87,9 @@ class PopulateCategoryController:
 
         categories_dict = {}
 
-        with open("./static_sources/external_eateries.json", "r") as external_eateries_file:
+        with open(
+            "./static_sources/external_eateries.json", "r"
+        ) as external_eateries_file:
             external_eateries_json = json.load(external_eateries_file)
             json_eateries.extend(external_eateries_json["eateries"])
 
@@ -94,7 +104,7 @@ class PopulateCategoryController:
                 continue
 
             is_cafe = eatery_is_cafe(json_eatery)
-            
+
             """
             For every event in an eatery --> for every menu in an eatery --> get categories
             """

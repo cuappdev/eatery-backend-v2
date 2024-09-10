@@ -4,6 +4,7 @@ from eatery.serializers import EaterySerializer
 from eatery.models import Eatery
 from django.core.exceptions import ObjectDoesNotExist
 
+
 class PopulateEateryController:
     def __init__(self):
         self = self
@@ -66,7 +67,7 @@ class PopulateEateryController:
             for line in file:
                 if len(line) > 2:
                     json_objs.append(json.loads(line))
-            
+
             for json_obj in json_objs:
                 try:
                     object = Eatery.objects.get(id=int(json_obj["id"]))

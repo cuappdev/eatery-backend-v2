@@ -64,7 +64,7 @@ class UpdateEateryController:
 
         try:
             return response.json()["data"]
-        except:
+        except Exception:
             raise Exception("Image uploading unsuccessful")
 
     """
@@ -72,6 +72,7 @@ class UpdateEateryController:
     >> left merge Eatery and CornellDiningNow
     >> left merge Events and CornellDiningNow
     """
+
     def compare(self):
         pass
 
