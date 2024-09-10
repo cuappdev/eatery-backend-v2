@@ -16,6 +16,7 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ["id", "category", "event", "items"]
 
+
 class CategorySerializerOptimized(serializers.ModelSerializer):
     items = ItemSerializerOptimized(many=True, read_only=True)
 

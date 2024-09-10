@@ -1,14 +1,15 @@
 from rest_framework import serializers
 
 from person.models import Student, Chef
-from django.contrib.auth.models import User
+
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['id', 'net_id', 'user', 'favorite_eateries', 'favorite_items']
+        fields = ["id", "net_id", "user", "favorite_eateries", "favorite_items"]
+
 
 class ChefSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chef
-        fields = ['id', 'user', 'eateries_managed']
+        fields = ["id", "user", "eateries_managed"]

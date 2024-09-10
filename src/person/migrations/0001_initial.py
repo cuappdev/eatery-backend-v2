@@ -9,28 +9,67 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('item', '0001_initial'),
-        ('eatery', '0001_initial'),
-        ('auth', '0012_alter_user_first_name_max_length'),
+        ("item", "0001_initial"),
+        ("eatery", "0001_initial"),
+        ("auth", "0012_alter_user_first_name_max_length"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Student',
+            name="Student",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('net_id', models.TextField()),
-                ('favorite_eateries', models.ManyToManyField(related_name='student', to='eatery.Eatery')),
-                ('favorite_items', models.ManyToManyField(related_name='student', to='item.Item')),
-                ('user', models.OneToOneField(default=None, on_delete=django.db.models.deletion.CASCADE, to='auth.user')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("net_id", models.TextField()),
+                (
+                    "favorite_eateries",
+                    models.ManyToManyField(related_name="student", to="eatery.Eatery"),
+                ),
+                (
+                    "favorite_items",
+                    models.ManyToManyField(related_name="student", to="item.Item"),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="auth.user",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Chef',
+            name="Chef",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('eateries_managed', models.ManyToManyField(related_name='chef', to='eatery.Eatery')),
-                ('user', models.OneToOneField(default=None, on_delete=django.db.models.deletion.CASCADE, to='auth.user')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "eateries_managed",
+                    models.ManyToManyField(related_name="chef", to="eatery.Eatery"),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        default=None,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="auth.user",
+                    ),
+                ),
             ],
         ),
     ]

@@ -115,10 +115,7 @@ class CornellDiningEvents(DfgNode):
 
     @staticmethod
     def from_cornell_dining_json(json_item: dict):
-        return MenuItem(
-            healthy=json_item["healthy"],
-            name=json_item["item"]
-        )
+        return MenuItem(healthy=json_item["healthy"], name=json_item["item"])
 
     def description(self):
         return "CornellDiningEvents"
