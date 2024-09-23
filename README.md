@@ -1,12 +1,12 @@
 # eatery-blue-backend
 
-This is the backend for eatery-blue-backend.
+This is the backend for Eatery Blue.
 
 # Postgres Setup
 
 ---
 
-- Install PostgresSQL here at https://www.postgresql.org/download/
+- Install PostgreSQL here at https://www.postgresql.org/download/
 - Login to postgres via command line by entering `psql postgres`
 - Create the eatery database via `create database "eatery-dev";`
 - Quit psql via `\q`
