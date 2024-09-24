@@ -4,7 +4,6 @@ from api.datatype.MenuItemSection import MenuItemSection
 
 
 class MenuItem:
-
     def __init__(
         self,
         name: str,

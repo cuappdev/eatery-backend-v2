@@ -2,7 +2,6 @@ from api.datatype.MenuItem import MenuItem
 
 
 class MenuCategory:
-
     def __init__(self, category: str, items: list[MenuItem]):
         self.category = category
         self.items = items

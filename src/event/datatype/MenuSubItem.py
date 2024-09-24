@@ -2,7 +2,6 @@ from typing import Optional
 
 
 class MenuSubItem:
-
     def __init__(
         self, name: str, total_price: Optional[float], additional_price: Optional[float]
     ):

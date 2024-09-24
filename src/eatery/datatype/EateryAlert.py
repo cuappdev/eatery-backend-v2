@@ -1,5 +1,4 @@
 class EateryAlert:
-
     def __init__(
         self, id: int, description: str, start_timestamp: int, end_timestamp: int
     ):

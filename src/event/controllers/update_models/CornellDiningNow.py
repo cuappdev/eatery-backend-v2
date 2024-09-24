@@ -7,7 +7,7 @@ from eatery.datatype.Eatery import Eatery
 class CornellDiningNow(DfgNode):
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         try:
-            response = requests.get(CORNELL_DINING_URL).json()
+            response = requests.get(CORNELL_DINING_URL, timeout=10).json()
 
         except Exception as e:
             raise e

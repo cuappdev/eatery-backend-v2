@@ -22,7 +22,7 @@ class Command(BaseCommand):
 
     def get_json(self):
         try:
-            response = requests.get(CORNELL_DINING_URL)
+            response = requests.get(CORNELL_DINING_URL, timeout=10)
         except Exception as e:
             raise e
         if response.status_code <= 400:

@@ -60,6 +60,7 @@ class UpdateEateryController:
                 "bucket": os.environ["IMAGE_BUCKET"],
                 "image": f"data:image/{extension};base64,{b64_encoded_image}",
             },
+            timeout=10,
         )
 
         try:
