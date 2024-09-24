@@ -8,7 +8,6 @@ class PopulateItemController:
         self = self
 
     def generate_cafe_items(self, menu, json_eatery):
-
         for json_item in json_eatery["diningItems"]:
             category_name = json_item["category"].strip()
             try:
@@ -26,7 +25,6 @@ class PopulateItemController:
     def generate_dining_hall_items(self, menu, json_event, json_eatery):
         json_menus = json_event["menu"]
         for json_menu in json_menus:
-
             category_name = json_menu["category"].strip()
             category_id = menu[category_name]
 
