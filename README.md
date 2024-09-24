@@ -17,6 +17,10 @@ This is the backend for Eatery Blue.
 - To set up the tables and data (or if reseting the database), make sure current working directory is the `src` folder and run `python3 manage.py makemigrations; python3 manage.py migrate; python3 manage.py populate_models`
 - To run the backend, run `python3 manage.py runserver 0.0.0.0:8000` (Ensuring the env variables are loaded and all dependencies are installed)
 
+# Documentation
+
+- Full Swagger Docs API Specs can be found at /docs when running the server
+
 ## SP24 Members
 
 - Thomas Vignos
