@@ -10,4 +10,4 @@ class Item(models.Model):
     base_price = models.FloatField(null=True, blank=True, default=0.0)
 
     def __str__(self):
-        return f"{self.name} ({self.category.name})"
+        return f"{self.name} ({self.category.id})"
