@@ -8,5 +8,5 @@ urlpatterns = [
     path("item/", include("item.urls")),
     path("category/", include("category.urls")),
     path("report/", include("report.urls")),
-    path("users/", include("user.urls")),
+    path("user/", include("user.urls")),
 ]
