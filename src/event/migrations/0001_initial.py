@@ -5,22 +5,44 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('eatery', '0001_initial'),
+        ("eatery", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Event',
+            name="Event",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('event_description', models.TextField(blank=True, choices=[('Breakfast', 'Breakfast'), ('Brunch', 'Brunch'), ('Lunch', 'Lunch'), ('Dinner', 'Dinner'), ('General', 'General'), ('Cafe', 'Cafe'), ('Pants', 'Pants')], default='General', null=True)),
-                ('start', models.IntegerField(default=0)),
-                ('end', models.IntegerField(default=0)),
-                ('eatery', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='events', to='eatery.eatery')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "event_description",
+                    models.TextField(
+                        blank=True,
+                        choices=[
+                            ("Breakfast", "Breakfast"),
+                            ("Brunch", "Brunch"),
+                            ("Lunch", "Lunch"),
+                            ("Dinner", "Dinner"),
+                            ("General", "General"),
+                            ("Cafe", "Cafe"),
+                            ("Pants", "Pants"),
+                        ],
+                        default="General",
+                        null=True,
+                    ),
+                ),
+                ("start", models.IntegerField(default=0)),
+                ("end", models.IntegerField(default=0)),
+                (
+                    "eatery",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        related_name="events",
+                        to="eatery.eatery",
+                    ),
+                ),
             ],
         ),
     ]

@@ -23,7 +23,7 @@ def verify_json_fields(
             if not isinstance(json[field], str):
                 return False
         elif field_type_map[field] is FieldType.EATERYID:
-            if not isinstance(json[field], int) or EateryID(json[field]) == None:
+            if not isinstance(json[field], int) or EateryID(json[field]) is None:
                 return False
 
     for field in json:

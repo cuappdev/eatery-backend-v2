@@ -1,0 +1,25 @@
+repos:
+  # Updates all subsequent hooks
+  - repo: https://gitlab.com/vojko.pribudic.foss/pre-commit-update
+    rev: v0.5.1
+    hooks:
+      - id: pre-commit-update
+
+    # Linter hook
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.7
+    hooks:
+      - id: ruff
+        args: [--fix]
+
+    # Formatter hook
+  - repo: https://github.com/psf/black-pre-commit-mirror
+    rev: 24.8.0
+    hooks:
+      - id: black
+
+    # Static code analysis hook
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.10
+    hooks:
+      - id: bandit

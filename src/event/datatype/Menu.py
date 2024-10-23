@@ -1,7 +1,7 @@
 from datatype.MenuCategory import MenuCategory
 
-class Menu:
 
+class Menu:
     def __init__(self, categories: list[MenuCategory]):
         self.categories = categories
 

@@ -4,15 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('event', '0003_alter_event_event_description'),
+        ("event", "0003_alter_event_event_description"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='event',
-            name='event_description',
-            field=models.TextField(blank=True, choices=[('Breakfast', 'Breakfast'), ('Brunch', 'Brunch'), ('Lunch', 'Lunch'), ('Dinner', 'Dinner'), ('General', 'General'), ('Cafe', 'Cafe'), ('Pants', 'Pants')], default='General', null=True),
+            model_name="event",
+            name="event_description",
+            field=models.TextField(
+                blank=True,
+                choices=[
+                    ("Breakfast", "Breakfast"),
+                    ("Brunch", "Brunch"),
+                    ("Lunch", "Lunch"),
+                    ("Dinner", "Dinner"),
+                    ("General", "General"),
+                    ("Cafe", "Cafe"),
+                    ("Pants", "Pants"),
+                ],
+                default="General",
+                null=True,
+            ),
         ),
     ]

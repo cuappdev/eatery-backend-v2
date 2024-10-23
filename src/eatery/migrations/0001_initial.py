@@ -4,28 +4,43 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Eatery',
+            name="Eatery",
             fields=[
-                ('id', models.IntegerField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=40)),
-                ('menu_summary', models.TextField(blank=True, default='', null=True)),
-                ('image_url', models.URLField(blank=True)),
-                ('location', models.TextField(blank=True)),
-                ('campus_area', models.CharField(blank=True, choices=[('West', 'West'), ('North', 'North'), ('Central', 'Central'), ('Collegetown', 'Collegetown'), ('', 'None')], default='', max_length=15)),
-                ('online_order_url', models.URLField(blank=True, null=True)),
-                ('latitude', models.FloatField(blank=True, null=True)),
-                ('longitude', models.FloatField(blank=True, null=True)),
-                ('payment_accepts_meal_swipes', models.BooleanField(blank=True, null=True)),
-                ('payment_accepts_brbs', models.BooleanField(blank=True, null=True)),
-                ('payment_accepts_cash', models.BooleanField(blank=True, null=True)),
+                ("id", models.IntegerField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=40)),
+                ("menu_summary", models.TextField(blank=True, default="", null=True)),
+                ("image_url", models.URLField(blank=True)),
+                ("location", models.TextField(blank=True)),
+                (
+                    "campus_area",
+                    models.CharField(
+                        blank=True,
+                        choices=[
+                            ("West", "West"),
+                            ("North", "North"),
+                            ("Central", "Central"),
+                            ("Collegetown", "Collegetown"),
+                            ("", "None"),
+                        ],
+                        default="",
+                        max_length=15,
+                    ),
+                ),
+                ("online_order_url", models.URLField(blank=True, null=True)),
+                ("latitude", models.FloatField(blank=True, null=True)),
+                ("longitude", models.FloatField(blank=True, null=True)),
+                (
+                    "payment_accepts_meal_swipes",
+                    models.BooleanField(blank=True, null=True),
+                ),
+                ("payment_accepts_brbs", models.BooleanField(blank=True, null=True)),
+                ("payment_accepts_cash", models.BooleanField(blank=True, null=True)),
             ],
         ),
     ]

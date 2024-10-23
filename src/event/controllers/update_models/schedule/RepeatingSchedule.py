@@ -14,9 +14,9 @@ class RepeatingSchedule(DfgNode):
 
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         if "day_of_week_schedules" not in self.cache:
-            self.cache[
-                "day_of_week_schedules"
-            ] = RepeatingEventSchedule.objects.all().values()
+            self.cache["day_of_week_schedules"] = (
+                RepeatingEventSchedule.objects.all().values()
+            )
         repeating_schedules = [
             sched
             for sched in self.cache["day_of_week_schedules"]
