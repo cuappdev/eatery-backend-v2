@@ -1,12 +1,12 @@
 # eatery-blue-backend
 
-This is the backend for eatery-blue-backend.
+This is the backend for Eatery Blue.
 
 # Postgres Setup
 
 ---
 
-- Install PostgresSQL here at https://www.postgresql.org/download/
+- Install PostgreSQL here at https://www.postgresql.org/download/
 - Login to postgres via command line by entering `psql postgres`
 - Create the eatery database via `create database "eatery-dev";`
 - Quit psql via `\q`
@@ -16,6 +16,10 @@ This is the backend for eatery-blue-backend.
 - Load the environment variables by running `source .envrc`
 - To set up the tables and data (or if reseting the database), make sure current working directory is the `src` folder and run `python3 manage.py makemigrations; python3 manage.py migrate; python3 manage.py populate_models`
 - To run the backend, run `python3 manage.py runserver 0.0.0.0:8000` (Ensuring the env variables are loaded and all dependencies are installed)
+
+# Documentation
+
+- Full Swagger Docs API Specs can be found at /docs when running the server
 
 ## SP24 Members
 

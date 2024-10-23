@@ -60,11 +60,12 @@ class UpdateEateryController:
                 "bucket": os.environ["IMAGE_BUCKET"],
                 "image": f"data:image/{extension};base64,{b64_encoded_image}",
             },
+            timeout=10,
         )
 
         try:
             return response.json()["data"]
-        except:
+        except Exception:
             raise Exception("Image uploading unsuccessful")
 
     """
@@ -72,6 +73,7 @@ class UpdateEateryController:
     >> left merge Eatery and CornellDiningNow
     >> left merge Events and CornellDiningNow
     """
+
     def compare(self):
         pass
 

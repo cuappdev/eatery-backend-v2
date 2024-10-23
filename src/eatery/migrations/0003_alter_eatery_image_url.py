@@ -4,15 +4,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('eatery', '0002_alter_eatery_id'),
+        ("eatery", "0002_alter_eatery_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='eatery',
-            name='image_url',
-            field=models.URLField(blank=True, default='https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg'),
+            model_name="eatery",
+            name="image_url",
+            field=models.URLField(
+                blank=True,
+                default="https://images-prod.healthline.com/hlcmsresource/images/AN_images/health-benefits-of-apples-1296x728-feature.jpg",
+            ),
         ),
     ]

@@ -18,7 +18,7 @@ class CornellDiningEvents(DfgNode):
     def __call__(self, *args, **kwargs) -> list[Eatery]:
         if "eateries" not in self.cache:
             try:
-                response = requests.get(CORNELL_DINING_URL).json()
+                response = requests.get(CORNELL_DINING_URL, timeout=10).json()
             except Exception as e:
                 raise e
             if response["status"] == "success":
@@ -115,10 +115,7 @@ class CornellDiningEvents(DfgNode):
 
     @staticmethod
     def from_cornell_dining_json(json_item: dict):
-        return MenuItem(
-            healthy=json_item["healthy"],
-            name=json_item["item"]
-        )
+        return MenuItem(healthy=json_item["healthy"], name=json_item["item"])
 
     def description(self):
         return "CornellDiningEvents"

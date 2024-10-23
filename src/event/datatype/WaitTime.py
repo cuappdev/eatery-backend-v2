@@ -1,10 +1,10 @@
 class WaitTime:
     def __init__(
-            self,
-            timestamp: int,
-            wait_time_low: float,
-            wait_time_expected: float,
-            wait_time_high: float
+        self,
+        timestamp: int,
+        wait_time_low: float,
+        wait_time_expected: float,
+        wait_time_high: float,
     ):
         self.timestamp = timestamp
         self.wait_time_low = wait_time_low
@@ -16,7 +16,7 @@ class WaitTime:
             "timestamp": self.timestamp,
             "wait_time_low": self.wait_time_low,
             "wait_time_expected": self.wait_time_expected,
-            "wait_time_high": self.wait_time_high
+            "wait_time_high": self.wait_time_high,
         }
 
     @staticmethod
@@ -25,5 +25,5 @@ class WaitTime:
             timestamp=wait_time_json["timestamp"],
             wait_time_low=wait_time_json["wait_time_low"],
             wait_time_expected=wait_time_json["wait_time_expected"],
-            wait_time_high=wait_time_json["wait_time_high"]
+            wait_time_high=wait_time_json["wait_time_high"],
         )
