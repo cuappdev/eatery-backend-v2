@@ -19,7 +19,8 @@ class UserViewSet(viewsets.ModelViewSet):
         eatery = get_object_or_404(Eatery, id=eatery_id)
         user.favorite_eateries.add(eatery)
         user.save()
-        return Response({"status": "eatery added"}, status=status.HTTP_200_OK)
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="eatery/remove")
     def remove_favorite_eatery(self, request, pk=None):
@@ -28,7 +29,8 @@ class UserViewSet(viewsets.ModelViewSet):
         eatery = get_object_or_404(Eatery, id=eatery_id)
         user.favorite_eateries.remove(eatery)
         user.save()
-        return Response({"status": "eatery removed"}, status=status.HTTP_200_OK)
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="item/add")
     def add_favorite_item(self, request, pk=None):
@@ -37,7 +39,8 @@ class UserViewSet(viewsets.ModelViewSet):
         item = get_object_or_404(Item, id=item_id)
         user.favorite_items.add(item)
         user.save()
-        return Response({"status": "item added"}, status=status.HTTP_200_OK)
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=["post"], url_path="item/remove")
     def remove_favorite_item(self, request, pk=None):
@@ -46,4 +49,5 @@ class UserViewSet(viewsets.ModelViewSet):
         item = get_object_or_404(Item, id=item_id)
         user.favorite_items.remove(item)
         user.save()
-        return Response({"status": "item removed"}, status=status.HTTP_200_OK)
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)
