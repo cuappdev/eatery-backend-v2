@@ -1,10 +1,10 @@
 from django.urls import path, include
-from django.views.decorators.http import require_POST
-from user.views import UserViewSet
+from user_session.views import UserSessionViewSet
+
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register("", UserViewSet)
+router.register("", UserSessionViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),

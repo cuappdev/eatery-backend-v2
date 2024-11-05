@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     "item",
     "category",
     "user",
+    "user_session",
     # Third party
     "rest_framework",
 ]
