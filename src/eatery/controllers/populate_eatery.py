@@ -71,7 +71,7 @@ class PopulateEateryController:
             for json_obj in json_objs:
                 try:
                     object = Eatery.objects.get(id=int(json_obj["id"]))
-                except object.DoesNotExist:
+                except Eatery.DoesNotExist:
                     """
                     Create a new Eatery object
                     """
