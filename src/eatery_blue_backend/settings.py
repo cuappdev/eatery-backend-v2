@@ -41,6 +41,8 @@ DEBUG = False if os.environ.get("IS_PROD") is True else True
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 
+FCM_SERVER_KEY = os.environ.get("FCM_SERVER_KEY")
+
 
 # Application definition
 
@@ -63,6 +65,7 @@ INSTALLED_APPS = [
     "user",
     # Third party
     "rest_framework",
+    "fcm_django",
 ]
 
 MIDDLEWARE = [
