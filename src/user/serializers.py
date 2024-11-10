@@ -3,13 +3,19 @@ from user.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+
+    favorite_items = serializers.ListField(
+        child=serializers.CharField(max_length=100), required=False
+    )
+
     class Meta:
         model = User
         fields = [
             "id",
-            "name",
+            "given_name",
+            "family_name",
             "netid",
-            "is_admin",
+            "google_id",
             "favorite_eateries",
             "favorite_items",
             "fcm_devices",
