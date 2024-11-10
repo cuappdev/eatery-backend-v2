@@ -41,26 +41,6 @@ class UserViewSet(viewsets.ModelViewSet):
         user_data = UserSerializer(user).data
         return Response(user_data, status=status.HTTP_200_OK)
 
-    # @action(detail=True, methods=["post"], url_path="item/add")
-    # def add_favorite_item(self, request, pk=None):
-    #     user = get_object_or_404(User, pk=pk)
-    #     item_id = request.data.get("item_id")
-    #     item = get_object_or_404(Item, id=item_id)
-    #     user.favorite_items.add(item)
-    #     user.save()
-    #     user_data = UserSerializer(user).data
-    #     return Response(user_data, status=status.HTTP_200_OK)
-
-    # @action(detail=True, methods=["post"], url_path="item/remove")
-    # def remove_favorite_item(self, request, pk=None):
-    #     user = get_object_or_404(User, pk=pk)
-    #     item_id = request.data.get("item_id")
-    #     item = get_object_or_404(Item, id=item_id)
-    #     user.favorite_items.remove(item)
-    #     user.save()
-    #     user_data = UserSerializer(user).data
-    #     return Response(user_data, status=status.HTTP_200_OK)
-
     @action(detail=True, methods=["post"], url_path="item/add")
     def add_favorite_item(self, request, pk=None):
         user = get_object_or_404(User, pk=pk)
