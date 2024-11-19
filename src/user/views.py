@@ -4,11 +4,8 @@ from rest_framework.decorators import action
 from user.models import User
 from user.serializers import UserSerializer
 from eatery.models import Eatery
-from item.models import Item
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.conf import settings
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from user.models import User
@@ -114,6 +111,8 @@ class UserViewSet(viewsets.ModelViewSet):
 
             # creates session token and makes new user session
             session_token = secrets.token_hex(20)
+            while UserSession.objects.filter(session_token=session_token).exists():
+                session_token = secrets.token_hex(20)
             UserSession.objects.create(user=user)
 
             return Response({"session_token": session_token}, status=status.HTTP_200_OK)
