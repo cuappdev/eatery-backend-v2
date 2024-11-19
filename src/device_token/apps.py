@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
-class UserSessionConfig(AppConfig):
+class DeviceTokenConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'user_session'
+    name = 'device_token'

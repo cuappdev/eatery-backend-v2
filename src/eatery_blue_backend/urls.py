@@ -22,6 +22,6 @@ urlpatterns = [
     path("category/", include("category.urls")),
     path("report/", include("report.urls")),
     path("user/", include("user.urls")),
-    path("user-session/", include("user_session.urls")),
+    path("device-token/", include("device_token.urls")),
     path("docs/", schema_view.with_ui("swagger", cache_timeout=0)),
 ]

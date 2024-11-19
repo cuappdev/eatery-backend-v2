@@ -1,10 +1,10 @@
 from django.urls import path, include
-from user_session.views import UserSessionViewSet
+from device_token.views import DeviceTokenViewSet
 
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register("", UserSessionViewSet)
+router.register("", DeviceTokenViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
