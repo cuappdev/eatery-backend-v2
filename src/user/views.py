@@ -12,7 +12,7 @@ from user.models import User
 from user_session.models import UserSession
 import secrets
 import os
-
+import datetime
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -113,7 +113,7 @@ class UserViewSet(viewsets.ModelViewSet):
             session_token = secrets.token_hex(20)
             while UserSession.objects.filter(session_token=session_token).exists():
                 session_token = secrets.token_hex(20)
-            UserSession.objects.create(user=user)
+            UserSession.objects.create(user=user, session_token = session_token, created_at = datetime.now())
 
             return Response({"session_token": session_token}, status=status.HTTP_200_OK)
 
