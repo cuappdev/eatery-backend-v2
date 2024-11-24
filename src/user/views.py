@@ -64,7 +64,7 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["post"], url_path="login")
     def login(self, request):
         device_token = request.data.get("device_token")
-        id_token_str = request.data.get("idToken")
+        id_token_str = request.data.get("id_token")
 
         if not device_token:
             return Response(
@@ -152,15 +152,15 @@ class UserViewSet(viewsets.ModelViewSet):
 
             except ValueError:
                 return Response(
-                    {"error": "Invalid idToken"},
+                    {"error": "Invalid id_token"},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
         else:
-            # no idToken provided, user is anonymous
+            # no id_token provided, user is anonymous
             if user.netid is None:
                 pass
             else:
-                # device token associated with an authenticated user but no idToken provided
+                # device token associated with an authenticated user but no id_token provided
                 return Response(
                     {"error": "Device token associated with an authenticated user"},
                     status=status.HTTP_400_BAD_REQUEST,
