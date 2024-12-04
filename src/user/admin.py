@@ -1,5 +1,4 @@
 from django.contrib import admin
-from user.models import User, UserFCMDevice
+from user.models import User
 
 admin.site.register(User)
-admin.site.register(UserFCMDevice)
