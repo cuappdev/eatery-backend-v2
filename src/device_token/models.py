@@ -7,7 +7,7 @@ class DeviceToken(models.Model):
     user = models.ForeignKey(
         User, related_name="device_tokens", on_delete=models.CASCADE
     )
-    device_token = models.CharField(max_length=40)
+    device_token = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
         return f"{self.user.netid} - {self.device_token}"
