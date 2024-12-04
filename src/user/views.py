@@ -4,22 +4,19 @@ from rest_framework.decorators import action
 from user.models import User, UserFCMDevice
 from user.serializers import UserSerializer
 from eatery.models import Eatery
-from item.models import Item
 from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.conf import settings
 from google.oauth2 import id_token
 from google.auth.transport import requests
 from user.models import User
-from user_session.models import UserSession
-import secrets
+from device_token.models import DeviceToken
 import os
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
 
 # from rest_framework.permissions import IsAuthenticated
+import datetime
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -112,77 +109,139 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"], url_path="login")
     def login(self, request):
-        id_token_str = request.data.get("idToken")
-        user = request.data.get("user")
+        device_token = request.data.get("device_token")
+        id_token_str = request.data.get("id_token")
 
-        if not id_token_str or not user:
+        if not device_token:
             return Response(
-                {"error": "Invalid request"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "device_token is required"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         try:
-            # verifies token
-            idinfo = id_token.verify_oauth2_token(
-                id_token_str, requests.Request(), os.getenv("GOOGLE_CLIENT_ID")
+            # create device token if doesnt exist
+            device_token_obj = DeviceToken.objects.get_or_create(
+                device_token=device_token,
+                defaults={"user": User.objects.create(netid=None)},
             )
-
-            # ensures token is from Google
-            if idinfo["iss"] not in [
-                "accounts.google.com",
-                "https://accounts.google.com",
-            ]:
-                return Response(
-                    {"error": "Invalid token issuer"},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-
-            userid = idinfo["sub"]
-            email = idinfo["email"]
-
-            # ensures email is Cornell email
-            if not email.endswith("@cornell.edu"):
-                return Response(
-                    {"error": "Non-Cornell email used"},
-                    status=status.HTTP_401_UNAUTHORIZED,
-                )
-
-            # creates user if not exists
-            user = User.objects.get_or_create(
-                google_id=userid,
-                defaults={
-                    "email": email,
-                    "given_name": idinfo.get("given_name", ""),
-                    "family_name": idinfo.get("family_name", ""),
-                    "netid": email.split("@")[0],
-                },
-            )
-
-            # creates session token and makes new user session
-            session_token = secrets.token_hex(20)
-            UserSession.objects.create(user=user)
-
-            return Response({"session_token": session_token}, status=status.HTTP_200_OK)
-
-        except ValueError:
+            user = device_token_obj.user
+        except Exception as e:
             return Response(
-                {"error": "Invalid token"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": f"Error processing device token: {str(e)}"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
+
+        if id_token_str:
+            try:
+                # verifies token
+                idinfo = id_token.verify_oauth2_token(
+                    id_token_str, requests.Request(), os.getenv("GOOGLE_CLIENT_ID")
+                )
+
+                # ensures token is from Google
+                if idinfo["iss"] not in [
+                    "accounts.google.com",
+                    "https://accounts.google.com",
+                ]:
+                    return Response(
+                        {"error": "Invalid token issuer"},
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
+
+                userid = idinfo["sub"]
+                email = idinfo["email"]
+
+                # ensures email is Cornell email
+                if not email.endswith("@cornell.edu"):
+                    return Response(
+                        {"error": "Non-Cornell email used"},
+                        status=status.HTTP_401_UNAUTHORIZED,
+                    )
+
+                # creates user if not exists
+                authenticated_user = User.objects.get_or_create(
+                    google_id=userid,
+                    defaults={
+                        "email": email,
+                        "given_name": idinfo.get("given_name", ""),
+                        "family_name": idinfo.get("family_name", ""),
+                        "netid": email.split("@")[0],
+                    },
+                )
+
+                if user == authenticated_user:
+                    pass
+                elif user.netid is None:
+                    # was unauthorized user, update to authenticated user
+
+                    # copy favorites
+                    authenticated_user.favorite_items = list(
+                        set(authenticated_user.favorite_items + user.favorite_items)
+                    )
+                    authenticated_user.favorite_eateries.add(
+                        *user.favorite_eateries.all()
+                    )
+                    authenticated_user.save()
+
+                    # copy device token
+                    device_token_obj.user = authenticated_user
+                    device_token_obj.save()
+
+                    # delete unauthorized user after merging
+                    user.delete()
+                else:
+                    # device token is associated with a different user, should not happen
+                    return Response(
+                        {"error": "Device token is associated with another user"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+
+                return Response(
+                    {"device_token": device_token}, status=status.HTTP_200_OK
+                )
+
+            except ValueError:
+                return Response(
+                    {"error": "Invalid id_token"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+        else:
+            # no id_token provided, user is anonymous
+            if user.netid is None:
+                pass
+            else:
+                # device token associated with an authenticated user but no id_token provided
+                return Response(
+                    {"error": "Device token associated with an authenticated user"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            return Response({"device_token": device_token}, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=["post"], url_path="logout")
     def logout(self, request):
-        session_token = request.data.get("session_token")
-        if not session_token:
+        device_token = request.data.get("device_token")
+        if not device_token:
             return Response(
-                {"error": "Session token required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Device token required"}, status=status.HTTP_400_BAD_REQUEST
             )
         try:
-            # gets and deletes user session
-            user_session = UserSession.objects.get(session_token=session_token)
-            user_session.delete()
+            # delete the device token
+            device_token_obj = DeviceToken.objects.get(device_token=device_token)
+            user = device_token_obj.user
+            device_token_obj.delete()
+
+            # if user was anonymous and has no device tokens, delete the user
+            if (
+                user.netid is None
+                and not DeviceToken.objects.filter(user=user).exists()
+            ):
+                user.delete()
+
             return Response(
                 {"message": "Logged out successfully"}, status=status.HTTP_200_OK
             )
-        except UserSession.DoesNotExist:
+        except DeviceToken.DoesNotExist:
             return Response(
-                {"error": "Invalid session token"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid device token"}, status=status.HTTP_400_BAD_REQUEST
             )

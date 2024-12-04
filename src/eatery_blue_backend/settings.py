@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     "item",
     "category",
     "user",
-    "user_session",
+    "device_token",
     # Third party
     "rest_framework",
     "fcm_django",
