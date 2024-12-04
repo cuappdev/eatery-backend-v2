@@ -1,7 +1,7 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from user.models import User, UserFCMDevice
+from user.models import User
 from user.serializers import UserSerializer
 from eatery.models import Eatery
 from django.shortcuts import get_object_or_404
