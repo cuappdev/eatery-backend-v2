@@ -38,7 +38,7 @@ def schedule_event_notifications():
                     f"Event '{event.event_description}' is starting in {minutes_to_start} minutes."
                 )
                 notify_users_about_event(
-                    eatery, event, f"in {minutes_to_start} minutes", "starting"
+                    eatery, event, f"in {minutes_to_start} minutes", "opening"
                 )
 
             # Notify users about events ending soon
@@ -48,7 +48,7 @@ def schedule_event_notifications():
                     f"Event '{event.event_description}' is ending in {minutes_to_end} minutes."
                 )
                 notify_users_about_event(
-                    eatery, event, f"in {minutes_to_end} minutes", "ending"
+                    eatery, event, f"in {minutes_to_end} minutes", "closing"
                 )
 
 
@@ -92,7 +92,7 @@ def send_fcm_notification(device_token, message, action):
     try:
         # Construct the notification payload
         notification = messaging.Notification(
-            title=f"Eatery Event {action.capitalize()} Soon",
+            title=f"Eatery {action.capitalize()} Soon",
             body=message,
         )
         message_payload = messaging.Message(

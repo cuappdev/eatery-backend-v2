@@ -50,7 +50,7 @@ class TestScheduleEventNotifications(TestCase):
         self.assertIn(
             expected_time_message, called_args[1]
         )  # Check the time in the message
-        self.assertIn("starting", called_args[2])  # Check the action in the message
+        self.assertIn("opening", called_args[2])  # Check the action in the message
 
     @patch("eatery.util.notifications.send_fcm_notification")
     def test_event_ending_notification(self, mock_send_fcm_notification):
@@ -92,4 +92,4 @@ class TestScheduleEventNotifications(TestCase):
         self.assertIn(
             expected_time_message, called_args[1]
         )  # Check the time in the message
-        self.assertIn("ending", called_args[2])  # Check the action in the message
+        self.assertIn("closing", called_args[2])  # Check the action in the message
