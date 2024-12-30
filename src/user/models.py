@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from fcm_django.models import FCMDevice
 
 
 class User(models.Model):
@@ -18,6 +17,8 @@ class User(models.Model):
 
     def get_fcm_tokens(self):
         # Retrieve all FCM tokens for this user.
+        from device_token.models import DeviceToken
+
         return DeviceToken.objects.filter(user=self).values_list(
             "device_token", flat=True
         )
