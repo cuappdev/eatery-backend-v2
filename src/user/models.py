@@ -18,7 +18,9 @@ class User(models.Model):
 
     def get_fcm_tokens(self):
         # Retrieve all FCM tokens for this user.
-        return self.fcm_devices.values_list("registration_id", flat=True)
+        return DeviceToken.objects.filter(user=self).values_list(
+            "device_token", flat=True
+        )
 
     def __str__(self):
         return f"{self.netid}"

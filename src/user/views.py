@@ -202,3 +202,14 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(
                 {"error": "Invalid device token"}, status=status.HTTP_400_BAD_REQUEST
             )
+
+    @action(detail=True, methods=["get"], url_path="fcm-tokens")
+    def get_fcm_tokens(self, request, pk=None):
+        """
+        Retrieve all FCM tokens associated with the user.
+        """
+        user = self.get_object()  # Get the user by ID
+        tokens = DeviceToken.objects.filter(user=user).values_list(
+            "device_token", flat=True
+        )
+        return Response({"fcm_tokens": list(tokens)}, status=status.HTTP_200_OK)

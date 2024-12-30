@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 from django.utils import timezone
 from user.models import User
 from eatery.models import Eatery
+from firebase_admin import messaging
 
 
 def schedule_event_notifications():
@@ -57,16 +58,26 @@ def send_fcm_notification(device_token, message, action):
         message (str): The notification message body.
         action (str): The action associated with the notification.
     """
-    from fcm_django.models import FCMDevice
-
     try:
-        # Use the FCMDevice model to send the message
-        device = FCMDevice.objects.filter(registration_id=device_token).first()
-        if device:
-            device.send_message(
-                title=f"Eatery Event {action.capitalize()} Soon",
-                body=message,
-            )
+        # Construct the notification payload
+        notification = messaging.Notification(
+            title=f"Eatery Event {action.capitalize()} Soon",
+            body=message,
+        )
+        message_payload = messaging.Message(
+            notification=notification,
+            token=device_token,
+        )
+
+        # Send the notification
+        try:
+            response = messaging.send(message_payload)
+            print(f"Successfully sent notification: {response}")
+        except messaging.FirebaseError as e:
+            print(f"Firebase error: {str(e)}")
+        except Exception as e:
+            print(f"Unexpected error: {str(e)}")
+
     except Exception as e:
         # Log or handle the notification error
         print(f"Failed to send notification to {device_token}: {str(e)}")
