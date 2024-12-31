@@ -101,18 +101,10 @@ def send_fcm_notification(device_token, message, action):
         )
 
         # Send the notification
-        try:
-            response = messaging.send(message_payload)
-            logger.info(
-                f"Successfully sent notification to token {device_token}: {response}"
-            )
-        except messaging.FirebaseError as e:
-            logger.error(f"Firebase error for token {device_token}: {str(e)}")
-        except Exception as e:
-            logger.error(f"Unexpected error for token {device_token}: {str(e)}")
-
-    except Exception as e:
-        # Log or handle the notification error
-        logger.error(
-            f"Failed to construct notification for token {device_token}: {str(e)}"
+        response = messaging.send(message_payload)
+        logger.info(
+            f"Successfully sent notification to token {device_token}: {response}"
         )
+
+    except Exception as e:  # Catch any exception (including Firebase errors)
+        logger.error(f"Failed to send notification to {device_token}: {str(e)}")

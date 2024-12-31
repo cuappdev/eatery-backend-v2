@@ -44,7 +44,9 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(",")
 FCM_SERVER_KEY = os.environ.get("FCM_SERVER_KEY")
 
 FIREBASE_CREDENTIALS = os.path.join(
-    BASE_DIR, "eatery-a4ad1-firebase-adminsdk-ehcww-262f7c1a73.json"
+    BASE_DIR,
+    "eatery_blue_backend",
+    "eatery-a4ad1-firebase-adminsdk-ehcww-262f7c1a73.json",
 )
 
 
