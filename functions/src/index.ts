@@ -10,7 +10,7 @@ const messaging = admin.messaging();
 exports.scheduleDailyNotifications = functions.pubsub
   .schedule("0 0 * * *") // Runs daily at midnight
   .timeZone("America/New_York")
-  .onRun(async (context) => {
+  .onRun(async () => {
     const eateriesSnapshot = await firestore.collection("eateries").get();
     const now = new Date();
 
@@ -41,7 +41,7 @@ function scheduleNotification(
   userTokens: string[]
 ) {
   console.log(`Scheduling notification for ${eventName} (${action}) at ${notifyTime}`);
-  
+
   const payload = {
     notification: {
       title: `${eventName} ${action} Soon`,
