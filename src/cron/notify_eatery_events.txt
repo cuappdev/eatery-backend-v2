@@ -1,1 +1,1 @@
-*/0 6 * * * cd /usr/app && /usr/local/bin/python /usr/app/manage.py notify_eatery_events > /usr/app/cron/notification_cron_log.txt 2>&1
+*/0 5 * * * cd /usr/app && /usr/local/bin/python /usr/app/manage.py notify_eatery_events > /usr/app/cron/notification_cron_log.txt 2>&1

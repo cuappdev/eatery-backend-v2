@@ -1,9 +1,9 @@
-from datetime import datetime
 from django.utils.timezone import now
 from user.models import User
 from eatery.models import Eatery
 import logging
 from eatery_blue_backend.firebase import db
+from datetime import timedelta
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -26,6 +26,8 @@ def push_eatery_data_to_firebase():
                 "event_description": event.event_description,
                 "start": event.start,
                 "end": event.end,
+                "notify_time_open": event.start - 1800,
+                "notify_time_close": event.end - 1800,
             }
             for event in eatery.events.all()
         ]
