@@ -21,6 +21,12 @@ This is the backend for Eatery Blue.
 
 - Full Swagger Docs API Specs can be found at /docs when running the server
 
+## FA24 Members
+
+- Thomas Vignos
+- Skye Slattery
+- Cassidy Xu
+
 ## SP24 Members
 
 - Thomas Vignos
