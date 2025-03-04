@@ -2,8 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from django.shortcuts import get_object_or_404
-from google.oauth2 import id_token as google_id_token
-from google.auth.transport import requests
+import requests as http_requests
 import os
 
 from user.models import User
@@ -54,57 +53,77 @@ class UserViewSet(viewsets.ModelViewSet):
         user_data = UserSerializer(user).data
         return Response(user_data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=["post"], url_path="login")
-    def login(self, request):
+    @action(detail=False, methods=["post"], url_path="authorize")
+    def authorize(self, request):
         auth_header = request.headers.get("Authorization")
-        if auth_header and auth_header.startswith("Bearer "):
-            id_token_str = auth_header[7:]
-        else:
-            id_token_str = request.data.get("id_token")
 
-        if not id_token_str:
-            return Response({"error": "id_token is required"},
+        # header should be in the form "Bearer <session_id>"
+        if not auth_header:
+            return Response({"error": "Missing authorization header"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if not auth_header.startswith("Bearer "):
+            return Response({"error": "Invalid authorization header - must start with 'Bearer '"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+        session_id = auth_header[7:]
+
+        device_id = request.data.get("deviceId")
+        pin = request.data.get("pin")
+        fcm_token = request.data.get("fcmToken")
+
+        if not device_id or not pin:
+            return Response({"error": "deviceId, pin required"},
                             status=status.HTTP_400_BAD_REQUEST)
 
+        # prepare payload for GET API
+        payload = {
+            "method": "createPIN",
+            "params": {
+                "PIN": pin,
+                "deviceId": device_id,
+                "sessionId": session_id
+            }
+        }
+
+        # call createPIN from GET API
         try:
-            idinfo = google_id_token.verify_oauth2_token(
-                id_token_str, requests.Request(), os.getenv("GOOGLE_CLIENT_ID")
+            get_response = http_requests.post(
+                "https://services.get.cbord.com/GETServices/services/json/user",
+                json=payload,
+                headers={"Content-Type": "application/json"}
             )
-            if idinfo.get("iss") not in ["accounts.google.com", "https://accounts.google.com"]:
-                return Response({"error": "Invalid token issuer"},
+            result = get_response.json()
+        except Exception as e:
+            return Response({"error": "Error communicating with GET API", "details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        """
+        note: right now if session_id is invalid, response is "error": "4001|Session not found" 
+        and this retuns 400 
+        """
+        # return 401 if “Error: not validated” in result otherwise return 400
+        if result.get("exception"):
+            if "not validated" in result.get("exception"):
+                return Response({"error": result.get("exception")},
                                 status=status.HTTP_401_UNAUTHORIZED)
-
-            google_user_id = idinfo["sub"]
-
-            # # ensure the email is a Cornell email.
-            # if not email.endswith("@cornell.edu"):
-            #     return Response({"error": "Non-Cornell email used"},
-            #                     status=status.HTTP_401_UNAUTHORIZED)
-
-
-            user, _ = User.objects.get_or_create(
-                google_id=google_user_id,
-                defaults={
-                    # "email": email,
-                    "given_name": idinfo.get("given_name", ""),
-                    "family_name": idinfo.get("family_name", ""),
-                    # "netid": email.split("@")[0],
-                },
-            )
-
-            favorites = request.data.get("favorite_items")
-            if favorites and isinstance(favorites, list):
-                merged_favorites = list(set(user.favorite_items + favorites))
-                user.favorite_items = merged_favorites
-
-            fcm_token = request.data.get("fcm_token")
-            if fcm_token:
-                user.fcm_token = fcm_token
-
-            user.save()
-            user_data = UserSerializer(user).data
-            return Response(user_data, status=status.HTTP_200_OK)
-
-        except ValueError:
-            return Response({"error": "Invalid id_token"},
+            return Response({"error": result.get("exception")},
                             status=status.HTTP_400_BAD_REQUEST)
+
+        favorites = request.data.get("favorite_items")
+
+        user, _ = User.objects.get_or_create(
+            device_id=device_id,
+            defaults={}
+        )
+
+        # merge favorites if they exist
+        if favorites and isinstance(favorites, list):
+            merged_favorites = list(set(user.favorite_items + favorites))
+            user.favorite_items = merged_favorites
+
+        if fcm_token:
+            user.fcm_token = fcm_token
+
+        user.save()
+        user_data = UserSerializer(user).data
+        return Response(user_data, status=status.HTTP_200_OK)
