@@ -16,4 +16,10 @@ class UserSerializer(serializers.ModelSerializer):
             "fcm_token",
             "favorite_eateries",
             "favorite_items",
+            "brb_balance",
+            "city_bucks_balance",
+            "laundry_balance",
+            "brb_account_name",
+            "city_bucks_account_name",
+            "laundry_account_name",
         ]

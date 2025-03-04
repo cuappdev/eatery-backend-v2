@@ -176,8 +176,11 @@ class UserViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=["post"], url_path="transactions")
     def transactions(self, request):
         auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return Response({"error": "Missing or invalid authorization header"},
+        if not auth_header:
+            return Response({"error": "Missing authorization header"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if not auth_header.startswith("Bearer "):
+            return Response({"error": "Invalid authorization header - must start with 'Bearer '"},
                             status=status.HTTP_400_BAD_REQUEST)
         session_id = auth_header[7:]
         
@@ -209,7 +212,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "Error communicating with GET API", "details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        # BRB transactions (tenderId == "000000449")
+        # brb transactions (tenderId == "000000449")
         transactions = result.get("response", {}).get("transactions", [])
         brb_transactions = []
         for txn in transactions:
@@ -224,3 +227,83 @@ class UserViewSet(viewsets.ModelViewSet):
                 })
         
         return Response({"transactions": brb_transactions}, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=["post"], url_path="accounts")
+    def accounts(self, request):
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            return Response({"error": "Missing or invalid authorization header"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        session_id = auth_header[7:]
+        
+        device_id = request.data.get("deviceId")
+        if not device_id:
+            return Response({"error": "deviceId is required"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+        payload = {
+            "method": "retrieveAccounts",
+            "params": {
+                "sessionId": session_id
+            }
+        }
+        
+        try:
+            get_response = http_requests.post(
+                "https://services.get.cbord.com/GETServices/services/json/commerce",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            )
+            result = get_response.json()
+        except Exception as e:
+            return Response({"error": "Error communicating with GET API", "details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        accounts = result.get("response", {}).get("accounts", [])
+        brb_account = None
+        city_bucks_account = None
+        laundry_account = None
+        
+        for account in accounts:
+            display_name = account.get("accountDisplayName", "")
+            if "Big Red Bucks" in display_name and brb_account is None:
+                brb_account = account
+            # two city bucks accounts, one for GET which is not the main one
+            if "City Bucks" in display_name and "GET" not in display_name and city_bucks_account is None:
+                city_bucks_account = account
+            if "Laundry" in display_name and laundry_account is None:
+                laundry_account = account
+            if brb_account and city_bucks_account and laundry_account:
+                break
+        
+        try:
+            user = User.objects.get(device_id=device_id)
+        except User.DoesNotExist:
+            return Response({"error": "User not found for the given deviceId"}, status=status.HTTP_404_NOT_FOUND)
+        
+        # update brb balance and account name
+        if brb_account:
+            user.brb_balance = brb_account.get("balance", 0)
+            user.brb_account_name = brb_account.get("accountDisplayName", "")
+        else:
+            user.brb_account_name = None
+
+        if city_bucks_account:
+            user.city_bucks_balance = city_bucks_account.get("balance", 0)
+            user.city_bucks_account_name = city_bucks_account.get("accountDisplayName", "")
+        else:
+            user.city_bucks_account_name = None
+
+        if laundry_account:
+            user.laundry_balance = laundry_account.get("balance", 0)
+            user.laundry_account_name = laundry_account.get("accountDisplayName", "")
+        else:
+            user.laundry_account_name = None
+
+        user.save()
+
+        return Response({
+            "brb": {"name": user.brb_account_name, "balance": user.brb_balance},
+            "city_bucks": {"name": user.city_bucks_account_name, "balance": user.city_bucks_balance},
+            "laundry": {"name": user.laundry_account_name, "balance": user.laundry_balance}
+        }, status=status.HTTP_200_OK)
