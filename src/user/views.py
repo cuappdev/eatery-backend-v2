@@ -172,3 +172,55 @@ class UserViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({"sessionId": new_session_id}, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=["post"], url_path="transactions")
+    def transactions(self, request):
+        auth_header = request.headers.get("Authorization")
+        if not auth_header or not auth_header.startswith("Bearer "):
+            return Response({"error": "Missing or invalid authorization header"},
+                            status=status.HTTP_400_BAD_REQUEST)
+        session_id = auth_header[7:]
+        
+        # note: gets 100 most recent transcations including meal swipes, so we dont
+        # have an exact number of BRB transactions. can change to date range if it 
+        # becomes a problem
+        payload = {
+            "method": "retrieveTransactionHistoryWithinDateRange",
+            "params": {
+                "paymentSystemType": 0,
+                "queryCriteria": {
+                    "maxReturnMostRecent": 100,
+                    "newestDate": None,
+                    "oldestDate": None,
+                    "accountId": None
+                },
+                "sessionId": session_id
+            }
+        }
+        
+        try:
+            get_response = http_requests.post(
+                "https://services.get.cbord.com/GETServices/services/json/commerce",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            )
+            result = get_response.json()
+        except Exception as e:
+            return Response({"error": "Error communicating with GET API", "details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        # BRB transactions (tenderId == "000000449")
+        transactions = result.get("response", {}).get("transactions", [])
+        brb_transactions = []
+        for txn in transactions:
+            account_name = txn.get("accountName", "")
+            if "City Bucks" in account_name or "Big Red Bucks" in account_name:
+                brb_transactions.append({
+                    "amount": txn.get("amount"),
+                    "tenderId": txn.get("tenderId"),
+                    "accountName": account_name,
+                    "date": txn.get("postedDate"),
+                    "location": txn.get("locationName")
+                })
+        
+        return Response({"transactions": brb_transactions}, status=status.HTTP_200_OK)
