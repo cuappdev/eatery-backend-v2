@@ -127,3 +127,48 @@ class UserViewSet(viewsets.ModelViewSet):
         user.save()
         user_data = UserSerializer(user).data
         return Response(user_data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=["post"], url_path="refresh")
+    def refresh(self, request):
+        device_id = request.data.get("deviceId")
+        pin = request.data.get("pin")
+        if not device_id or not pin:
+            return Response({"error": "deviceId and pin are required"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        payload = {
+            "method": "authenticatePIN",
+            "params": {
+                "systemCredentials": {
+                    "domain": "",
+                    "userName": "get_mobile",
+                    "password": "NOTUSED"
+                },
+                "deviceId": device_id,
+                "pin": pin
+            }
+        }
+
+        # refresh sessionId with GET API's authenticatePIN method
+        try:
+            get_response = http_requests.post(
+                "https://services.get.cbord.com/GETServices/services/json/authentication",
+                json=payload,
+                headers={"Content-Type": "application/json"}
+            )
+            result = get_response.json()
+        except Exception as e:
+            return Response({"error": "Error communicating with GET API", "details": str(e)},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        # if exception, return 401 and user should be fully logged out
+        if result.get("exception"):
+            return Response({"error": result.get("exception")},
+                            status=status.HTTP_401_UNAUTHORIZED)
+
+        new_session_id = result.get("response")
+        if not new_session_id:
+            return Response({"error": "Failed to retrieve new sessionId"},
+                            status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+        return Response({"sessionId": new_session_id}, status=status.HTTP_200_OK)
