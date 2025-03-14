@@ -12,10 +12,14 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "id",
-            "given_name",
-            "family_name",
-            "netid",
-            "google_id",
+            "device_id",
+            "fcm_token",
             "favorite_eateries",
             "favorite_items",
+            "brb_balance",
+            "city_bucks_balance",
+            "laundry_balance",
+            "brb_account_name",
+            "city_bucks_account_name",
+            "laundry_account_name",
         ]
