@@ -99,7 +99,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
         """
         note: right now if session_id is invalid, response is "error": "4001|Session not found" 
-        and this retuns 400 
+        w/ 400 status code
         """
         # return 401 if “Error: not validated” in result otherwise return 400
         if result.get("exception"):
@@ -212,19 +212,25 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "Error communicating with GET API", "details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+        if result.get("exception"):
+            if "not validated" in result.get("exception"):
+                return Response({"error": result.get("exception")},
+                                status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": result.get("exception")},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
         # brb transactions (tenderId == "000000449")
         transactions = result.get("response", {}).get("transactions", [])
         brb_transactions = []
         for txn in transactions:
             account_name = txn.get("accountName", "")
-            if "City Bucks" in account_name or "Big Red Bucks" in account_name:
-                brb_transactions.append({
-                    "amount": txn.get("amount"),
-                    "tenderId": txn.get("tenderId"),
-                    "accountName": account_name,
-                    "date": txn.get("postedDate"),
-                    "location": txn.get("locationName")
-                })
+            brb_transactions.append({
+                "amount": txn.get("amount"),
+                "tenderId": txn.get("tenderId"),
+                "accountName": account_name,
+                "date": txn.get("postedDate"),
+                "location": txn.get("locationName")
+            })
         
         return Response({"transactions": brb_transactions}, status=status.HTTP_200_OK)
     
@@ -258,6 +264,14 @@ class UserViewSet(viewsets.ModelViewSet):
         except Exception as e:
             return Response({"error": "Error communicating with GET API", "details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+        if result.get("exception"):
+            if "not validated" in result.get("exception"):
+                return Response({"error": result.get("exception")},
+                                status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": result.get("exception")},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
         
         accounts = result.get("response", {}).get("accounts", [])
         brb_account = None
