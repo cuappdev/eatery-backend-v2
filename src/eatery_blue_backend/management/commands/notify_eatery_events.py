@@ -6,13 +6,11 @@ from datetime import datetime
 
 
 class Command(BaseCommand):
-    help = "Checks for upcoming eatery events and sends notifications to users"
+    help = "Checks for upcoming eatery events and schedules notifications to users"
 
     def handle(self, *args, **kwargs):
-        self.stdout.write(
-            f"Starting eatery event notification task at {datetime.now()} UTC"
-        )
+        self.stdout.write(f"Starting firebase data push task at {datetime.now()} UTC")
         push_eatery_data_to_firebase()
         self.stdout.write(
-            self.style.SUCCESS("Successfully ran eatery event notification task")
+            self.style.SUCCESS("Successfully pushed eatery data to Firebase")
         )

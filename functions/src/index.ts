@@ -17,9 +17,9 @@ exports.scheduleDailyNotifications = functions.pubsub
   .onRun(async () => {
     const { CloudTasksClient } = await import("@google-cloud/tasks");
     const client = new CloudTasksClient();
-    
-    const now = Math.floor(Date.now() / 1000); 
-    const parent = client.queuePath(PROJECT_ID, LOCATION, QUEUE_NAME);
+
+    const now = Math.floor(Date.now() / 1000);
+    const parent = `projects/${PROJECT_ID}/locations/${LOCATION}/queues/${QUEUE_NAME}`;
 
     console.log("Fetching all eatery events for today...");
 
@@ -29,25 +29,49 @@ exports.scheduleDailyNotifications = functions.pubsub
       const eatery = doc.data();
       const userTokens = eatery.user_tokens || [];
 
-      eatery.events.forEach(async (event: any) => {
-        const notifyTimeOpen = event.start - 30 * 60;
-        const notifyTimeClose = event.end - 30 * 60;
+      for (const event of eatery.events) {
+        const notifyTimes = [
+          { time: event.notify_time_open, action: "Opening Soon" },
+          { time: event.notify_time_close, action: "Closing Soon" }
+        ];
 
-        if (notifyTimeOpen > now) {
-          await scheduleTask(client, parent, eatery.name, event.event_description, userTokens, notifyTimeOpen, "Opening Soon");
-        }
+        const [taskResponse] = await client.listTasks({ parent });
+        const existingTasks = taskResponse || [];
 
-        if (notifyTimeClose > now) {
-          await scheduleTask(client, parent, eatery.name, event.event_description, userTokens, notifyTimeClose, "Closing Soon");
+        for (const { time, action } of notifyTimes) {
+          if (time <= now) continue;
+
+          if (userTokens.length === 0) {
+            console.log(`Skipping ${event.event_description} (${action}) at ${eatery.name}: No user tokens.`);
+            continue;
+          }
+
+          const isDuplicate = existingTasks.some(
+            (task: any) => task.name && task.name.includes(`${eatery.name}-${event.event_description}-${action}`)
+          );
+
+          if (isDuplicate) {
+            console.log(`Skipping duplicate task for ${event.event_description} (${action}) at ${eatery.name}`);
+            continue;
+          }
+
+          await scheduleTask(client, parent, eatery.name, event.event_description, userTokens, time, action);
         }
-      });
+      }
     }
-
     console.log("All notifications scheduled via Cloud Tasks.");
   });
 
 async function scheduleTask(client: any, parent: string, eateryName: string, eventName: string, userTokens: string[], notifyTime: number, action: string) {
+  const sanitize = (str: string) => str.replace(/[^A-Za-z0-9 _-]/g, "").replace(/\s+/g, "-");
+  const sanitizedEateryName = sanitize(eateryName);
+  const sanitizedEventName = sanitize(eventName);
+  const sanitizedAction = sanitize(action);
+
+  const taskName = `${sanitizedEateryName}-${sanitizedEventName}-${sanitizedAction}-${notifyTime}`;
+
   const task = {
+    name: `${parent}/tasks/${taskName}`,
     httpRequest: {
       httpMethod: "POST" as "POST",
       url: `https://${LOCATION}-${PROJECT_ID}.cloudfunctions.net/sendNotification`,
@@ -68,7 +92,7 @@ async function scheduleTask(client: any, parent: string, eateryName: string, eve
   };
 
   await client.createTask({ parent, task });
-  console.log(`Scheduled task for ${eventName} (${action}) at ${new Date(notifyTime * 1000).toISOString()}`);
+  console.log(`Scheduled ${taskName} at ${new Date(notifyTime * 1000).toISOString()}`);
 }
 
 exports.sendNotification = functions.https.onRequest(async (req, res) => {
