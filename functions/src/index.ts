@@ -105,11 +105,23 @@ exports.sendNotification = functions.https.onRequest(async (req, res) => {
       return;
     }
 
+    const isGeneralOpenEvent = eventName.toLowerCase() === "open";
+
+    const title = isGeneralOpenEvent
+      ? action === "Opening Soon"
+        ? `${eateryName} is opening soon!`
+        : `${eateryName} is closing soon!`
+      : `${eventName} is ${action.toLowerCase()}!`;
+
+    const body = isGeneralOpenEvent
+      ? action === "Opening Soon"
+        ? `${eateryName} opens in 30 minutes! Grab your favorite meal.`
+        : `${eateryName} closes in 30 minutes! Last chance to get food.`
+      : `${eventName} at ${eateryName} starts in 30 minutes! Don't miss out.`;
+
+    // Construct payload with correct title & body
     const payload = {
-      notification: {
-        title: `${eventName} ${action}!`,
-        body: `${eventName} at ${eateryName} is happening in 30 minutes!`,
-      },
+      notification: { title, body },
     };
 
     const sendPromises = userTokens.map((token) =>
