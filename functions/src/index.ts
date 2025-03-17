@@ -15,52 +15,52 @@ exports.scheduleDailyNotifications = functions.pubsub
   .schedule("0 6 * * *") // Runs daily at 6 AM UTC
   .timeZone("UTC")
   .onRun(async () => {
-    const { CloudTasksClient } = await import("@google-cloud/tasks");
-    const client = new CloudTasksClient();
+  const { CloudTasksClient } = await import("@google-cloud/tasks");
+  const client = new CloudTasksClient();
 
-    const now = Math.floor(Date.now() / 1000);
-    const parent = `projects/${PROJECT_ID}/locations/${LOCATION}/queues/${QUEUE_NAME}`;
+  const now = Math.floor(Date.now() / 1000);
+  const parent = `projects/${PROJECT_ID}/locations/${LOCATION}/queues/${QUEUE_NAME}`;
 
-    console.log("Fetching all eatery events for today...");
+  console.log("Fetching all eatery events for today...");
 
-    const eateriesSnapshot = await firestore.collection("eateries").get();
+  const eateriesSnapshot = await firestore.collection("eateries").get();
 
-    for (const doc of eateriesSnapshot.docs) {
-      const eatery = doc.data();
-      const userTokens = eatery.user_tokens || [];
+  for (const doc of eateriesSnapshot.docs) {
+    const eatery = doc.data();
+    const userTokens = eatery.user_tokens || [];
 
-      for (const event of eatery.events) {
-        const notifyTimes = [
-          { time: event.notify_time_open, action: "Opening Soon" },
-          { time: event.notify_time_close, action: "Closing Soon" }
-        ];
+    for (const event of eatery.events) {
+      const notifyTimes = [
+        { time: event.notify_time_open, action: "Opening Soon" },
+        { time: event.notify_time_close, action: "Closing Soon" }
+      ];
 
-        const [taskResponse] = await client.listTasks({ parent });
-        const existingTasks = taskResponse || [];
+      const [taskResponse] = await client.listTasks({ parent });
+      const existingTasks = taskResponse || [];
 
-        for (const { time, action } of notifyTimes) {
-          if (time <= now) continue;
+      for (const { time, action } of notifyTimes) {
+        if (time <= now) continue;
 
-          if (userTokens.length === 0) {
-            console.log(`Skipping ${event.event_description} (${action}) at ${eatery.name}: No user tokens.`);
-            continue;
-          }
-
-          const isDuplicate = existingTasks.some(
-            (task: any) => task.name && task.name.includes(`${eatery.name}-${event.event_description}-${action}`)
-          );
-
-          if (isDuplicate) {
-            console.log(`Skipping duplicate task for ${event.event_description} (${action}) at ${eatery.name}`);
-            continue;
-          }
-
-          await scheduleTask(client, parent, eatery.name, event.event_description, userTokens, time, action);
+        if (userTokens.length === 0) {
+          console.log(`Skipping ${event.event_description} (${action}) at ${eatery.name}: No user tokens.`);
+          continue;
         }
+
+        const isDuplicate = existingTasks.some(
+          (task: any) => task.name && task.name.includes(`${eatery.name}-${event.event_description}-${action}`)
+        );
+
+        if (isDuplicate) {
+          console.log(`Skipping duplicate task for ${event.event_description} (${action}) at ${eatery.name}`);
+          continue;
+        }
+
+        await scheduleTask(client, parent, eatery.name, event.event_description, userTokens, time, action);
       }
     }
-    console.log("All notifications scheduled via Cloud Tasks.");
-  });
+  }
+  console.log("All notifications scheduled via Cloud Tasks.");
+});
 
 async function scheduleTask(client: any, parent: string, eateryName: string, eventName: string, userTokens: string[], notifyTime: number, action: string) {
   const sanitize = (str: string) => str.replace(/[^A-Za-z0-9 _-]/g, "").replace(/\s+/g, "-");
@@ -95,7 +95,7 @@ async function scheduleTask(client: any, parent: string, eateryName: string, eve
   console.log(`Scheduled ${taskName} at ${new Date(notifyTime * 1000).toISOString()}`);
 }
 
-exports.sendNotification = functions.https.onRequest(async (req, res) => {
+export const sendNotification = functions.https.onRequest(async (req, res) => {
   try {
     const { eateryName, eventName, userTokens, action }: { eateryName: string; eventName: string; userTokens: string[]; action: string } = req.body;
 
@@ -105,21 +105,29 @@ exports.sendNotification = functions.https.onRequest(async (req, res) => {
       return;
     }
 
-    const isGeneralOpenEvent = eventName.toLowerCase() === "open";
+    let title: string;
+    let body: string;
+    // handle "Open" events separately
+    if (eventName.toLowerCase() === "open") {
+      if (action === "Opening Soon") {
+        title = `${eateryName} is opening soon!`;
+        body = `${eateryName} opens in 30 minutes! Don't miss out.`;
+      } else {
+        title = `${eateryName} is closing soon!`;
+        body = `${eateryName} closes in 30 minutes! Last chance to grab food.`;
+      }
+    } 
+    // normal events
+    else {
+      if (action === "Opening Soon") {
+        title = `${eventName} is starting soon!`;
+        body = `${eventName} at ${eateryName} starts in 30 minutes! Don't miss out.`;
+      } else {
+        title = `${eventName} is ending soon!`;
+        body = `${eventName} at ${eateryName} ends in 30 minutes! Last chance to grab food.`;
+      }
+    }
 
-    const title = isGeneralOpenEvent
-      ? action === "Opening Soon"
-        ? `${eateryName} is opening soon!`
-        : `${eateryName} is closing soon!`
-      : `${eventName} is ${action.toLowerCase()}!`;
-
-    const body = isGeneralOpenEvent
-      ? action === "Opening Soon"
-        ? `${eateryName} opens in 30 minutes! Grab your favorite meal.`
-        : `${eateryName} closes in 30 minutes! Last chance to get food.`
-      : `${eventName} at ${eateryName} starts in 30 minutes! Don't miss out.`;
-
-    // Construct payload with correct title & body
     const payload = {
       notification: { title, body },
     };
