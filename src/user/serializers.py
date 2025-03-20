@@ -1,11 +1,15 @@
 from rest_framework import serializers
 from user.models import User
+from device_token.models import DeviceToken
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     favorite_items = serializers.ListField(
         child=serializers.CharField(max_length=100), required=False
+    )
+
+    device_tokens = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=DeviceToken.objects.all(), required=False
     )
 
     class Meta:
@@ -18,4 +22,5 @@ class UserSerializer(serializers.ModelSerializer):
             "google_id",
             "favorite_eateries",
             "favorite_items",
+            "device_tokens",
         ]

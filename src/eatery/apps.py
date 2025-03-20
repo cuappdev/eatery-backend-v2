@@ -4,3 +4,7 @@ from django.apps import AppConfig
 class EateryConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "eatery"
+
+    def ready(self):
+        # Import Firebase initialization
+        import eatery_blue_backend.firebase

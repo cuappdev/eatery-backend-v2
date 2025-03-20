@@ -11,7 +11,10 @@ from google.auth.transport import requests
 from user.models import User
 from device_token.models import DeviceToken
 import os
-import datetime
+from rest_framework.views import APIView
+from rest_framework.decorators import api_view
+from rest_framework.permissions import AllowAny
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -76,7 +79,7 @@ class UserViewSet(viewsets.ModelViewSet):
             # create device token if doesnt exist
             device_token_obj = DeviceToken.objects.get_or_create(
                 device_token=device_token,
-                defaults={'user': User.objects.create(netid=None)}
+                defaults={"user": User.objects.create(netid=None)},
             )
             user = device_token_obj.user
         except Exception as e:
@@ -132,7 +135,9 @@ class UserViewSet(viewsets.ModelViewSet):
                     authenticated_user.favorite_items = list(
                         set(authenticated_user.favorite_items + user.favorite_items)
                     )
-                    authenticated_user.favorite_eateries.add(*user.favorite_eateries.all())
+                    authenticated_user.favorite_eateries.add(
+                        *user.favorite_eateries.all()
+                    )
                     authenticated_user.save()
 
                     # copy device token
@@ -148,7 +153,9 @@ class UserViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_400_BAD_REQUEST,
                     )
 
-                return Response({"device_token": device_token}, status=status.HTTP_200_OK)
+                return Response(
+                    {"device_token": device_token}, status=status.HTTP_200_OK
+                )
 
             except ValueError:
                 return Response(
@@ -168,8 +175,6 @@ class UserViewSet(viewsets.ModelViewSet):
 
             return Response({"device_token": device_token}, status=status.HTTP_200_OK)
 
-
-
     @action(detail=False, methods=["post"], url_path="logout")
     def logout(self, request):
         device_token = request.data.get("device_token")
@@ -184,7 +189,10 @@ class UserViewSet(viewsets.ModelViewSet):
             device_token_obj.delete()
 
             # if user was anonymous and has no device tokens, delete the user
-            if user.netid is None and not DeviceToken.objects.filter(user=user).exists():
+            if (
+                user.netid is None
+                and not DeviceToken.objects.filter(user=user).exists()
+            ):
                 user.delete()
 
             return Response(
@@ -194,3 +202,14 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(
                 {"error": "Invalid device token"}, status=status.HTTP_400_BAD_REQUEST
             )
+
+    @action(detail=True, methods=["get"], url_path="fcm-tokens")
+    def get_fcm_tokens(self, request, pk=None):
+        """
+        Retrieve all FCM tokens associated with the user.
+        """
+        user = self.get_object()  # Get the user by ID
+        tokens = DeviceToken.objects.filter(user=user).values_list(
+            "device_token", flat=True
+        )
+        return Response({"fcm_tokens": list(tokens)}, status=status.HTTP_200_OK)

@@ -53,3 +53,5 @@ uritemplate==4.1.1
 urllib3
 virtualenv==20.26.3
 google-auth
+fcm-django
+firebase-admin

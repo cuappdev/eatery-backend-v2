@@ -15,5 +15,13 @@ class User(models.Model):
         "eatery.Eatery", related_name="favorited_by", blank=True
     )
 
+    def get_fcm_tokens(self):
+        # Retrieve all FCM tokens for this user.
+        from device_token.models import DeviceToken
+
+        return DeviceToken.objects.filter(user=self).values_list(
+            "device_token", flat=True
+        )
+
     def __str__(self):
         return f"{self.netid}"
