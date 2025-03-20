@@ -1,4 +1,4 @@
-import * as functions from "firebase-functions/v1";
+import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 
 admin.initializeApp();
@@ -6,10 +6,10 @@ admin.initializeApp();
 const firestore = admin.firestore();
 const messaging = admin.messaging();
 
-const PROJECT_ID = "eatery-a4ad1";
-const LOCATION = "us-central1";
-const QUEUE_NAME = "eatery-notification-queue";
-const SERVICE_ACCOUNT_EMAIL = "cloud-tasks-sa@eatery-a4ad1.iam.gserviceaccount.com";
+const PROJECT_ID = process.env.PROJECT_ID;
+const LOCATION = process.env.LOCATION;
+const QUEUE_NAME = process.env.QUEUE_NAME;
+const SERVICE_ACCOUNT_EMAIL = process.env.SERVICE_ACCOUNT_EMAIL;
 
 exports.scheduleDailyNotifications = functions.pubsub
   .schedule("0 6 * * *") // Runs daily at 6 AM UTC
