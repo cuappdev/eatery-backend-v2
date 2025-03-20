@@ -107,8 +107,9 @@ export const sendNotification = functions.https.onRequest(async (req, res) => {
 
     let title: string;
     let body: string;
-    // handle "Open" events separately
-    if (eventName.toLowerCase() === "open") {
+    let generalEvent = eventName.toLowerCase() === "open" || eventName.toLowerCase() === "general"
+    // handle "Open" & "General" events separately
+    if (generalEvent) {
       if (action === "Opening Soon") {
         title = `${eateryName} is opening soon!`;
         body = `${eateryName} opens in 30 minutes! Don't miss out.`;
@@ -120,10 +121,10 @@ export const sendNotification = functions.https.onRequest(async (req, res) => {
     // normal events
     else {
       if (action === "Opening Soon") {
-        title = `${eventName} is starting soon!`;
+        title = `${eateryName} ${eventName} is starting soon!`;
         body = `${eventName} at ${eateryName} starts in 30 minutes! Don't miss out.`;
       } else {
-        title = `${eventName} is ending soon!`;
+        title = `${eateryName} ${eventName} is ending soon!`;
         body = `${eventName} at ${eateryName} ends in 30 minutes! Last chance to grab food.`;
       }
     }
