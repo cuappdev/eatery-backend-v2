@@ -38,7 +38,6 @@ exports.scheduleDailyNotifications = functions.pubsub
         continue;
       }
 
-      // get existing tasks once per batch instead of every iteration
       if (batchCounter % batchSize === 0) {
         console.log(`Fetching existing tasks for batch ${batchCounter / batchSize + 1}...`);
         let [taskResponse] = await client.listTasks({ parent });
@@ -69,7 +68,6 @@ exports.scheduleDailyNotifications = functions.pubsub
 
       batchCounter++;
 
-      // add a delay every `batchSize` to avoid API limit issues
       if (batchCounter % batchSize === 0) {
         console.log("⏳ Waiting 2 seconds before processing next batch...");
         await new Promise((resolve) => setTimeout(resolve, 2000));
@@ -125,7 +123,7 @@ export const sendNotification = functions.https.onRequest(async (req, res) => {
     let title: string;
     let body: string;
     let generalEvent = eventName.toLowerCase() === "open" || eventName.toLowerCase() === "general"
-    // handle "Open" & "General" events separately
+
     if (generalEvent) {
       if (action === "Opening Soon") {
         title = `${eateryName} is opening soon!`;
@@ -135,7 +133,6 @@ export const sendNotification = functions.https.onRequest(async (req, res) => {
         body = `${eateryName} closes in 30 minutes! Last chance to grab food.`;
       }
     } 
-    // normal events
     else {
       if (action === "Opening Soon") {
         title = `${eateryName} ${eventName} is starting soon!`;
