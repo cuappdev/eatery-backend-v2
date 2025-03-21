@@ -13,6 +13,8 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    CBORD_BASE_URL = os.getenv('CBORD_BASE_URL')
+
     @action(detail=True, methods=["post"], url_path="eatery/add")
     def add_favorite_eatery(self, request, pk=None):
         user = get_object_or_404(User, pk=pk)
@@ -52,20 +54,45 @@ class UserViewSet(viewsets.ModelViewSet):
             user.save()
         user_data = UserSerializer(user).data
         return Response(user_data, status=status.HTTP_200_OK)
+    
+    def check_auth_header(self, request):
+        """
+        Validate auth header and return session_id if valid
+        header should be in the form "Bearer <session_id>"
+        """
+        auth_header = request.headers.get("Authorization")
+        #
+        if not auth_header:
+            return None, Response({"error": "Missing authorization header"},
+                        status=status.HTTP_400_BAD_REQUEST)
+        if not auth_header.startswith("Bearer "):
+            return None, Response({"error": "Invalid authorization header - must start with 'Bearer '"},
+                        status=status.HTTP_400_BAD_REQUEST)
+                        
+        session_id = auth_header[7:]
+        return session_id, None
+    
+    def handle_cbord_exception(self, result):
+        """
+        Check for exceptions in cbord response
+        Returns Response object if exception, None otherwise
+
+        note: right now if session_id is invalid, response is "error": "4001|Session not found" 
+        w/ 400 status code
+        """
+        if result.get("exception"):
+            if "not validated" in result.get("exception"):
+                return Response({"error": result.get("exception")},
+                                status=status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": result.get("exception")},
+                            status=status.HTTP_400_BAD_REQUEST)
+        return None
 
     @action(detail=False, methods=["post"], url_path="authorize")
     def authorize(self, request):
-        auth_header = request.headers.get("Authorization")
-
-        # header should be in the form "Bearer <session_id>"
-        if not auth_header:
-            return Response({"error": "Missing authorization header"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        if not auth_header.startswith("Bearer "):
-            return Response({"error": "Invalid authorization header - must start with 'Bearer '"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        
-        session_id = auth_header[7:]
+        session_id, error = self.check_auth_header(request)
+        if error:
+            return error
 
         device_id = request.data.get("deviceId")
         pin = request.data.get("pin")
@@ -88,7 +115,7 @@ class UserViewSet(viewsets.ModelViewSet):
         # call createPIN from GET API
         try:
             get_response = http_requests.post(
-                "https://services.get.cbord.com/GETServices/services/json/user",
+                f"{self.CBORD_BASE_URL}/user",
                 json=payload,
                 headers={"Content-Type": "application/json"}
             )
@@ -97,17 +124,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "Error communicating with GET API", "details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-        """
-        note: right now if session_id is invalid, response is "error": "4001|Session not found" 
-        w/ 400 status code
-        """
-        # return 401 if “Error: not validated” in result otherwise return 400
-        if result.get("exception"):
-            if "not validated" in result.get("exception"):
-                return Response({"error": result.get("exception")},
-                                status=status.HTTP_401_UNAUTHORIZED)
-            return Response({"error": result.get("exception")},
-                            status=status.HTTP_400_BAD_REQUEST)
+        exception_response = self.handle_cbord_exception(result)
+        if exception_response:
+            return exception_response
 
         favorites = request.data.get("favorite_items")
 
@@ -152,7 +171,7 @@ class UserViewSet(viewsets.ModelViewSet):
         # refresh sessionId with GET API's authenticatePIN method
         try:
             get_response = http_requests.post(
-                "https://services.get.cbord.com/GETServices/services/json/authentication",
+                f"{self.CBORD_BASE_URL}/authentication",
                 json=payload,
                 headers={"Content-Type": "application/json"}
             )
@@ -175,14 +194,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["post"], url_path="transactions")
     def transactions(self, request):
-        auth_header = request.headers.get("Authorization")
-        if not auth_header:
-            return Response({"error": "Missing authorization header"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        if not auth_header.startswith("Bearer "):
-            return Response({"error": "Invalid authorization header - must start with 'Bearer '"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        session_id = auth_header[7:]
+        session_id, error = self.check_auth_header(request)
+        if error:
+            return error
         
         # note: gets 100 most recent transcations including meal swipes, so we dont
         # have an exact number of BRB transactions. can change to date range if it 
@@ -203,7 +217,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
         try:
             get_response = http_requests.post(
-                "https://services.get.cbord.com/GETServices/services/json/commerce",
+                f"{self.CBORD_BASE_URL}/commerce",
                 json=payload,
                 headers={"Content-Type": "application/json"}
             )
@@ -212,12 +226,9 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response({"error": "Error communicating with GET API", "details": str(e)},
                             status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        if result.get("exception"):
-            if "not validated" in result.get("exception"):
-                return Response({"error": result.get("exception")},
-                                status=status.HTTP_401_UNAUTHORIZED)
-            return Response({"error": result.get("exception")},
-                            status=status.HTTP_400_BAD_REQUEST)
+        exception_response = self.handle_cbord_exception(result)
+        if exception_response:
+            return exception_response
         
         # brb transactions (tenderId == "000000449")
         transactions = result.get("response", {}).get("transactions", [])
@@ -236,11 +247,9 @@ class UserViewSet(viewsets.ModelViewSet):
     
     @action(detail=False, methods=["post"], url_path="accounts")
     def accounts(self, request):
-        auth_header = request.headers.get("Authorization")
-        if not auth_header or not auth_header.startswith("Bearer "):
-            return Response({"error": "Missing or invalid authorization header"},
-                            status=status.HTTP_400_BAD_REQUEST)
-        session_id = auth_header[7:]
+        session_id, error = self.check_auth_header(request)
+        if error:
+            return error
         
         device_id = request.data.get("deviceId")
         if not device_id:
@@ -256,7 +265,7 @@ class UserViewSet(viewsets.ModelViewSet):
         
         try:
             get_response = http_requests.post(
-                "https://services.get.cbord.com/GETServices/services/json/commerce",
+                f"{self.CBORD_BASE_URL}/commerce",
                 json=payload,
                 headers={"Content-Type": "application/json"}
             )
