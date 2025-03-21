@@ -139,7 +139,7 @@
       "id": 34,
       "slug": "Macs",
       "external": true,
-      "name": "Mac's Café",
+      "name": "Mac's Caf\u00e9",
       "nameshort": "Mac's",
       "about": "",
       "cornellDining": false,
@@ -360,7 +360,9 @@
           ]
         }
       ],
-      "datesClosed": ["09/06/21"],
+      "datesClosed": [
+        "09/06/21"
+      ],
       "payMethods": [
         {
           "descr": "Cash",
@@ -819,6 +821,169 @@
         },
         {
           "item": "Bulk Items",
+          "healthy": false,
+          "category": "General"
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "slug": "Freege",
+      "external": true,
+      "name": "Free Food Fridge",
+      "nameshort": "Freege",
+      "about": "",
+      "cornellDining": false,
+      "contactPhone": "",
+      "latitude": 42.445061,
+      "longitude": -76.485826,
+      "campusArea": {
+        "descr": "South Campus",
+        "descrshort": "South"
+      },
+      "location": "Anabel Taylor Hall Room 120",
+      "eateryTypes": [
+        {
+          "descr": "Cash",
+          "descrshort": "Cash"
+        }
+      ],
+      "onlineOrdering": false,
+      "onlineOrderUrl": null,
+      "operatingHours": [
+        {
+          "weekday": "Monday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Tuesday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Wednesday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Thursday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Friday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Saturday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        },
+        {
+          "weekday": "Sunday",
+          "events": [
+            {
+              "descr": "General",
+              "start": "08:30",
+              "end": "23:00",
+              "menu": []
+            }
+          ]
+        }
+      ],
+      "datesClosed": [],
+      "payMethods": [
+        {
+          "descr": "Free",
+          "descrshort": "Free"
+        }
+      ],
+      "diningItems": [
+        {
+          "item": "Croissant",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Coffee Cake",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Filled Crossiant",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Cookies",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Asorted Scones",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Bufflao Chicken Wraps",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Turkey Sandwich",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Italian Combo",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Prosciutto Mozzarela",
+          "healthy": false,
+          "category": "General"
+        },
+        {
+          "item": "Roast Beef & Asiago Cheese",
           "healthy": false,
           "category": "General"
         }
