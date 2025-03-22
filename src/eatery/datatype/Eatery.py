@@ -47,4 +47,4 @@ class EateryID(Enum):
     MORRISON_DINING = 39
     NOVICKS_CAFE = 40
     VET_CAFE = 41
-    FREEGE = 46
+    FREEDGE = 46

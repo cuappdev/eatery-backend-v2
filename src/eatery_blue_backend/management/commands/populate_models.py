@@ -35,22 +35,22 @@ class Command(BaseCommand):
     
     def update_freege_external_eatery(self):
         GOOGLE_SHEETS_API_KEY = os.environ.get("GOOGLE_SHEETS_API_KEY")
-        FREEGE_SHEET_ID = os.environ.get("FREEGE_SHEET_ID")
-        FREEGE_APPROVED_EMAILS = os.environ.get("FREEGE_APPROVED_EMAILS")
+        FREEDGE_SHEET_ID = os.environ.get("FREEDGE_SHEET_ID")
+        FREEDGE_APPROVED_EMAILS = os.environ.get("FREEDGE_APPROVED_EMAILS")
         if not GOOGLE_SHEETS_API_KEY:
             print("GOOGLE_SHEETS_API_KEY not set, cannot update freege external eatery")
             return
-        if not FREEGE_SHEET_ID:
-            print("FREEGE_SHEET_ID not set, cannot update freege external eatery")
+        if not FREEDGE_SHEET_ID:
+            print("FREEDGE_SHEET_ID not set, cannot update freege external eatery")
             return
-        if not FREEGE_APPROVED_EMAILS:
-            print("FREEGE_APPROVED_EMAILS not set, cannot update freege external eatery")
+        if not FREEDGE_APPROVED_EMAILS:
+            print("FREEDGE_APPROVED_EMAILS not set, cannot update freege external eatery")
             return
         
-        approved_emails = FREEGE_APPROVED_EMAILS.split(",")
+        approved_emails = FREEDGE_APPROVED_EMAILS.split(",")
         
         try:
-            response = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/{FREEGE_SHEET_ID}/values/A2:M?key={GOOGLE_SHEETS_API_KEY}", timeout=10)
+            response = requests.get(f"https://sheets.googleapis.com/v4/spreadsheets/{FREEDGE_SHEET_ID}/values/A2:M?key={GOOGLE_SHEETS_API_KEY}", timeout=10)
         except Exception as e:
             raise e
         if response.status_code > 400:
@@ -63,29 +63,29 @@ class Command(BaseCommand):
         for item in freege_items:
             # item[1] is the email
             # item[4] is item name
-            if len(item) < 5:
+            # item[11] is if it is there
+            if len(item) < 12:
                 continue
-            if item[1] not in approved_emails:
+            if item[1] not in approved_emails or item[11] != "Yes":
                 continue
 
             freege_dining_items.append({
                 "item": item[4].strip(),
                 "healthy": False,
-                "category": "General",
+                "category": "Free Food",
             })
 
         with open(
-            "./static_sources/external_eateries.json", "r"
+            "./static_sources/external_eateries.json", "w+"
         ) as external_eateries_file:
             external_eateries_json = json.load(external_eateries_file)
             for eatery in external_eateries_json["eateries"]:
-                if eatery["id"] == EateryID.FREEGE.value:
+                if eatery["id"] == EateryID.FREEDGE.value:
                     print("Updating freege external eatery")
                     eatery["diningItems"] = freege_dining_items
                     break
-        
-        with open("./static_sources/external_eateries.json", "w") as external_eateries_file:
-            json.dump(external_eateries_json, external_eateries_file, indent=2)
+
+            json.dump(external_eateries_json, external_eateries_file, indent=2)            
 
     def logger_wrapper(self, command_obj, log_title, args):
         pre = int(datetime.now().timestamp())
